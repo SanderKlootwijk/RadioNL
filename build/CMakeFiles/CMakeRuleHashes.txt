@@ -1,0 +1,3 @@
+# Hashes of file build rules.
+ac5c3350b1fc9c9eb3f8cc6e4f607f13 CMakeFiles/radionl.desktop
+6093ab88dbdfe2f0a8478d8bc46411b9 po/CMakeFiles/radionl.sanderklootwijk.pot

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Radio NL
+Exec=qmlscene qml/Main.qml
+Icon=assets/radionl.svg
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
+X-Ubuntu-Splash-Color=white
