@@ -47,10 +47,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sander/radionl
+CMAKE_SOURCE_DIR = /home/sander/RadioNL
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sander/radionl/build
+CMAKE_BINARY_DIR = /home/sander/RadioNL/build
 
 #=============================================================================
 # Target rules for target CMakeFiles/radionl.desktop.dir
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/sander/radionl/build
 CMakeFiles/radionl.desktop.dir/all:
 	$(MAKE) -f CMakeFiles/radionl.desktop.dir/build.make CMakeFiles/radionl.desktop.dir/depend
 	$(MAKE) -f CMakeFiles/radionl.desktop.dir/build.make CMakeFiles/radionl.desktop.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/sander/radionl/build/CMakeFiles  1
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/sander/RadioNL/build/CMakeFiles  1
 	@echo "Built target radionl.desktop"
 .PHONY : CMakeFiles/radionl.desktop.dir/all
 
@@ -69,9 +69,9 @@ all: CMakeFiles/radionl.desktop.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/radionl.desktop.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sander/radionl/build/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sander/RadioNL/build/CMakeFiles 1
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/radionl.desktop.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sander/radionl/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sander/RadioNL/build/CMakeFiles 0
 .PHONY : CMakeFiles/radionl.desktop.dir/rule
 
 # Convenience name for target.
@@ -109,7 +109,7 @@ po/preinstall:
 po/CMakeFiles/radionl.sanderklootwijk.pot.dir/all:
 	$(MAKE) -f po/CMakeFiles/radionl.sanderklootwijk.pot.dir/build.make po/CMakeFiles/radionl.sanderklootwijk.pot.dir/depend
 	$(MAKE) -f po/CMakeFiles/radionl.sanderklootwijk.pot.dir/build.make po/CMakeFiles/radionl.sanderklootwijk.pot.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/sander/radionl/build/CMakeFiles  2
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/sander/RadioNL/build/CMakeFiles  2
 	@echo "Built target radionl.sanderklootwijk.pot"
 .PHONY : po/CMakeFiles/radionl.sanderklootwijk.pot.dir/all
 
@@ -119,9 +119,9 @@ all: po/CMakeFiles/radionl.sanderklootwijk.pot.dir/all
 
 # Build rule for subdir invocation for target.
 po/CMakeFiles/radionl.sanderklootwijk.pot.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sander/radionl/build/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sander/RadioNL/build/CMakeFiles 1
 	$(MAKE) -f CMakeFiles/Makefile2 po/CMakeFiles/radionl.sanderklootwijk.pot.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sander/radionl/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sander/RadioNL/build/CMakeFiles 0
 .PHONY : po/CMakeFiles/radionl.sanderklootwijk.pot.dir/rule
 
 # Convenience name for target.

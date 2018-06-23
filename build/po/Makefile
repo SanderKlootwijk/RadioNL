@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sander/radionl
+CMAKE_SOURCE_DIR = /home/sander/RadioNL
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sander/radionl/build
+CMAKE_BINARY_DIR = /home/sander/RadioNL/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -114,14 +114,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/sander/radionl/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/sander/radionl/build/CMakeFiles /home/sander/radionl/build/po/CMakeFiles/progress.marks
-	cd /home/sander/radionl/build && $(MAKE) -f CMakeFiles/Makefile2 po/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sander/radionl/build/CMakeFiles 0
+	cd /home/sander/RadioNL/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/sander/RadioNL/build/CMakeFiles /home/sander/RadioNL/build/po/CMakeFiles/progress.marks
+	cd /home/sander/RadioNL/build && $(MAKE) -f CMakeFiles/Makefile2 po/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sander/RadioNL/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/sander/radionl/build && $(MAKE) -f CMakeFiles/Makefile2 po/clean
+	cd /home/sander/RadioNL/build && $(MAKE) -f CMakeFiles/Makefile2 po/clean
 .PHONY : clean
 
 # The main clean target
@@ -130,22 +130,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/sander/radionl/build && $(MAKE) -f CMakeFiles/Makefile2 po/preinstall
+	cd /home/sander/RadioNL/build && $(MAKE) -f CMakeFiles/Makefile2 po/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/sander/radionl/build && $(MAKE) -f CMakeFiles/Makefile2 po/preinstall
+	cd /home/sander/RadioNL/build && $(MAKE) -f CMakeFiles/Makefile2 po/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/sander/radionl/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/sander/RadioNL/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 po/CMakeFiles/radionl.sanderklootwijk.pot.dir/rule:
-	cd /home/sander/radionl/build && $(MAKE) -f CMakeFiles/Makefile2 po/CMakeFiles/radionl.sanderklootwijk.pot.dir/rule
+	cd /home/sander/RadioNL/build && $(MAKE) -f CMakeFiles/Makefile2 po/CMakeFiles/radionl.sanderklootwijk.pot.dir/rule
 .PHONY : po/CMakeFiles/radionl.sanderklootwijk.pot.dir/rule
 
 # Convenience name for target.
@@ -154,7 +154,7 @@ radionl.sanderklootwijk.pot: po/CMakeFiles/radionl.sanderklootwijk.pot.dir/rule
 
 # fast build rule for target.
 radionl.sanderklootwijk.pot/fast:
-	cd /home/sander/radionl/build && $(MAKE) -f po/CMakeFiles/radionl.sanderklootwijk.pot.dir/build.make po/CMakeFiles/radionl.sanderklootwijk.pot.dir/build
+	cd /home/sander/RadioNL/build && $(MAKE) -f po/CMakeFiles/radionl.sanderklootwijk.pot.dir/build.make po/CMakeFiles/radionl.sanderklootwijk.pot.dir/build
 .PHONY : radionl.sanderklootwijk.pot/fast
 
 # Help Target
@@ -181,6 +181,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/sander/radionl/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/sander/RadioNL/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

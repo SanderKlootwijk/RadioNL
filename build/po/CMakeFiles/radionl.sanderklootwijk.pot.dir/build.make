@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sander/radionl
+CMAKE_SOURCE_DIR = /home/sander/RadioNL
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sander/radionl/build
+CMAKE_BINARY_DIR = /home/sander/RadioNL/build
 
 # Utility rule file for radionl.sanderklootwijk.pot.
 
@@ -46,11 +46,11 @@ CMAKE_BINARY_DIR = /home/sander/radionl/build
 include po/CMakeFiles/radionl.sanderklootwijk.pot.dir/progress.make
 
 po/CMakeFiles/radionl.sanderklootwijk.pot:
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/sander/radionl/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/sander/RadioNL/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating translation template"
-	cd /home/sander/radionl/build/po && /usr/bin/intltool-extract --update --type=gettext/ini --srcdir=/home/sander/radionl radionl.desktop.in
-	cd /home/sander/radionl/build/po && /usr/bin/xgettext -o radionl.sanderklootwijk.pot -D /home/sander/radionl/po -D /home/sander/radionl/build/po --from-code=UTF-8 --c++ --qt --language=javascript --add-comments=TRANSLATORS --keyword=tr --keyword=tr:1,2 --keyword=N_ --keyword=_ --package-name='radionl.sanderklootwijk' ../qml/Main.qml radionl.desktop.in.h
-	cd /home/sander/radionl/build/po && /usr/bin/cmake -E copy radionl.sanderklootwijk.pot /home/sander/radionl/po
+	cd /home/sander/RadioNL/build/po && /usr/bin/intltool-extract --update --type=gettext/ini --srcdir=/home/sander/RadioNL radionl.desktop.in
+	cd /home/sander/RadioNL/build/po && /usr/bin/xgettext -o radionl.sanderklootwijk.pot -D /home/sander/RadioNL/po -D /home/sander/RadioNL/build/po --from-code=UTF-8 --c++ --qt --language=javascript --add-comments=TRANSLATORS --keyword=tr --keyword=tr:1,2 --keyword=N_ --keyword=_ --package-name='radionl.sanderklootwijk' ../qml/Main.qml radionl.desktop.in.h
+	cd /home/sander/RadioNL/build/po && /usr/bin/cmake -E copy radionl.sanderklootwijk.pot /home/sander/RadioNL/po
 
 radionl.sanderklootwijk.pot: po/CMakeFiles/radionl.sanderklootwijk.pot
 radionl.sanderklootwijk.pot: po/CMakeFiles/radionl.sanderklootwijk.pot.dir/build.make
@@ -61,10 +61,10 @@ po/CMakeFiles/radionl.sanderklootwijk.pot.dir/build: radionl.sanderklootwijk.pot
 .PHONY : po/CMakeFiles/radionl.sanderklootwijk.pot.dir/build
 
 po/CMakeFiles/radionl.sanderklootwijk.pot.dir/clean:
-	cd /home/sander/radionl/build/po && $(CMAKE_COMMAND) -P CMakeFiles/radionl.sanderklootwijk.pot.dir/cmake_clean.cmake
+	cd /home/sander/RadioNL/build/po && $(CMAKE_COMMAND) -P CMakeFiles/radionl.sanderklootwijk.pot.dir/cmake_clean.cmake
 .PHONY : po/CMakeFiles/radionl.sanderklootwijk.pot.dir/clean
 
 po/CMakeFiles/radionl.sanderklootwijk.pot.dir/depend:
-	cd /home/sander/radionl/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/sander/radionl /home/sander/radionl/po /home/sander/radionl/build /home/sander/radionl/build/po /home/sander/radionl/build/po/CMakeFiles/radionl.sanderklootwijk.pot.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/sander/RadioNL/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/sander/RadioNL /home/sander/RadioNL/po /home/sander/RadioNL/build /home/sander/RadioNL/build/po /home/sander/RadioNL/build/po/CMakeFiles/radionl.sanderklootwijk.pot.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : po/CMakeFiles/radionl.sanderklootwijk.pot.dir/depend
 

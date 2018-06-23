@@ -1,4 +1,4 @@
-# Install script for directory: /home/sander/radionl/po
+# Install script for directory: /home/sander/RadioNL/po
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

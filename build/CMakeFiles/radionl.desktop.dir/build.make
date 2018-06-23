@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sander/radionl
+CMAKE_SOURCE_DIR = /home/sander/RadioNL
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sander/radionl/build
+CMAKE_BINARY_DIR = /home/sander/RadioNL/build
 
 # Utility rule file for radionl.desktop.
 
@@ -46,10 +46,10 @@ CMAKE_BINARY_DIR = /home/sander/radionl/build
 include CMakeFiles/radionl.desktop.dir/progress.make
 
 CMakeFiles/radionl.desktop:
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/sander/radionl/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/sander/RadioNL/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Merging translations into radionl.desktop..."
-	LC_ALL=C /usr/bin/intltool-merge -d -u /home/sander/radionl/po /home/sander/radionl/radionl.desktop.in radionl.desktop
-	sed -i 's/radionl-//g' /home/sander/radionl/build/radionl.desktop
+	LC_ALL=C /usr/bin/intltool-merge -d -u /home/sander/RadioNL/po /home/sander/RadioNL/radionl.desktop.in radionl.desktop
+	sed -i 's/radionl-//g' /home/sander/RadioNL/build/radionl.desktop
 
 radionl.desktop: CMakeFiles/radionl.desktop
 radionl.desktop: CMakeFiles/radionl.desktop.dir/build.make
@@ -64,6 +64,6 @@ CMakeFiles/radionl.desktop.dir/clean:
 .PHONY : CMakeFiles/radionl.desktop.dir/clean
 
 CMakeFiles/radionl.desktop.dir/depend:
-	cd /home/sander/radionl/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/sander/radionl /home/sander/radionl /home/sander/radionl/build /home/sander/radionl/build /home/sander/radionl/build/CMakeFiles/radionl.desktop.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/sander/RadioNL/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/sander/RadioNL /home/sander/RadioNL /home/sander/RadioNL/build /home/sander/RadioNL/build /home/sander/RadioNL/build/CMakeFiles/radionl.desktop.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/radionl.desktop.dir/depend
 

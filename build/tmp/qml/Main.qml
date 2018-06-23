@@ -108,6 +108,7 @@ Settings {
   property string utvisible: "false"
   property string zeevisible: "false"
   property string nohovisible: "false"
+  property string frivisible: "false"
 }
 
 Component.onCompleted: { player.source = settings.source; bottomIMG.source = settings.image; playerText.text = settings.text }
@@ -1015,6 +1016,7 @@ Flickable {
       width: parent.width
 
       Text {
+        id: fritext
         height: units.gu(2)
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -1031,6 +1033,498 @@ Flickable {
           leftMargin: units.gu(1)
           verticalCenter: parent.verticalCenter
         }
+      }
+
+      Image {
+        height: units.gu(1.5)
+        width: height
+        anchors {
+          left: fritext.right
+          leftMargin: units.gu(0.75)
+          verticalCenter: parent.verticalCenter
+        }
+        source: {
+          if (settings.frivisible == "false") {
+            "img/arrow-up.svg"
+          }
+          else {
+            "img/arrow-down.svg"
+          }
+      }
+      }
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
+          if (settings.frivisible == "false") {
+            settings.frivisible = "true"
+          }
+          else {
+            settings.frivisible = "false"
+          }
+      }
+    }
+    }
+
+    Rectangle {
+      id: omropfryslan
+      visible: {
+        if (settings.frivisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/omropfryslan.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://icecast.pmedia70.kpnstreaming.nl/omropfryslanlive-OmropFryslanRadio.mp3"
+            settings.source = "http://icecast.pmedia70.kpnstreaming.nl/omropfryslanlive-OmropFryslanRadio.mp3"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "Omrop Fryslân"
+            settings.text = "Omrop Fryslân"
+            bottomIMG.source = "img/omropfryslan.jpg"
+            settings.image = "img/omropfryslan.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/omropfryslanback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+
+      }
+    }
+
+    Rectangle {
+      id: waterstadfm
+      visible: {
+        if (settings.frivisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/waterstadfm.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://stream.waterstadfm.nl/waterstadfm"
+            settings.source = "http://stream.waterstadfm.nl/waterstadfm"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "Waterstad FM"
+            settings.text = "Waterstad FM"
+            bottomIMG.source = "img/waterstadfm.jpg"
+            settings.image = "img/waterstadfm.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/waterstadfmback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+
+      }
+    }
+
+    Rectangle {
+      id: radiocentraal
+      visible: {
+        if (settings.frivisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/radiocentraal.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://centraal.mm-stream.nl:8017/stream"
+            settings.source = "http://centraal.mm-stream.nl:8017/stream"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "Radio Centraal"
+            settings.text = "Radio Centraal"
+            bottomIMG.source = "img/radiocentraal.jpg"
+            settings.image = "img/radiocentraal.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/radiocentraalback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+
+      }
+    }
+
+    Rectangle {
+      id: rtvnof
+      visible: {
+        if (settings.frivisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/rtvnof.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://media02.streampartner.nl:8056/live"
+            settings.source = "http://media02.streampartner.nl:8056/live"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "RTV Noordoost Friesland"
+            settings.text = "RTV Noordoost Friesland"
+            bottomIMG.source = "img/rtvnof.jpg"
+            settings.image = "img/rtvnof.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/rtvnofback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+
+      }
+    }
+
+    Rectangle {
+      id: radiospannenburg
+      visible: {
+        if (settings.frivisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/radiospannenburg.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://37.59.195.28:8132/;"
+            settings.source = "http://37.59.195.28:8132/;"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "Radio Spannenburg"
+            settings.text = "Radio Spannenburg"
+            bottomIMG.source = "img/radiospannenburg.jpg"
+            settings.image = "img/radiospannenburg.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/radiospannenburgback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+
+      }
+    }
+
+    Rectangle {
+      id: leofm
+      visible: {
+        if (settings.frivisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/leofm.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://rs5.stream24.org:8390/;*.mp3"
+            settings.source = "http://rs5.stream24.org:8390/;*.mp3"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "Leo FM"
+            settings.text = "Leo FM"
+            bottomIMG.source = "img/leofm.jpg"
+            settings.image = "img/leofm.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/leofmback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+
       }
     }
 

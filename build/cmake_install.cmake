@@ -1,4 +1,4 @@
-# Install script for directory: /home/sander/radionl
+# Install script for directory: /home/sander/RadioNL
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/" TYPE FILE FILES "/home/sander/radionl/build/manifest.json")
+file(INSTALL DESTINATION "/" TYPE FILE FILES "/home/sander/RadioNL/build/manifest.json")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -53,7 +53,7 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/" TYPE FILE FILES "/home/sander/radionl/radionl.apparmor")
+file(INSTALL DESTINATION "/" TYPE FILE FILES "/home/sander/RadioNL/radionl.apparmor")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -65,7 +65,7 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/" TYPE DIRECTORY FILES "/home/sander/radionl/qml")
+file(INSTALL DESTINATION "/" TYPE DIRECTORY FILES "/home/sander/RadioNL/qml")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -77,7 +77,7 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/" TYPE DIRECTORY FILES "/home/sander/radionl/assets")
+file(INSTALL DESTINATION "/" TYPE DIRECTORY FILES "/home/sander/RadioNL/assets")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -89,12 +89,12 @@ if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/" TYPE FILE FILES "/home/sander/radionl/build/radionl.desktop")
+file(INSTALL DESTINATION "/" TYPE FILE FILES "/home/sander/RadioNL/build/radionl.desktop")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/sander/radionl/build/po/cmake_install.cmake")
+  include("/home/sander/RadioNL/build/po/cmake_install.cmake")
 
 endif()
 
@@ -104,7 +104,7 @@ else()
   set(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 endif()
 
-file(WRITE "/home/sander/radionl/build/${CMAKE_INSTALL_MANIFEST}" "")
+file(WRITE "/home/sander/RadioNL/build/${CMAKE_INSTALL_MANIFEST}" "")
 foreach(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  file(APPEND "/home/sander/radionl/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  file(APPEND "/home/sander/RadioNL/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 endforeach()

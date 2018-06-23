@@ -1261,8 +1261,8 @@ Flickable {
           anchors.fill: parent
           onClicked: {
             player.stop()
-            player.source = "http://streams.movemedia.eu/centraal"
-            settings.source = "http://streams.movemedia.eu/centraal"
+            player.source = "http://centraal.mm-stream.nl:8017/stream"
+            settings.source = "http://centraal.mm-stream.nl:8017/stream"
             player.play()
             playerIcon.name = "media-playback-stop"
             playerText.text = "Radio Centraal"
