@@ -1,2 +1,0 @@
-/home/sander/RadioNL/build/CMakeFiles/radionl.desktop.dir
-/home/sander/RadioNL/build/po/CMakeFiles/radionl.sanderklootwijk.pot.dir

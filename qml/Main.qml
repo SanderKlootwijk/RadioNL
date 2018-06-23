@@ -55,24 +55,7 @@ MainView {
       id: header
       height: units.gu(9)
       title: i18n.tr('Radio NL')
-      /*/ Icon {
-      width: units.gu(3.2)
-      height: units.gu(3.2)
-      anchors {
-      top: header.top
-      topMargin: units.gu(1)
-      right: header.right
-      rightMargin: units.gu(3)
-    }
-    name: "help"
 
-    MouseArea {
-    anchors.fill: parent
-    onClicked: {
-    openAboutDialog()
-  }
-}
-} /*/
 Sections {
   anchors.bottom: parent.bottom
   anchors.horizontalCenter: parent.horizontalCenter
@@ -89,10 +72,19 @@ Sections {
   Action {
     text: "Regionaal"
     onTriggered: {
-      scrollRegionaal.visible = true
-      flickLandelijk.state = "regionaal"
-      flickRegionaal.state = "regionaal"
-      scrollLandelijk.visible = false
+      if (settings.tutorialRegionaal == "true"){
+          PopupUtils.open(tutorialRegionaalDialog)
+          scrollRegionaal.visible = true
+          flickLandelijk.state = "regionaal"
+          flickRegionaal.state = "regionaal"
+          scrollLandelijk.visible = false
+      }
+      else{
+        scrollRegionaal.visible = true
+        flickLandelijk.state = "regionaal"
+        flickRegionaal.state = "regionaal"
+        scrollLandelijk.visible = false
+      }
     }
   }
   ]
@@ -104,14 +96,37 @@ Settings {
   property string source: ""
   property string image: ""
   property string text: ""
+  property string tutorialMain: "true"
+  property string tutorialRegionaal: "true"
   property string gevisible: "false"
   property string utvisible: "false"
   property string zeevisible: "false"
   property string nohovisible: "false"
   property string frivisible: "false"
+  property string grovisible: "false"
+  property string drenvisible: "false"
+  property string overvisible: "false"
+  property string flevisible: "false"
+  property string zuhovisible: "false"
+  property string bravisible: "false"
+  property string limvisible: "false"
 }
 
-Component.onCompleted: { player.source = settings.source; bottomIMG.source = settings.image; playerText.text = settings.text }
+//Component.onCompleted: { player.source = settings.source; bottomIMG.source = settings.image; playerText.text = settings.text }
+
+Component.onCompleted: {
+  if (settings.tutorialMain == "true"){
+      PopupUtils.open(tutorialMainDialog)
+      player.source = settings.source
+      bottomIMG.source = settings.image
+      playerText.text = settings.text
+  }
+  else{
+    player.source = settings.source
+    bottomIMG.source = settings.image
+    playerText.text = settings.text
+  }
+}
 
 Flickable {
   id: flickLandelijk
@@ -1534,6 +1549,7 @@ Flickable {
       width: parent.width
 
       Text {
+        id: grotext
         height: units.gu(2)
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -1551,6 +1567,24 @@ Flickable {
           verticalCenter: parent.verticalCenter
         }
       }
+
+      Image {
+        height: units.gu(1.5)
+        width: height
+        anchors {
+          left: grotext.right
+          leftMargin: units.gu(0.75)
+          verticalCenter: parent.verticalCenter
+        }
+        source: {
+          if (settings.grovisible == "false") {
+            "img/arrow-up.svg"
+          }
+          else {
+            "img/arrow-down.svg"
+          }
+      }
+      }
     }
 
     Rectangle {
@@ -1559,6 +1593,7 @@ Flickable {
       width: parent.width
 
       Text {
+        id: drentext
         height: units.gu(2)
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -1576,6 +1611,24 @@ Flickable {
           verticalCenter: parent.verticalCenter
         }
       }
+
+      Image {
+        height: units.gu(1.5)
+        width: height
+        anchors {
+          left: drentext.right
+          leftMargin: units.gu(0.75)
+          verticalCenter: parent.verticalCenter
+        }
+        source: {
+          if (settings.drenvisible == "false") {
+            "img/arrow-up.svg"
+          }
+          else {
+            "img/arrow-down.svg"
+          }
+      }
+      }
     }
 
     Rectangle {
@@ -1584,6 +1637,7 @@ Flickable {
       width: parent.width
 
       Text {
+        id: overtext
         height: units.gu(2)
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -1601,6 +1655,24 @@ Flickable {
           verticalCenter: parent.verticalCenter
         }
       }
+
+      Image {
+        height: units.gu(1.5)
+        width: height
+        anchors {
+          left: overtext.right
+          leftMargin: units.gu(0.75)
+          verticalCenter: parent.verticalCenter
+        }
+        source: {
+          if (settings.overvisible == "false") {
+            "img/arrow-up.svg"
+          }
+          else {
+            "img/arrow-down.svg"
+          }
+      }
+      }
     }
 
     Rectangle {
@@ -1609,6 +1681,7 @@ Flickable {
       width: parent.width
 
       Text {
+        id: fletext
         height: units.gu(2)
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -1625,6 +1698,24 @@ Flickable {
           leftMargin: units.gu(1)
           verticalCenter: parent.verticalCenter
         }
+      }
+
+      Image {
+        height: units.gu(1.5)
+        width: height
+        anchors {
+          left: fletext.right
+          leftMargin: units.gu(0.75)
+          verticalCenter: parent.verticalCenter
+        }
+        source: {
+          if (settings.flevisible == "false") {
+            "img/arrow-up.svg"
+          }
+          else {
+            "img/arrow-down.svg"
+          }
+      }
       }
     }
 
@@ -3551,6 +3642,7 @@ Flickable {
       width: parent.width
 
       Text {
+        id: zuhotext
         height: units.gu(2)
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -3567,6 +3659,24 @@ Flickable {
           leftMargin: units.gu(1)
           verticalCenter: parent.verticalCenter
         }
+      }
+
+      Image {
+        height: units.gu(1.5)
+        width: height
+        anchors {
+          left: zuhotext.right
+          leftMargin: units.gu(0.75)
+          verticalCenter: parent.verticalCenter
+        }
+        source: {
+          if (settings.zuhovisible == "false") {
+            "img/arrow-up.svg"
+          }
+          else {
+            "img/arrow-down.svg"
+          }
+      }
       }
     }
 
@@ -4088,6 +4198,7 @@ Flickable {
       width: parent.width
 
       Text {
+        id: bratext
         height: units.gu(2)
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -4105,6 +4216,24 @@ Flickable {
           verticalCenter: parent.verticalCenter
         }
       }
+
+      Image {
+        height: units.gu(1.5)
+        width: height
+        anchors {
+          left: bratext.right
+          leftMargin: units.gu(0.75)
+          verticalCenter: parent.verticalCenter
+        }
+        source: {
+          if (settings.bravisible == "false") {
+            "img/arrow-up.svg"
+          }
+          else {
+            "img/arrow-down.svg"
+          }
+      }
+      }
     }
 
     Rectangle {
@@ -4113,6 +4242,7 @@ Flickable {
       width: parent.width
 
       Text {
+        id: limtext
         height: units.gu(2)
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -4129,6 +4259,24 @@ Flickable {
           leftMargin: units.gu(1)
           verticalCenter: parent.verticalCenter
         }
+      }
+
+      Image {
+        height: units.gu(1.5)
+        width: height
+        anchors {
+          left: limtext.right
+          leftMargin: units.gu(0.75)
+          verticalCenter: parent.verticalCenter
+        }
+        source: {
+          if (settings.limvisible == "false") {
+            "img/arrow-up.svg"
+          }
+          else {
+            "img/arrow-down.svg"
+          }
+      }
       }
     }
 
@@ -4275,6 +4423,45 @@ Component {
                     text: "Toch Proberen"
                     color: "#888888"
                     onClicked: PopupUtils.close(dialogue)
+                }
+            }
+}
+
+Component {
+            id: tutorialRegionaalDialog
+            Dialog {
+                id: dialogue2
+                AnimatedImage {
+                  source: "img/gifje.gif"
+                }
+                text: "Klik op het vinkje naast jouw provincie en luister naar je favoriete regionale zender!"
+                Button {
+                    text: "Ik begrijp het!"
+                    color: "#00adda"
+                    onClicked: {
+                      PopupUtils.close(dialogue2)
+                      settings.tutorialRegionaal = "false"
+                    }
+                }
+            }
+}
+
+Component {
+            id: tutorialMainDialog
+            Dialog {
+                id: dialogue3
+                AnimatedImage {
+                  source: "img/gifje2.gif"
+                }
+                title: "Welkom!"
+                text: "Welkom bij Radio NL, dé app waarin je alle Nederlandse radio stations op één plek vindt! Boven in het scherm kan je wisselen tussen landelijke en regionale zenders. Veel luisterplezier!"
+                Button {
+                    text: "Ik begrijp het!"
+                    color: "#00adda"
+                    onClicked: {
+                      PopupUtils.close(dialogue3)
+                      settings.tutorialMain = "false"
+                    }
                 }
             }
 }
