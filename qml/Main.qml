@@ -3678,6 +3678,474 @@ Flickable {
           }
       }
       }
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
+          if (settings.zuhovisible == "false") {
+            settings.zuhovisible = "true"
+          }
+          else {
+            settings.zuhovisible = "false"
+          }
+      }
+    }
+    }
+
+    Rectangle {
+      id: havenstadradio
+      visible: {
+        if (settings.zuhovisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/havenstadradio.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://mediaserv33.live-streams.nl:8056/stream"
+            settings.source = "http://mediaserv33.live-streams.nl:8056/stream"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "Havenstad Radio"
+            settings.text = "Havenstad Radio"
+            bottomIMG.source = "img/havenstadradio.jpg"
+            settings.image = "img/havenstadradio.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/havenstadradioback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+      }
+    }
+
+    Rectangle {
+      id: rtvrijnmond
+      visible: {
+        if (settings.zuhovisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/rtvrijnmond.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://d2e9xgjjdd9cr5.cloudfront.net/icecast/rijnmond/radio-mp3"
+            settings.source = "http://d2e9xgjjdd9cr5.cloudfront.net/icecast/rijnmond/radio-mp3"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "RTV Rijnmond"
+            settings.text = "RTV Rijnmond"
+            bottomIMG.source = "img/rtvrijnmond.jpg"
+            settings.image = "img/rtvrijnmond.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/rtvrijnmondback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+      }
+    }
+
+    Rectangle {
+      id: omroepwest
+      visible: {
+        if (settings.zuhovisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/omroepwest.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://d3jhv0ayn0z3fg.cloudfront.net/icecast/omroepwest/radio"
+            settings.source = "http://d3jhv0ayn0z3fg.cloudfront.net/icecast/omroepwest/radio"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "Omroep West"
+            settings.text = "Omroep West"
+            bottomIMG.source = "img/omroepwest.jpg"
+            settings.image = "img/omroepwest.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/omroepwestback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+      }
+    }
+
+    Rectangle {
+      id: zfm
+      visible: {
+        if (settings.zuhovisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/zfm.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://www.kippingmultimediaal.nl:8000/ZFMmobiel"
+            settings.source = "http://www.kippingmultimediaal.nl:8000/ZFMmobiel"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "ZFM"
+            settings.text = "ZFM"
+            bottomIMG.source = "img/zfm.jpg"
+            settings.image = "img/zfm.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/zfmback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+      }
+    }
+
+    Rectangle {
+      id: funxdenhaag
+      visible: {
+        if (settings.zuhovisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/funxdenhaag.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://icecast.omroep.nl/funx-denhaag-bb-mp3"
+            settings.source = "http://icecast.omroep.nl/funx-denhaag-bb-mp3"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "FunX Den Haag"
+            settings.text = "FunX Den Haag"
+            bottomIMG.source = "img/funxdenhaag.jpg"
+            settings.image = "img/funxdenhaag.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/funxdenhaagback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+      }
+    }
+
+    Rectangle {
+      id: denhaagfm
+      visible: {
+        if (settings.zuhovisible == "false") {
+          false
+        }
+        else {
+          true
+        }
+      }
+      width: parent.width
+      height: bottomMenu.height * 1.5
+      color: "transparent"
+
+      Image {
+        z: 3
+        source: "img/denhaagfm.jpg"
+        height: parent.height
+        width: parent.height
+        anchors {
+          left: parent.left
+          bottom: parent.bottom
+        }
+      }
+
+      Icon {
+        z: 3
+        width: bottomMenu.height / 1.5
+        height: bottomMenu.height / 1.5
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+          rightMargin: units.gu(3)
+        }
+        color: "white"
+        name: "media-playback-start"
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            player.stop()
+            player.source = "http://82.94.205.122/proxy/haagseomroep?mp=/denhaagfm"
+            settings.source = "http://82.94.205.122/proxy/haagseomroep?mp=/denhaagfm"
+            player.play()
+            playerIcon.name = "media-playback-stop"
+            playerText.text = "Den Haag FM"
+            settings.text = "Den Haag FM"
+            bottomIMG.source = "img/denhaagfm.jpg"
+            settings.image = "img/denhaagfm.jpg"
+          }
+        }
+      }
+
+      Rectangle {
+        z: 1
+        width: parent.width - parent.height
+        height: parent.height
+        anchors {
+          right: parent.right
+          bottom: parent.bottom
+        }
+        color: "grey"
+        clip: true
+
+        Image {
+          width: parent.width
+          height: parent.height
+          fillMode: Image.PreserveAspectCrop
+          source: "img/denhaagfmback.png"
+          smooth: true
+          z: parent.z + 1
+          opacity: 0.5
+        }
+      }
     }
 
     Rectangle {
