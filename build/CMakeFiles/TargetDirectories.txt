@@ -1,0 +1,14 @@
+/home/sander/RadioNL/build/CMakeFiles/install.dir
+/home/sander/RadioNL/build/CMakeFiles/list_install_components.dir
+/home/sander/RadioNL/build/CMakeFiles/rebuild_cache.dir
+/home/sander/RadioNL/build/CMakeFiles/radionl.desktop.dir
+/home/sander/RadioNL/build/CMakeFiles/edit_cache.dir
+/home/sander/RadioNL/build/CMakeFiles/install/strip.dir
+/home/sander/RadioNL/build/CMakeFiles/install/local.dir
+/home/sander/RadioNL/build/po/CMakeFiles/install.dir
+/home/sander/RadioNL/build/po/CMakeFiles/list_install_components.dir
+/home/sander/RadioNL/build/po/CMakeFiles/rebuild_cache.dir
+/home/sander/RadioNL/build/po/CMakeFiles/radionl.sanderklootwijk.pot.dir
+/home/sander/RadioNL/build/po/CMakeFiles/edit_cache.dir
+/home/sander/RadioNL/build/po/CMakeFiles/install/strip.dir
+/home/sander/RadioNL/build/po/CMakeFiles/install/local.dir

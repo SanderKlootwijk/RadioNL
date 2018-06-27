@@ -4901,6 +4901,7 @@ Component {
                 id: dialogue2
                 AnimatedImage {
                   source: "img/gifje.gif"
+                  height: width / 0.6
                 }
                 text: "Klik op het vinkje naast jouw provincie en luister naar je favoriete regionale zender!"
                 Button {
@@ -4920,8 +4921,8 @@ Component {
                 id: dialogue3
                 AnimatedImage {
                   source: "img/gifje2.gif"
+                  height: width / 0.6
                 }
-                title: "Welkom!"
                 text: "Welkom bij Radio NL, dé app waarin je alle Nederlandse radio stations op één plek vindt! Boven in het scherm kan je wisselen tussen landelijke en regionale zenders. Veel luisterplezier!"
                 Button {
                     text: "Ik begrijp het!"
