@@ -1,7 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import Ubuntu.Components 1.3
-import Ubuntu.Components.Popups 1.0
+import Ubuntu.Components.Popups 1.3
 import QtMultimedia 5.0
 import Qt.labs.settings 1.0
 
@@ -15,39 +15,37 @@ MainView {
   height: units.gu(75)
 
   Image {
-              id: testImg
-              anchors.right: parent.left
-              source: "https://www.buienradar.nl/resources/images/logor.svg"
-              onStatusChanged: if (testImg.status == Image.Ready) console.log('TestImg is loaded!')
+    id: testImg
+    anchors.right: parent.left
+    source: "https://www.npo3fm.nl/templates/npo3fm/images/logo-npo3fm.png"
+    onStatusChanged: if (testImg.status == Image.Ready) console.log('TestImg is loaded!')
+  }
 
+  Timer {
+    id: delaytimer
+    interval: 2500
+    running: false
+    repeat: false
+    onTriggered: {
+      if (loaded.text == 'Not loaded'){
+        PopupUtils.open(noConnectionDialog)
+        console.log('Oops! No internet connection.')
+      }
+      else{
+        console.log('Yes! Working internet connection.')
+      }
+    }
+  }
 
-          }
-
-          Timer {
-              id: delaytimer
-              interval: 2000
-              running: false
-              repeat: false
-              onTriggered: {
-                  if (loaded.text == 'Not loaded'){
-                      PopupUtils.open(noConnectionDialog)
-                      console.log('Oops! No internet connection.')
-                  }
-                  else{
-                      console.log('Yes! Working internet connection.')
-                  }
-              }
-          }
-
-          Text {
-              id: loaded
-              visible: false
-              text: testImg.status == Image.Ready ? 'Loaded' : 'Not loaded'
-              Component.onCompleted: {
-                  delaytimer.start()
-                  console.log('hello!')
-              }
-            }
+  Text {
+    id: loaded
+    visible: false
+    text: testImg.status == Image.Ready ? 'Loaded' : 'Not loaded'
+    Component.onCompleted: {
+      delaytimer.start()
+      console.log('hello!')
+    }
+  }
 
   Page {
     anchors.fill: parent
@@ -56,4707 +54,1954 @@ MainView {
       height: units.gu(9)
       title: i18n.tr('Radio NL')
 
-Sections {
-  anchors.bottom: parent.bottom
-  anchors.horizontalCenter: parent.horizontalCenter
-  actions: [
-  Action {
-    text: "Landelijk"
-    onTriggered: {
-      scrollLandelijk.visible = true
-      flickLandelijk.state = "landelijk"
-      flickRegionaal.state = "landelijk"
-      scrollRegionaal.visible = false
+      ActionBar {
+        anchors.right: parent.right
+        numberOfSlots: 1
+        actions: [
+        Action {
+          id: settingsAction
+          text: i18n.tr("About")
+          iconName: "settings"
+          onTriggered: openSettingsDialog()
+        }
+        ]
+      }
+
+
+      Sections {
+        id: sections
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        actions: [
+        Action {
+          text: "Landelijk"
+          onTriggered: {
+            scrollLandelijk.visible = true
+            flickLandelijk.state = "landelijk"
+            flickRegionaal.state = "landelijk"
+            scrollRegionaal.visible = false
+            settingsAction.visible = false
+          }
+        },
+        Action {
+          text: "Regionaal"
+          onTriggered: {
+            if (settings.tutorialRegionaal == "true"){
+              openTutorialRegionaalDialog()
+              scrollRegionaal.visible = true
+              flickLandelijk.state = "regionaal"
+              flickRegionaal.state = "regionaal"
+              scrollLandelijk.visible = false
+              settingsAction.visible = true
+            }
+            else{
+              scrollRegionaal.visible = true
+              flickLandelijk.state = "regionaal"
+              flickRegionaal.state = "regionaal"
+              scrollLandelijk.visible = false
+              settingsAction.visible = true
+            }
+          }
+        }
+        ]
+      }
     }
-  },
-  Action {
-    text: "Regionaal"
-    onTriggered: {
-      if (settings.tutorialRegionaal == "true"){
-          PopupUtils.open(tutorialRegionaalDialog)
-          scrollRegionaal.visible = true
-          flickLandelijk.state = "regionaal"
-          flickRegionaal.state = "regionaal"
-          scrollLandelijk.visible = false
+
+    Settings {
+      id: settings
+      property string source: ""
+      property string image: ""
+      property string text: ""
+      property string tutorialMain: "true"
+      property string tutorialRegionaal: "true"
+      property string gevisible: "false"
+      property string utvisible: "false"
+      property string zeevisible: "false"
+      property string nohovisible: "false"
+      property string frivisible: "false"
+      property string grovisible: "false"
+      property string drenvisible: "false"
+      property string overvisible: "false"
+      property string flevisible: "false"
+      property string zuhovisible: "false"
+      property string bravisible: "false"
+      property string limvisible: "false"
+      property string selectedIndex: "0"
+    }
+
+    //Component.onCompleted: { player.source = settings.source; bottomIMG.source = settings.image; playerText.text = settings.text }
+
+    Component.onCompleted: {
+      if (settings.tutorialMain == "true"){
+        PopupUtils.open(tutorialMainDialog)
+        player.source = settings.source
+        bottomIMG.source = settings.image
+        playerText.text = settings.text
       }
       else{
-        scrollRegionaal.visible = true
-        flickLandelijk.state = "regionaal"
-        flickRegionaal.state = "regionaal"
-        scrollLandelijk.visible = false
+        player.source = settings.source
+        bottomIMG.source = settings.image
+        playerText.text = settings.text
       }
     }
+
+    Flickable {
+      id: flickLandelijk
+      width: parent.width
+      height: parent.height - units.gu(15)
+      anchors {
+        right: parent.right
+        bottom: bottomMenu.top
+      }
+      contentWidth: zendersLandelijkColumn.width
+      contentHeight: zendersLandelijkColumn.height
+
+      states: State {
+        name: "regionaal"
+        AnchorChanges { target: flickLandelijk; anchors.right: parent.left }
+      }
+
+      State {
+        name: "landelijk"
+        AnchorChanges { target: flickLandelijk; anchors.right: parent.right }
+      }
+
+      transitions: Transition {
+        // smoothly reanchor myRect and move into new position
+        AnchorAnimation { duration: 225 }
+      }
+
+      Column {
+        id: zendersLandelijkColumn
+        width: root.width
+        //spacing: units.gu(1)
+
+        /* NPO ZENDERS */
+
+        ZenderLandelijk {
+          naam: "NPO Radio 1"
+          logo: "img/nporadio1.jpg"
+          achtergrond: "img/nporadio1back.png"
+          bron: "http://icecast.omroep.nl/radio1-bb-mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "NPO Radio 2"
+          logo: "img/nporadio2.jpg"
+          achtergrond: "img/nporadio2back.png"
+          bron: "http://icecast.omroep.nl/radio2-bb-mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "NPO 3FM"
+          logo: "img/npo3fm.jpg"
+          achtergrond: "img/npo3fmback.png"
+          bron: "http://icecast.omroep.nl/3fm-bb-mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "NPO Radio 4"
+          logo: "img/nporadio4.jpg"
+          achtergrond: "img/nporadio4back.png"
+          bron: "http://icecast.omroep.nl/radio4-bb-mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "NPO Radio 5"
+          logo: "img/nporadio5.jpg"
+          achtergrond: "img/nporadio5back.png"
+          bron: "http://icecast.omroep.nl/radio5-bb-mp3"
+        }
+
+        /* EINDE NPO ZENDERS */
+
+        Rectangle {
+          color: "transparent"
+          height: units.gu(2)
+          width: parent.width
+        }
+
+        /* COMMERCIEEL */
+
+        ZenderLandelijk {
+          naam: "Q-music"
+          logo: "img/qmusic.jpg"
+          achtergrond: "img/qmusicback.png"
+          bron: "http://icecast-qmusic.cdp.triple-it.nl/Qmusic_nl_live_96.mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "Radio 538"
+          logo: "img/radio538.jpg"
+          achtergrond: "img/radio538back.png"
+          bron: "http://18973.live.streamtheworld.com/RADIO538.mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "Sky Radio"
+          logo: "img/skyradio.jpg"
+          achtergrond: "img/skyradioback.png"
+          bron: "http://playerservices.streamtheworld.com/api/livestream-redirect/SKYRADIO.mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "Radio 10"
+          logo: "img/radio10.jpg"
+          achtergrond: "img/radio10back.png"
+          bron: "http://20853.live.streamtheworld.com/RADIO10.mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "Radio Veronica"
+          logo: "img/radioveronica.jpg"
+          achtergrond: "img/radioveronicaback.png"
+          bron: "http://19993.live.streamtheworld.com/VERONICA.mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "100% NL"
+          logo: "img/100pnl.jpg"
+          achtergrond: "img/100pnlback.png"
+          bron: "http://stream.100p.nl/100pctnl.mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "SLAM!"
+          logo: "img/slam.jpg"
+          achtergrond: "img/slamback.png"
+          bron: "https://stream.slam.nl/slam_mp3"
+        }
+
+        /* EINDE COMMERCIEEL */
+
+      }
+    }
+
+    Flickable {
+      id: flickRegionaal
+      width: parent.width
+      height: parent.height - units.gu(15)
+      anchors {
+        left: parent.right
+        bottom: bottomMenu.top
+      }
+      contentWidth: zendersRegionaalColumn.width
+      contentHeight: zendersRegionaalColumn.height
+
+      states: State {
+        name: "regionaal"
+        AnchorChanges { target: flickRegionaal; anchors.left: parent.left }
+      }
+      State {
+        name: "landelijk"
+        AnchorChanges { target: flickRegionaal; anchors.left: parent.right }
+      }
+
+      transitions: Transition {
+        // smoothly reanchor myRect and move into new position
+        AnchorAnimation { duration: 250 }
+      }
+
+      Column {
+        id: zendersRegionaalColumn
+        width: root.width
+        //spacing: units.gu(1)
+
+        /* REGIO */
+
+        Rectangle {
+          color: "transparent"
+          height: units.gu(3)
+          width: parent.width
+          visible: {
+            if (settings.frivisible == "false") {
+              false
+            }
+            else {
+              true
+            }
+          }
+
+          Text {
+            id: fritext
+            height: units.gu(2)
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: units.gu(4.25)
+            text: "Friesland"
+          }
+
+          Image {
+            source: "img/friesland.png"
+            height: units.gu(1.5)
+            width: units.gu(2.5)
+            anchors {
+              left: parent.left
+              leftMargin: units.gu(1)
+              verticalCenter: parent.verticalCenter
+            }
+          }
+}
+
+ZenderRegionaal {
+  naam: "Omrop Fryslân"
+  logo: "img/omropfryslan.jpg"
+  achtergrond: "img/omropfryslanback.png"
+  bron: "http://icecast.pmedia70.kpnstreaming.nl/omropfryslanlive-OmropFryslanRadio.mp3"
+  visible: {
+    if (settings.frivisible == "false") {
+      false
+    }
+    else {
+      true
+    }
   }
-  ]
-}
 }
 
-Settings {
-  id: settings
-  property string source: ""
-  property string image: ""
-  property string text: ""
-  property string tutorialMain: "true"
-  property string tutorialRegionaal: "true"
-  property string gevisible: "false"
-  property string utvisible: "false"
-  property string zeevisible: "false"
-  property string nohovisible: "false"
-  property string frivisible: "false"
-  property string grovisible: "false"
-  property string drenvisible: "false"
-  property string overvisible: "false"
-  property string flevisible: "false"
-  property string zuhovisible: "false"
-  property string bravisible: "false"
-  property string limvisible: "false"
-}
-
-//Component.onCompleted: { player.source = settings.source; bottomIMG.source = settings.image; playerText.text = settings.text }
-
-Component.onCompleted: {
-  if (settings.tutorialMain == "true"){
-      PopupUtils.open(tutorialMainDialog)
-      player.source = settings.source
-      bottomIMG.source = settings.image
-      playerText.text = settings.text
-  }
-  else{
-    player.source = settings.source
-    bottomIMG.source = settings.image
-    playerText.text = settings.text
+ZenderRegionaal {
+  naam: "Waterstad FM"
+  logo: "img/waterstadfm.jpg"
+  achtergrond: "img/waterstadfmback.png"
+  bron: "http://stream.waterstadfm.nl/waterstadfm"
+  visible: {
+    if (settings.frivisible == "false") {
+      false
+    }
+    else {
+      true
+    }
   }
 }
 
-Flickable {
-  id: flickLandelijk
+ZenderRegionaal {
+  naam: "Radio Centraal"
+  logo: "img/radiocentraal.jpg"
+  achtergrond: "img/radiocentraalback.png"
+  bron: "http://centraal.mm-stream.nl:8017/stream"
+  visible: {
+    if (settings.frivisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "RTV Noordoost Friesland"
+  logo: "img/rtvnof.jpg"
+  achtergrond: "img/rtvnofback.png"
+  bron: "http://media02.streampartner.nl:8056/live"
+  visible: {
+    if (settings.frivisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio Spannenburg"
+  logo: "img/radiospannenburg.jpg"
+  achtergrond: "img/radiospannenburgback.png"
+  bron: "http://37.59.195.28:8132/;"
+  visible: {
+    if (settings.frivisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Leo FM"
+  logo: "img/leofm.jpg"
+  achtergrond: "img/leofmback.png"
+  bron: "http://rs5.stream24.org:8390/;*.mp3"
+  visible: {
+    if (settings.frivisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+Rectangle {
+  color: "transparent"
+  height: units.gu(3)
   width: parent.width
-  height: parent.height - units.gu(15)
-  anchors {
-    right: parent.right
-    bottom: bottomMenu.top
-  }
-  contentWidth: zendersLandelijkColumn.width
-  contentHeight: zendersLandelijkColumn.height
-
-  states: State {
-    name: "regionaal"
-    AnchorChanges { target: flickLandelijk; anchors.right: parent.left }
+  visible: {
+    if (settings.grovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
   }
 
-  State {
-    name: "landeljk"
-    AnchorChanges { target: flickLandelijk; anchors.right: parent.right }
+  Text {
+    id: grotext
+    height: units.gu(2)
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: units.gu(4.25)
+    text: "Groningen"
   }
 
-  transitions: Transition {
-    // smoothly reanchor myRect and move into new position
-    AnchorAnimation { duration: 250 }
-  }
-
-  Column {
-    id: zendersLandelijkColumn
-    width: root.width
-    //spacing: units.gu(1)
-
-    /* NPO ZENDERS */
-
-    Rectangle {
-      id: nporadio1
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/nporadio1.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.omroep.nl/radio1-bb-mp3"
-            settings.source = "http://icecast.omroep.nl/radio1-bb-mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "NPO Radio 1"
-            settings.text = "NPO Radio 1"
-            bottomIMG.source = "img/nporadio1.jpg"
-            settings.image = "img/nporadio1.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/nporadio1back.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
+  Image {
+    source: "img/groningen.png"
+    height: units.gu(1.5)
+    width: units.gu(2.5)
+    anchors {
+      left: parent.left
+      leftMargin: units.gu(1)
+      verticalCenter: parent.verticalCenter
     }
-
-    Rectangle {
-      id: nporadio2
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "grey"
-
-      Image {
-        z: 3
-        source: "img/nporadio2.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.omroep.nl/radio2-bb-mp3"
-            settings.source = "http://icecast.omroep.nl/radio2-bb-mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "NPO Radio 2"
-            settings.text = "NPO Radio 2"
-            bottomIMG.source = "img/nporadio2.jpg"
-            settings.image = "img/nporadio2.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/nporadio2back.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: npo3fm
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/npo3fm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.omroep.nl/3fm-bb-mp3"
-            settings.source = "http://icecast.omroep.nl/3fm-bb-mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "NPO 3FM"
-            settings.text = "NPO 3FM"
-            bottomIMG.source = "img/npo3fm.jpg"
-            settings.image = "img/npo3fm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/npo3fmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: nporadio4
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/nporadio4.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.omroep.nl/radio4-bb-mp3"
-            settings.source = "http://icecast.omroep.nl/radio4-bb-mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "NPO Radio 4"
-            settings.text = "NPO Radio 4"
-            bottomIMG.source = "img/nporadio4.jpg"
-            settings.image = "img/nporadio4.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/nporadio4back.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: nporadio5
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/nporadio5.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.omroep.nl/radio5-bb-mp3"
-            settings.source = "http://icecast.omroep.nl/radio5-bb-mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "NPO Radio 5"
-            settings.text = "NPO Radio 5"
-            bottomIMG.source = "img/nporadio5.jpg"
-            settings.image = "img/nporadio5.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/nporadio5back.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    /* EINDE NPO ZENDERS */
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(2)
-      width: parent.width
-    }
-
-    /* COMMERCIEEL */
-
-    Rectangle {
-      id: qmusic
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/qmusic.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast-qmusic.cdp.triple-it.nl/Qmusic_nl_live_96.mp3"
-            settings.source = "http://icecast-qmusic.cdp.triple-it.nl/Qmusic_nl_live_96.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Q-music"
-            settings.text = "Q-music"
-            bottomIMG.source = "img/qmusic.jpg"
-            settings.image = "img/qmusic.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/qmusicback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: radio538
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/radio538.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://18973.live.streamtheworld.com/RADIO538.mp3"
-            settings.source = "http://18973.live.streamtheworld.com/RADIO538.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Radio 538"
-            settings.text = "Radio 538"
-            bottomIMG.source = "img/radio538.jpg"
-            settings.image = "img/radio538.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/radio538back.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: skyradio
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/skyradio.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://playerservices.streamtheworld.com/api/livestream-redirect/SKYRADIO.mp3"
-            settings.source = "http://playerservices.streamtheworld.com/api/livestream-redirect/SKYRADIO.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Sky Radio"
-            settings.text = "Sky Radio"
-            bottomIMG.source = "img/skyradio.jpg"
-            settings.image = "img/skyradio.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/skyradioback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: radio10
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/radio10.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://20853.live.streamtheworld.com/RADIO10.mp3"
-            settings.source = "http://20853.live.streamtheworld.com/RADIO10.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Radio 10"
-            settings.text = "Radio 10"
-            bottomIMG.source = "img/radio10.jpg"
-            settings.image = "img/radio10.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/radio10back.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: radioveronica
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/radioveronica.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://19993.live.streamtheworld.com/VERONICA.mp3"
-            settings.source = "http://19993.live.streamtheworld.com/VERONICA.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Radio Veronica"
-            settings.text = "Radio Veronica"
-            bottomIMG.source = "img/radioveronica.jpg"
-            settings.image = "img/radioveronica.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/radioveronicaback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: honderdpnl
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/100pnl.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://stream.100p.nl/100pctnl.mp3"
-            settings.source = "http://stream.100p.nl/100pctnl.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "100% NL"
-            settings.text = "100% NL"
-            bottomIMG.source = "img/100pnl.jpg"
-            settings.image = "img/100pnl.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/100pnlback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: slam
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/slam.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "https://stream.slam.nl/slam_mp3"
-            settings.source = "https://stream.slam.nl/slam_mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "SLAM!"
-            settings.text = "SLAM!"
-            bottomIMG.source = "img/slam.jpg"
-            settings.image = "img/slam.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/slamback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    /* EINDE COMMERCIEEL */
-
-
   }
 }
 
-Flickable {
-  id: flickRegionaal
+ZenderRegionaal {
+  naam: "Simone FM"
+  logo: "img/simonefm.jpg"
+  achtergrond: "img/simonefmback.png"
+  bron: "http://stream.stream.delivery/simonefm"
+  visible: {
+    if (settings.grovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio Compagnie"
+  logo: "img/radiocompagnie.jpg"
+  achtergrond: "img/radiocompagnieback.png"
+  bron: "http://178.19.116.3:8000/stream"
+  visible: {
+    if (settings.grovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio Westerwolde"
+  logo: "img/radiowesterwolde.jpg"
+  achtergrond: "img/radiowesterwoldeback.png"
+  bron: "http://server3.ic-stream.nl:6154/;"
+  visible: {
+    if (settings.grovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "RTV Noord"
+  logo: "img/rtvnoord.jpg"
+  achtergrond: "img/rtvnoordback.png"
+  bron: "http://icecast.omroep.nl/rtvnoord-bb-mp3"
+  visible: {
+    if (settings.grovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "OOG Radio"
+  logo: "img/oogradio.jpg"
+  achtergrond: "img/oogradioback.png"
+  bron: "http://icecast.streamone.net/yQYMPcsCPtcw"
+  visible: {
+    if (settings.grovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Haren FM"
+  logo: "img/harenfm.jpg"
+  achtergrond: "img/harenfmback.png"
+  bron: "http://icecast.streamonecloud.net/zzf29538s4p8"
+  visible: {
+    if (settings.grovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Joy Radio"
+  logo: "img/joyradio.jpg"
+  achtergrond: "img/joyradioback.png"
+  bron: "http://stream.joyradio.nl/joyradio"
+  visible: {
+    if (settings.grovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+Rectangle {
+  color: "transparent"
+  height: units.gu(3)
   width: parent.width
-  height: parent.height - units.gu(15)
-  anchors {
-    left: parent.right
-    bottom: bottomMenu.top
-  }
-  contentWidth: zendersRegionaalColumn.width
-  contentHeight: zendersRegionaalColumn.height
-
-  states: State {
-    name: "regionaal"
-    AnchorChanges { target: flickRegionaal; anchors.left: parent.left }
-  }
-  State {
-    name: "landelijk"
-    AnchorChanges { target: flickRegionaal; anchors.left: parent.right }
+  visible: {
+    if (settings.drenvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
   }
 
-  transitions: Transition {
-    // smoothly reanchor myRect and move into new position
-    AnchorAnimation { duration: 250 }
+  Text {
+    id: drentext
+    height: units.gu(2)
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: units.gu(4.25)
+    text: "Drenthe"
   }
 
-  Column {
-    id: zendersRegionaalColumn
-    width: root.width
-    //spacing: units.gu(1)
-
-    /* REGIO */
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        id: fritext
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Friesland"
-      }
-
-      Image {
-        source: "img/friesland.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: fritext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.frivisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: {
-          if (settings.frivisible == "false") {
-            settings.frivisible = "true"
-          }
-          else {
-            settings.frivisible = "false"
-          }
-      }
+  Image {
+    source: "img/drenthe.png"
+    height: units.gu(1.5)
+    width: units.gu(2.5)
+    anchors {
+      left: parent.left
+      leftMargin: units.gu(1)
+      verticalCenter: parent.verticalCenter
     }
-    }
-
-    Rectangle {
-      id: omropfryslan
-      visible: {
-        if (settings.frivisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/omropfryslan.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.pmedia70.kpnstreaming.nl/omropfryslanlive-OmropFryslanRadio.mp3"
-            settings.source = "http://icecast.pmedia70.kpnstreaming.nl/omropfryslanlive-OmropFryslanRadio.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Omrop Fryslân"
-            settings.text = "Omrop Fryslân"
-            bottomIMG.source = "img/omropfryslan.jpg"
-            settings.image = "img/omropfryslan.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/omropfryslanback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-
-      }
-    }
-
-    Rectangle {
-      id: waterstadfm
-      visible: {
-        if (settings.frivisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/waterstadfm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://stream.waterstadfm.nl/waterstadfm"
-            settings.source = "http://stream.waterstadfm.nl/waterstadfm"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Waterstad FM"
-            settings.text = "Waterstad FM"
-            bottomIMG.source = "img/waterstadfm.jpg"
-            settings.image = "img/waterstadfm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/waterstadfmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-
-      }
-    }
-
-    Rectangle {
-      id: radiocentraal
-      visible: {
-        if (settings.frivisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/radiocentraal.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://centraal.mm-stream.nl:8017/stream"
-            settings.source = "http://centraal.mm-stream.nl:8017/stream"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Radio Centraal"
-            settings.text = "Radio Centraal"
-            bottomIMG.source = "img/radiocentraal.jpg"
-            settings.image = "img/radiocentraal.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/radiocentraalback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-
-      }
-    }
-
-    Rectangle {
-      id: rtvnof
-      visible: {
-        if (settings.frivisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/rtvnof.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://media02.streampartner.nl:8056/live"
-            settings.source = "http://media02.streampartner.nl:8056/live"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "RTV Noordoost Friesland"
-            settings.text = "RTV Noordoost Friesland"
-            bottomIMG.source = "img/rtvnof.jpg"
-            settings.image = "img/rtvnof.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/rtvnofback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-
-      }
-    }
-
-    Rectangle {
-      id: radiospannenburg
-      visible: {
-        if (settings.frivisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/radiospannenburg.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://37.59.195.28:8132/;"
-            settings.source = "http://37.59.195.28:8132/;"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Radio Spannenburg"
-            settings.text = "Radio Spannenburg"
-            bottomIMG.source = "img/radiospannenburg.jpg"
-            settings.image = "img/radiospannenburg.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/radiospannenburgback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-
-      }
-    }
-
-    Rectangle {
-      id: leofm
-      visible: {
-        if (settings.frivisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/leofm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://rs5.stream24.org:8390/;*.mp3"
-            settings.source = "http://rs5.stream24.org:8390/;*.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Leo FM"
-            settings.text = "Leo FM"
-            bottomIMG.source = "img/leofm.jpg"
-            settings.image = "img/leofm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/leofmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-
-      }
-    }
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        id: grotext
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Groningen"
-      }
-
-      Image {
-        source: "img/groningen.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: grotext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.grovisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-    }
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        id: drentext
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Drenthe"
-      }
-
-      Image {
-        source: "img/drenthe.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: drentext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.drenvisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-    }
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        id: overtext
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Overijssel"
-      }
-
-      Image {
-        source: "img/overijssel.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: overtext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.overvisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-    }
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        id: fletext
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Flevoland"
-      }
-
-      Image {
-        source: "img/flevoland.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: fletext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.flevisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-    }
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Gelderland"
-        id: getext
-      }
-
-      Image {
-        source: "img/gelderland.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: getext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.gevisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: {
-          if (settings.gevisible == "false") {
-            settings.gevisible = "true"
-          }
-          else {
-            settings.gevisible = "false"
-          }
-      }
-    }
-    }
-
-    Rectangle {
-      id: omroepgelderland
-      visible: {
-        if (settings.gevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/omroepgelderland.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://stream.omroepgelderland.nl/radiogelderland"
-            settings.source = "http://stream.omroepgelderland.nl/radiogelderland"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Omroep Gelderland"
-            settings.text = "Omroep Gelderland"
-            bottomIMG.source = "img/omroepgelderland.jpg"
-            settings.image = "img/omroepgelderland.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/omroepgelderlandback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-
-      }
-    }
-
-    Rectangle {
-      id: keizerstad
-      visible: {
-        if (settings.gevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-    }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/keizerstad.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://server-06.stream-server.nl:8800/;"
-            settings.source = "http://server-06.stream-server.nl:8800/;"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Keizerstad Hits"
-            settings.text = "Keizerstad Hits"
-            bottomIMG.source = "img/keizerstad.jpg"
-            settings.image = "img/keizerstad.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/keizerstadback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: radio024
-      visible: {
-        if (settings.gevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-    }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/radio024.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://high.024.fm:8338/live"
-            settings.source = "http://high.024.fm:8338/live"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Radio 024"
-            settings.text = "Radio 024"
-            bottomIMG.source = "img/radio024.jpg"
-            settings.image = "img/radio024.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/radio024back.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: rn7
-      visible: {
-        if (settings.gevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-    }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/rn7.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "https://icecast.streamone.net/i4NtlopQlQUk"
-            settings.source = "https://icecast.streamone.net/i4NtlopQlQUk"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "RN7"
-            settings.text = "RN7"
-            bottomIMG.source = "img/rn7.jpg"
-            settings.image = "img/rn7.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/rn7back.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: rtvtotaal
-      visible: {
-        if (settings.gevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-    }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/rtvtotaal.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast01.rodney.it/rtvtotaal"
-            settings.source = "http://icecast01.rodney.it/rtvtotaal"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "RTV Totaal"
-            settings.text = "RTV Totaal"
-            bottomIMG.source = "img/rtvtotaal.jpg"
-            settings.image = "img/rtvtotaal.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/rtvtotaalback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: achterhoekfm
-      visible: {
-        if (settings.gevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-    }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/achterhoekfm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.streamone.nl/h7MniPPz5a?.mp3"
-            settings.source = "http://icecast.streamone.nl/h7MniPPz5a?.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Achterhoek FM"
-            settings.text = "Achterhoek FM"
-            bottomIMG.source = "img/achterhoekfm.jpg"
-            settings.image = "img/achterhoekfm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/achterhoekfmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: omroepnijkerk
-      visible: {
-        if (settings.gevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-    }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/omroepnijkerk.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://studio.omroepn.nl:443/nfm.mp3;"
-            settings.source = "http://studio.omroepn.nl:443/nfm.mp3;"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Omroep Nijkerk"
-            settings.text = "Omroep Nijkerk"
-            bottomIMG.source = "img/omroepnijkerk.jpg"
-            settings.image = "img/omroepnijkerk.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/omroepnijkerkback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: zorgomroeprivierenland
-      visible: {
-        if (settings.gevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-    }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/zorgomroeprivierenland.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://zot.shoutcaststream.com:8048/;"
-            settings.source = "http://zot.shoutcaststream.com:8048/;"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Zorgomroep Rivierenland"
-            settings.text = "Zorgomroep Rivierenland"
-            bottomIMG.source = "img/zorgomroeprivierenland.jpg"
-            settings.image = "img/zorgomroeprivierenland.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/zorgomroeprivierenlandback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: favorietfm
-      visible: {
-        if (settings.gevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-    }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/favorietfm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://stream.rtv-favoriet.nl/ffm-320-mp3"
-            settings.source = "http://stream.rtv-favoriet.nl/ffm-320-mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Favoriet FM"
-            settings.text = "Favoriet FM"
-            bottomIMG.source = "img/favorietfm.jpg"
-            settings.image = "img/favorietfm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/favorietfmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: klassefm
-      visible: {
-        if (settings.gevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-    }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/klassefm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://stream.klasse.fm:8070/;"
-            settings.source = "http://stream.klasse.fm:8070/;"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Klasse.FM"
-            settings.text = "Klasse.FM"
-            bottomIMG.source = "img/klassefm.jpg"
-            settings.image = "img/klassefm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/klassefmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: vierdaagseradio
-      visible: {
-        if (settings.gevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-    }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/4daagseradio.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.streamone.nl/k3MNdo0Azq?hash=1519746132620.mp3"
-            settings.source = "http://icecast.streamone.nl/k3MNdo0Azq?hash=1519746132620.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "4daagse radio"
-            settings.text = "4daagse radio"
-            bottomIMG.source = "img/4daagseradio.jpg"
-            settings.image = "img/4daagseradio.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/4daagseradioback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        id: uttext
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Utrecht"
-      }
-
-      Image {
-        source: "img/utrecht.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: uttext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.utvisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: {
-          if (settings.utvisible == "false") {
-            settings.utvisible = "true"
-          }
-          else {
-            settings.utvisible = "false"
-          }
-      }
-    }
-    }
-
-    Rectangle {
-      id: mutrecht
-      visible: {
-        if (settings.utvisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/mutrecht.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.omroep.nl/rtvutrecht-radio-m-bb-mp3"
-            settings.source = "http://icecast.omroep.nl/rtvutrecht-radio-m-bb-mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Radio M Utrecht"
-            settings.text = "Radio M Utrecht"
-            bottomIMG.source = "img/mutrecht.jpg"
-            settings.image = "img/mutrecht.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/mutrechtback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: eva
-      visible: {
-        if (settings.utvisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/eva.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://stream.mediagroep-eva.nl:8001/radio"
-            settings.source = "http://stream.mediagroep-eva.nl:8001/radio"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "EVA | Amersfoort & Leusden"
-            settings.text = "EVA | Amersfoort & Leusden"
-            bottomIMG.source = "img/eva.jpg"
-            settings.image = "img/eva.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/evaback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: midlandfm
-      visible: {
-        if (settings.utvisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/midlandfm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://s6streampakket.com:8204/;"
-            settings.source = "http://s6streampakket.com:8204/;"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Midland FM"
-            settings.text = "Midland FM"
-            bottomIMG.source = "img/midlandfm.jpg"
-            settings.image = "img/midlandfm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/midlandfmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: bingofm
-      visible: {
-        if (settings.utvisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/bingofm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.omroep.nl/rtvutrecht-bingo-fm-bb-mp3"
-            settings.source = "http://icecast.omroep.nl/rtvutrecht-bingo-fm-bb-mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Bingo FM"
-            settings.text = "Bingo FM"
-            bottomIMG.source = "img/bingofm.jpg"
-            settings.image = "img/bingofm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/bingofmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: rtvbaarn
-      visible: {
-        if (settings.utvisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/rtvbaarn.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.streamone.net/IJAFJ-oRIZUy"
-            settings.source = "http://icecast.streamone.net/IJAFJ-oRIZUy"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "RTV Baarn"
-            settings.text = "RTV Baarn"
-            bottomIMG.source = "img/rtvbaarn.jpg"
-            settings.image = "img/rtvbaarn.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/rtvbaarnback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: valleiradio
-      visible: {
-        if (settings.utvisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/valleiradio.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://server-25.stream-server.nl:8366/;"
-            settings.source = "http://server-25.stream-server.nl:8366/;"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "ValleiRadio.nl"
-            settings.text = "ValleiRadio.nl"
-            bottomIMG.source = "img/valleiradio.jpg"
-            settings.image = "img/valleiradio.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/valleiradioback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        id: nohotext
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Noord-Holland"
-      }
-
-      Image {
-        source: "img/noord-holland.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: nohotext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.nohovisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: {
-          if (settings.nohovisible == "false") {
-            settings.nohovisible = "true"
-          }
-          else {
-            settings.nohovisible = "false"
-          }
-      }
-    }
-    }
-
-    Rectangle {
-      id: nhradio
-      visible: {
-        if (settings.nohovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/nhradio.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://rtvnh-ics1.streamgate.nl/rtvnh"
-            settings.source = "http://rtvnh-ics1.streamgate.nl/rtvnh"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "NH Radio"
-            settings.text = "NH Radio"
-            bottomIMG.source = "img/nhradio.jpg"
-            settings.image = "img/nhradio.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/nhradioback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: zesfm
-      visible: {
-        if (settings.nohovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/zesfm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://6fm.nl:8000/mp3live"
-            settings.source = "http://6fm.nl:8000/mp3live"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "6FM"
-            settings.text = "6FM"
-            bottomIMG.source = "img/zesfm.jpg"
-            settings.image = "img/zesfm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/zesfmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: funxamsterdam
-      visible: {
-        if (settings.nohovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/funxamsterdam.jpeg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.omroep.nl/funx-amsterdam-bb-mp3"
-            settings.source = "http://icecast.omroep.nl/funx-amsterdam-bb-mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "FunX Amsterdam"
-            settings.text = "FunX Amsterdam"
-            bottomIMG.source = "img/funxamsterdam.jpeg"
-            settings.image = "img/funxamsterdam.jpeg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/funxamsterdamback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: meerradio
-      visible: {
-        if (settings.nohovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/meerradio.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://www.meerradio.nl:8000/;stream.mp3"
-            settings.source = "http://www.meerradio.nl:8000/;stream.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "MeerRadio"
-            settings.text = "MeerRadio"
-            bottomIMG.source = "img/meerradio.jpg"
-            settings.image = "img/meerradio.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/meerradioback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: haarlem105
-      visible: {
-        if (settings.nohovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/haarlem105.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://studio.haarlem105.nl:8000/haarlem105.mp3"
-            settings.source = "http://studio.haarlem105.nl:8000/haarlem105.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Haarlem 105"
-            settings.text = "Haarlem 105"
-            bottomIMG.source = "img/haarlem105.jpg"
-            settings.image = "img/haarlem105.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/haarlem105back.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: rtvamstelveen
-      visible: {
-        if (settings.nohovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/rtvamstelveen.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://217.21.199.146:8084/stream?icy=http"
-            settings.source = "http://217.21.199.146:8084/stream?icy=http"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "RTV Amstelveen"
-            settings.text = "RTV Amstelveen"
-            bottomIMG.source = "img/rtvamstelveen.jpg"
-            settings.image = "img/rtvamstelveen.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/rtvamstelveenback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        id: zuhotext
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Zuid-Holland"
-      }
-
-      Image {
-        source: "img/zuid-holland.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: zuhotext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.zuhovisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: {
-          if (settings.zuhovisible == "false") {
-            settings.zuhovisible = "true"
-          }
-          else {
-            settings.zuhovisible = "false"
-          }
-      }
-    }
-    }
-
-    Rectangle {
-      id: havenstadradio
-      visible: {
-        if (settings.zuhovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/havenstadradio.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://mediaserv33.live-streams.nl:8056/stream"
-            settings.source = "http://mediaserv33.live-streams.nl:8056/stream"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Havenstad Radio"
-            settings.text = "Havenstad Radio"
-            bottomIMG.source = "img/havenstadradio.jpg"
-            settings.image = "img/havenstadradio.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/havenstadradioback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: rtvrijnmond
-      visible: {
-        if (settings.zuhovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/rtvrijnmond.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://d2e9xgjjdd9cr5.cloudfront.net/icecast/rijnmond/radio-mp3"
-            settings.source = "http://d2e9xgjjdd9cr5.cloudfront.net/icecast/rijnmond/radio-mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "RTV Rijnmond"
-            settings.text = "RTV Rijnmond"
-            bottomIMG.source = "img/rtvrijnmond.jpg"
-            settings.image = "img/rtvrijnmond.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/rtvrijnmondback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: omroepwest
-      visible: {
-        if (settings.zuhovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/omroepwest.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://d3jhv0ayn0z3fg.cloudfront.net/icecast/omroepwest/radio"
-            settings.source = "http://d3jhv0ayn0z3fg.cloudfront.net/icecast/omroepwest/radio"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Omroep West"
-            settings.text = "Omroep West"
-            bottomIMG.source = "img/omroepwest.jpg"
-            settings.image = "img/omroepwest.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/omroepwestback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: zfm
-      visible: {
-        if (settings.zuhovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/zfm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://www.kippingmultimediaal.nl:8000/ZFMmobiel"
-            settings.source = "http://www.kippingmultimediaal.nl:8000/ZFMmobiel"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "ZFM"
-            settings.text = "ZFM"
-            bottomIMG.source = "img/zfm.jpg"
-            settings.image = "img/zfm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/zfmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: funxdenhaag
-      visible: {
-        if (settings.zuhovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/funxdenhaag.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://icecast.omroep.nl/funx-denhaag-bb-mp3"
-            settings.source = "http://icecast.omroep.nl/funx-denhaag-bb-mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "FunX Den Haag"
-            settings.text = "FunX Den Haag"
-            bottomIMG.source = "img/funxdenhaag.jpg"
-            settings.image = "img/funxdenhaag.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/funxdenhaagback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: denhaagfm
-      visible: {
-        if (settings.zuhovisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/denhaagfm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://82.94.205.122/proxy/haagseomroep?mp=/denhaagfm"
-            settings.source = "http://82.94.205.122/proxy/haagseomroep?mp=/denhaagfm"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Den Haag FM"
-            settings.text = "Den Haag FM"
-            bottomIMG.source = "img/denhaagfm.jpg"
-            settings.image = "img/denhaagfm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors {
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/denhaagfmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        id: zeetext
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Zeeland"
-      }
-
-      Image {
-        source: "img/zeeland.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: zeetext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.zeevisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-
-      MouseArea {
-        anchors.fill: parent
-        onClicked: {
-          if (settings.zeevisible == "false") {
-            settings.zeevisible = "true"
-          }
-          else {
-            settings.zeevisible = "false"
-          }
-      }
-    }
-    }
-
-    Rectangle {
-      id: omroepzeeland
-      visible: {
-        if (settings.zeevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/omroepzeeland.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://livestream.zeelandnet.nl:8000/omroepzeeland_radio"
-            settings.source = "http://livestream.zeelandnet.nl:8000/omroepzeeland_radio"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Omproep Zeeland"
-            settings.text = "Omroep Zeeland"
-            bottomIMG.source = "img/omroepzeeland.jpg"
-            settings.image = "img/omroepzeeland.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/omroepzeelandback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: omroeptholen
-      visible: {
-        if (settings.zeevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/omroeptholen.png"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://stream.dotpoint.nl:8065/stream?type=http&nocache=125381"
-            settings.source = "http://stream.dotpoint.nl:8065/stream?type=http&nocache=125381"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Omroep Tholen"
-            settings.text = "Omroep Tholen"
-            bottomIMG.source = "img/omroeptholen.png"
-            settings.image = "img/omroeptholen.png"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/omroeptholenback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: radioschouwenduiveland
-      visible: {
-        if (settings.zeevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/radioschouwenduiveland.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://radio.streamonecloud.net/dM21nd6oMi"
-            settings.source = "http://radio.streamonecloud.net/dM21nd6oMi"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Radio Schouwen-Duiveland"
-            settings.text = "Radio Schouwen-Duiveland"
-            bottomIMG.source = "img/radioschouwenduiveland.jpg"
-            settings.image = "img/radioschouwenduiveland.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/radioschouwenduivelandback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: scheldemondfm
-      visible: {
-        if (settings.zeevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/scheldemondfm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://stream.scheldemondfm.nl:8200/;"
-            settings.source = "http://stream.scheldemondfm.nl:8200/;"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Scheldemond FM"
-            settings.text = "Scheldemond FM"
-            bottomIMG.source = "img/scheldemondfm.jpg"
-            settings.image = "img/scheldemondfm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/scheldemondfmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: terneuzenfm
-      visible: {
-        if (settings.zeevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/terneuzenfm.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://terneuzenfm.shoutcaststream.com:8076/;stream/1"
-            settings.source = "http://terneuzenfm.shoutcaststream.com:8076/;stream/1"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Terneuzen FM"
-            settings.text = "Terneuzen FM"
-            bottomIMG.source = "img/terneuzenfm.jpg"
-            settings.image = "img/terneuzenfm.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/terneuzenfmback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      id: radioreimerswaal
-      visible: {
-        if (settings.zeevisible == "false") {
-          false
-        }
-        else {
-          true
-        }
-      }
-      width: parent.width
-      height: bottomMenu.height * 1.5
-      color: "transparent"
-
-      Image {
-        z: 3
-        source: "img/radioreimerswaal.jpg"
-        height: parent.height
-        width: parent.height
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-
-      Icon {
-        z: 3
-        width: bottomMenu.height / 1.5
-        height: bottomMenu.height / 1.5
-        anchors {
-          verticalCenter: parent.verticalCenter
-          right: parent.right
-          rightMargin: units.gu(3)
-        }
-        color: "white"
-        name: "media-playback-start"
-
-        MouseArea {
-          anchors.fill: parent
-          onClicked: {
-            player.stop()
-            player.source = "http://s44.myradiostream.com:6410/;listen.mp3"
-            settings.source = "http://s44.myradiostream.com:6410/;listen.mp3"
-            player.play()
-            playerIcon.name = "media-playback-stop"
-            playerText.text = "Radio Reimerswaal"
-            settings.text = "Radio Reimerswaal"
-            bottomIMG.source = "img/radioreimerswaal.jpg"
-            settings.image = "img/radioreimerswaal.jpg"
-          }
-        }
-      }
-
-      Rectangle {
-        z: 1
-        width: parent.width - parent.height
-        height: parent.height
-        anchors{
-          right: parent.right
-          bottom: parent.bottom
-        }
-        color: "grey"
-        clip: true
-
-        Image {
-          width: parent.width
-          height: parent.height
-          fillMode: Image.PreserveAspectCrop
-          source: "img/radioreimerswaalback.png"
-          smooth: true
-          z: parent.z + 1
-          opacity: 0.5
-        }
-      }
-    }
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        id: bratext
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Noord-Brabant"
-      }
-
-      Image {
-        source: "img/noord-brabant.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: bratext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.bravisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-    }
-
-    Rectangle {
-      color: "transparent"
-      height: units.gu(3)
-      width: parent.width
-
-      Text {
-        id: limtext
-        height: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: units.gu(4.25)
-        text: "Limburg"
-      }
-
-      Image {
-        source: "img/limburg.png"
-        height: units.gu(1.5)
-        width: units.gu(2.5)
-        anchors {
-          left: parent.left
-          leftMargin: units.gu(1)
-          verticalCenter: parent.verticalCenter
-        }
-      }
-
-      Image {
-        height: units.gu(1.5)
-        width: height
-        anchors {
-          left: limtext.right
-          leftMargin: units.gu(0.75)
-          verticalCenter: parent.verticalCenter
-        }
-        source: {
-          if (settings.limvisible == "false") {
-            "img/arrow-up.svg"
-          }
-          else {
-            "img/arrow-down.svg"
-          }
-      }
-      }
-    }
-
-    /*  REGIONAAL */
-
   }
+}
+
+ZenderRegionaal {
+  naam: "RTV Drenthe"
+  logo: "img/rtvdrenthe.jpg"
+  achtergrond: "img/rtvdrentheback.png"
+  bron: "http://icecast.omroep.nl/rtvnoord-bb-mp3"
+  visible: {
+    if (settings.drenvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "ZO!34"
+  logo: "img/zo!34.jpg"
+  achtergrond: "img/zo!34back.png"
+  bron: "http://stream01.streamhier.nl:8024/stream"
+  visible: {
+    if (settings.drenvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Streekradio"
+  logo: "img/streekradio.jpg"
+  achtergrond: "img/streekradioback.png"
+  bron: "http://livestream.streekradio.com/live"
+  visible: {
+    if (settings.drenvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+Rectangle {
+  color: "transparent"
+  height: units.gu(3)
+  width: parent.width
+  visible: {
+    if (settings.overvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+
+  Text {
+    id: overtext
+    height: units.gu(2)
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: units.gu(4.25)
+    text: "Overijssel"
+  }
+
+  Image {
+    source: "img/overijssel.png"
+    height: units.gu(1.5)
+    width: units.gu(2.5)
+    anchors {
+      left: parent.left
+      leftMargin: units.gu(1)
+      verticalCenter: parent.verticalCenter
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio Rosita"
+  logo: "img/radiorosita.jpg"
+  achtergrond: "img/radiorositaback.png"
+  bron: "http://audiostreamen.nl:8004/;"
+  visible: {
+    if (settings.overvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "RTV Oost"
+  logo: "img/rtvoost.jpg"
+  achtergrond: "img/rtvoostback.png"
+  bron: "http://ice.cr2.streamzilla.xlcdn.com:8000/sz=rtv_oost=RadioOost_mp3"
+  visible: {
+    if (settings.overvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "RTV SLOS"
+  logo: "img/rtvslos.jpg"
+  achtergrond: "img/rtvslosback.png"
+  bron: "http://icecast.streamone.net/cjZFLu-AKwQW"
+  visible: {
+    if (settings.overvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Twente FM"
+  logo: "img/twentefm.jpg"
+  achtergrond: "img/twentefmback.png"
+  bron: "http://stream.twentefm.nl:8004/high"
+  visible: {
+    if (settings.overvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio Hengelo"
+  logo: "img/radiohengelo.jpg"
+  achtergrond: "img/radiohengeloback.png"
+  bron: "http://stream1.icehosting.nl:8128/;stream.mp3"
+  visible: {
+    if (settings.overvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Enschede FM"
+  logo: "img/enschedefm.jpg"
+  achtergrond: "img/enschedefmback.png"
+  bron: "http://stream1.icehosting.nl:8126/;stream.mp3"
+  visible: {
+    if (settings.overvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+Rectangle {
+  color: "transparent"
+  height: units.gu(3)
+  width: parent.width
+  visible: {
+    if (settings.flevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+
+  Text {
+    id: fletext
+    height: units.gu(2)
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: units.gu(4.25)
+    text: "Flevoland"
+  }
+
+  Image {
+    source: "img/flevoland.png"
+    height: units.gu(1.5)
+    width: units.gu(2.5)
+    anchors {
+      left: parent.left
+      leftMargin: units.gu(1)
+      verticalCenter: parent.verticalCenter
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Flevoland"
+  logo: "img/omroepflevoland.jpg"
+  achtergrond: "img/omroepflevolandback.png"
+  bron: "http://streams.omroepflevoland.nl:8000/flevoland64k"
+  visible: {
+    if (settings.flevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio Lelystad"
+  logo: "img/radiolelystad.jpg"
+  achtergrond: "img/radiolelystadback.png"
+  bron: "http://live.radiolelystad.nl:8000/listen"
+  visible: {
+    if (settings.flevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Echnaton FM"
+  logo: "img/echnatonfm.jpg"
+  achtergrond: "img/echnatonfmback.png"
+  bron: "http://icecast.streamone.nl/pXsb3sihz9"
+  visible: {
+    if (settings.flevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Almere Radio"
+  logo: "img/omroepalmereradio.jpg"
+  achtergrond: "img/omroepalmereradioback.png"
+  bron: "http://icecast.streamone.nl/Pi6mjq9XKC"
+  visible: {
+    if (settings.flevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "URK FM"
+  logo: "img/urkfm.jpg"
+  achtergrond: "img/urkfmback.png"
+  bron: "http://live.urkfm.nl:8000/urkfm.mp3"
+  visible: {
+    if (settings.flevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Zeewolde"
+  logo: "img/omroepzeewolde.jpg"
+  achtergrond: "img/omroepzeewoldeback.png"
+  bron: "http://stream.lokaleomroepzeewolde.nl:8000/normal"
+  visible: {
+    if (settings.flevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+Rectangle {
+  color: "transparent"
+  height: units.gu(3)
+  width: parent.width
+  visible: {
+    if (settings.gevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+
+  Text {
+    height: units.gu(2)
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: units.gu(4.25)
+    text: "Gelderland"
+    id: getext
+  }
+
+  Image {
+    source: "img/gelderland.png"
+    height: units.gu(1.5)
+    width: units.gu(2.5)
+    anchors {
+      left: parent.left
+      leftMargin: units.gu(1)
+      verticalCenter: parent.verticalCenter
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Gelderland"
+  logo: "img/omroepgelderland.jpg"
+  achtergrond: "img/omroepgelderlandback.png"
+  bron: "http://stream.omroepgelderland.nl/radiogelderland"
+  visible: {
+    if (settings.gevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Keizerstad Hits"
+  logo: "img/keizerstad.jpg"
+  achtergrond: "img/keizerstadback.png"
+  bron: "http://server-06.stream-server.nl:8800/;"
+  visible: {
+    if (settings.gevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio 024"
+  logo: "img/radio024.jpg"
+  achtergrond: "img/radio024back.png"
+  bron: "http://high.024.fm:8338/live"
+  visible: {
+    if (settings.gevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "RN7"
+  logo: "img/rn7.jpg"
+  achtergrond: "img/rn7back.png"
+  bron: "https://icecast.streamone.net/i4NtlopQlQUk"
+  visible: {
+    if (settings.gevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Achterhoek FM"
+  logo: "img/achterhoekfm.jpg"
+  achtergrond: "img/achterhoekfmback.png"
+  bron: "https://ms3ic.mx-cd.net/169-699187/AchterhoekFM"
+  visible: {
+    if (settings.gevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Nijkerk"
+  logo: "img/omroepnijkerk.jpg"
+  achtergrond: "img/omroepnijkerkback.png"
+  bron: "http://studio.omroepn.nl:443/nfm.mp3;"
+  visible: {
+    if (settings.gevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Zorgomroep Rivierenland"
+  logo: "img/zorgomroeprivierenland.jpg"
+  achtergrond: "img/zorgomroeprivierenlandback.png"
+  bron: "http://zot.shoutcaststream.com:8048/;"
+  visible: {
+    if (settings.gevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Favoriet FM"
+  logo: "img/favorietfm.jpg"
+  achtergrond: "img/favorietfmback.png"
+  bron: "http://stream.rtv-favoriet.nl:8000/ffm-320-mp3?ver=452769"
+  visible: {
+    if (settings.gevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Klasse FM"
+  logo: "img/klassefm.jpg"
+  achtergrond: "img/klassefmback.png"
+  bron: "http://stream.klasse.fm:8070/;"
+  visible: {
+    if (settings.gevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "4daagse radio"
+  logo: "img/4daagseradio.jpg"
+  achtergrond: "img/4daagseradioback.png"
+  bron: "http://icecast.streamone.nl/k3MNdo0Azq?hash=1519746132620.mp3"
+  visible: {
+    if (settings.gevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+Rectangle {
+  color: "transparent"
+  height: units.gu(3)
+  width: parent.width
+  visible: {
+    if (settings.utvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+
+  Text {
+    id: uttext
+    height: units.gu(2)
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: units.gu(4.25)
+    text: "Utrecht"
+  }
+
+  Image {
+    source: "img/utrecht.png"
+    height: units.gu(1.5)
+    width: units.gu(2.5)
+    anchors {
+      left: parent.left
+      leftMargin: units.gu(1)
+      verticalCenter: parent.verticalCenter
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio M Utrecht"
+  logo: "img/mutrecht.jpg"
+  achtergrond: "img/mutrechtback.png"
+  bron: "http://icecast.omroep.nl/rtvutrecht-radio-m-bb-mp3"
+  visible: {
+    if (settings.utvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "EVA | Amersfoort & Leusden"
+  logo: "img/eva.jpg"
+  achtergrond: "img/evaback.png"
+  bron: "http://stream.mediagroep-eva.nl:8001/radio"
+  visible: {
+    if (settings.utvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Midland FM"
+  logo: "img/midlandfm.jpg"
+  achtergrond: "img/midlandfmback.png"
+  bron: "http://176.31.224.21:8204/;"
+  visible: {
+    if (settings.utvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Bingo FM"
+  logo: "img/bingofm.jpg"
+  achtergrond: "img/bingofmback.png"
+  bron: "http://icecast.omroep.nl/rtvutrecht-bingo-fm-bb-mp3"
+  visible: {
+    if (settings.utvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "RTV Baarn"
+  logo: "img/rtvbaarn.jpg"
+  achtergrond: "img/rtvbaarnback.png"
+  bron: "http://icecast.streamone.net/IJAFJ-oRIZUy"
+  visible: {
+    if (settings.utvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "ValleiRadio.nl"
+  logo: "img/valleiradio.jpg"
+  achtergrond: "img/valleiradioback.png"
+  bron: "http://server-25.stream-server.nl:8366/;"
+  visible: {
+    if (settings.utvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+Rectangle {
+  color: "transparent"
+  height: units.gu(3)
+  width: parent.width
+  visible: {
+    if (settings.nohovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+
+  Text {
+    id: nohotext
+    height: units.gu(2)
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: units.gu(4.25)
+    text: "Noord-Holland"
+  }
+
+  Image {
+    source: "img/noord-holland.png"
+    height: units.gu(1.5)
+    width: units.gu(2.5)
+    anchors {
+      left: parent.left
+      leftMargin: units.gu(1)
+      verticalCenter: parent.verticalCenter
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "NH Radio"
+  logo: "img/nhradio.jpg"
+  achtergrond: "img/nhradioback.png"
+  bron: "http://rtvnh-ics1.streamgate.nl/rtvnh"
+  visible: {
+    if (settings.nohovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "6FM"
+  logo: "img/zesfm.jpg"
+  achtergrond: "img/zesfmback.png"
+  bron: "http://6fm.nl:8000/mp3live"
+  visible: {
+    if (settings.nohovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "FunX Amsterdam"
+  logo: "img/funxamsterdam.jpeg"
+  achtergrond: "img/funxamsterdamback.png"
+  bron: "http://icecast.omroep.nl/funx-amsterdam-bb-mp3"
+  visible: {
+    if (settings.nohovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "MeerRadio"
+  logo: "img/meerradio.jpg"
+  achtergrond: "img/meerradioback.png"
+  bron: "http://www.meerradio.nl:8000/;stream.mp3"
+  visible: {
+    if (settings.nohovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Haarlem 105"
+  logo: "img/haarlem105.jpg"
+  achtergrond: "img/haarlem105back.png"
+  bron: "http://studio.haarlem105.nl:8000/haarlem105.mp3"
+  visible: {
+    if (settings.nohovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "RTV Amstelveen"
+  logo: "img/rtvamstelveen.jpg"
+  achtergrond: "img/rtvamstelveenback.png"
+  bron: "http://217.21.199.146:8084/stream?icy=http"
+  visible: {
+    if (settings.nohovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+Rectangle {
+  color: "transparent"
+  height: units.gu(3)
+  width: parent.width
+  visible: {
+    if (settings.zuhovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+
+  Text {
+    id: zuhotext
+    height: units.gu(2)
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: units.gu(4.25)
+    text: "Zuid-Holland"
+  }
+
+  Image {
+    source: "img/zuid-holland.png"
+    height: units.gu(1.5)
+    width: units.gu(2.5)
+    anchors {
+      left: parent.left
+      leftMargin: units.gu(1)
+      verticalCenter: parent.verticalCenter
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Havenstad Radio"
+  logo: "img/havenstadradio.jpg"
+  achtergrond: "img/havenstadradioback.png"
+  bron: "http://mediaserv33.live-streams.nl:8056/stream"
+  visible: {
+    if (settings.zuhovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "RTV Rijnmond"
+  logo: "img/rtvrijnmond.jpg"
+  achtergrond: "img/rtvrijnmondback.png"
+  bron: "http://d2e9xgjjdd9cr5.cloudfront.net/icecast/rijnmond/radio-mp3"
+  visible: {
+    if (settings.zuhovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep West"
+  logo: "img/omroepwest.jpg"
+  achtergrond: "img/omroepwestback.png"
+  bron: "http://d3jhv0ayn0z3fg.cloudfront.net/icecast/omroepwest/radio"
+  visible: {
+    if (settings.zuhovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "ZFM"
+  logo: "img/zfm.jpg"
+  achtergrond: "img/zfmback.png"
+  bron: "http://www.kippingmultimediaal.nl:8000/ZFMmobiel"
+  visible: {
+    if (settings.zuhovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "FunX Den Haag"
+  logo: "img/funxdenhaag.jpg"
+  achtergrond: "img/funxdenhaagback.png"
+  bron: "http://icecast.omroep.nl/funx-denhaag-bb-mp3"
+  visible: {
+    if (settings.zuhovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Den Haag FM"
+  logo: "img/denhaagfm.jpg"
+  achtergrond: "img/denhaagfmback.png"
+  bron: "http://82.94.205.122/proxy/haagseomroep?mp=/denhaagfm"
+  visible: {
+    if (settings.zuhovisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+Rectangle {
+  color: "transparent"
+  height: units.gu(3)
+  width: parent.width
+  visible: {
+    if (settings.zeevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+
+  Text {
+    id: zeetext
+    height: units.gu(2)
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: units.gu(4.25)
+    text: "Zeeland"
+  }
+
+  Image {
+    source: "img/zeeland.png"
+    height: units.gu(1.5)
+    width: units.gu(2.5)
+    anchors {
+      left: parent.left
+      leftMargin: units.gu(1)
+      verticalCenter: parent.verticalCenter
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Zeeland"
+  logo: "img/omroepzeeland.jpg"
+  achtergrond: "img/omroepzeelandback.png"
+  bron: "http://livestream.zeelandnet.nl:8000/omroepzeeland_radio"
+  visible: {
+    if (settings.zeevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Tholen"
+  logo: "img/omroeptholen.png"
+  achtergrond: "img/omroeptholenback.png"
+  bron: "http://stream.dotpoint.nl:8065/stream?type=http&nocache=125381"
+  visible: {
+    if (settings.zeevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio Schouwen-Duiveland"
+  logo: "img/radioschouwenduiveland.jpg"
+  achtergrond: "img/radioschouwenduivelandback.png"
+  bron: "http://radio.streamonecloud.net/dM21nd6oMi"
+  visible: {
+    if (settings.zeevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Scheldemond FM"
+  logo: "img/scheldemondfm.jpg"
+  achtergrond: "img/scheldemondfmback.png"
+  bron: "http://stream.scheldemondfm.nl:8200/;"
+  visible: {
+    if (settings.zeevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Terneuzen FM"
+  logo: "img/terneuzenfm.jpg"
+  achtergrond: "img/terneuzenfmback.png"
+  bron: "http://terneuzenfm.shoutcaststream.com:8076/;stream/1"
+  visible: {
+    if (settings.zeevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio Reimerswaal"
+  logo: "img/radioreimerswaal.jpg"
+  achtergrond: "img/radioreimerswaalback.png"
+  bron: "http://s44.myradiostream.com:6410/;listen.mp3"
+  visible: {
+    if (settings.zeevisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+Rectangle {
+  color: "transparent"
+  height: units.gu(3)
+  width: parent.width
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+
+  Text {
+    id: bratext
+    height: units.gu(2)
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: units.gu(4.25)
+    text: "Noord-Brabant"
+  }
+
+  Image {
+    source: "img/noord-brabant.png"
+    height: units.gu(1.5)
+    width: units.gu(2.5)
+    anchors {
+      left: parent.left
+      leftMargin: units.gu(1)
+      verticalCenter: parent.verticalCenter
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Glow FM"
+  logo: "img/glowfm.jpg"
+  achtergrond: "img/glowfmback.png"
+  bron: "http://stream.glowfm.nl:8000/glowfm.mp3"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Kempen FM"
+  logo: "img/kempenfm.jpg"
+  achtergrond: "img/kempenfmback.png"
+  bron: "http://91.213.69.167:40030/;"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Maasland FM"
+  logo: "img/maaslandfm.jpg"
+  achtergrond: "img/maaslandfmback.png"
+  bron: "http://icecast.streamone.nl/f5Snk8SjbA"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Brabant"
+  logo: "img/omroepbrabant.jpg"
+  achtergrond: "img/omroepbrabantback.png"
+  bron: "http://d3slqp9xhts6qb.cloudfront.net/icecast/omroepbrabant/mp3"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Centraal"
+  logo: "img/omroepcentraal.jpg"
+  achtergrond: "img/omroepcentraalback.png"
+  bron: "http://84.81.102.147:8000/;"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Veldhoven"
+  logo: "img/omroepveldhoven.jpg"
+  achtergrond: "img/omroepveldhovenback.png"
+  bron: "http://77.166.186.207:8000/Veldhoven"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio 8FM"
+  logo: "img/radio8fm.jpg"
+  achtergrond: "img/radio8fmback.png"
+  bron: "http://server-83.stream-server.nl/stream"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Helmond"
+  logo: "img/omroephelmond.jpg"
+  achtergrond: "img/omroephelmondback.png"
+  bron: "http://stream.omroephelmond.nl:8024/;"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio Horizon"
+  logo: "img/radiohorizon.jpg"
+  achtergrond: "img/radiohorizonback.png"
+  bron: "http://rtvhorizon.nl:8001/;"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio Kontakt"
+  logo: "img/radiokontakt.jpg"
+  achtergrond: "img/radiokontaktback.png"
+  bron: "http://lokaal.kontaktfm.nl:8005/;"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Langstraat FM"
+  logo: "img/langstraatfm.jpg"
+  achtergrond: "img/langstraatfmback.png"
+  bron: "https://mediaserv30.live-streams.nl:18001/stream"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Studio040"
+  logo: "img/studio040.jpg"
+  achtergrond: "img/studio040back.png"
+  bron: "http://stream.studio040.nl:8000/studio040.mp3"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Best"
+  logo: "img/omroepbest.jpg"
+  achtergrond: "img/omroepbestback.png"
+  bron: "http://109.235.33.237:8000/omroep.mp3"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Efteling Kids Radio"
+  logo: "img/eftelingkidsradio.jpg"
+  achtergrond: "img/eftelingkidsradioback.png"
+  bron: "https://20133.live.streamtheworld.com/TLPSTR07.mp3"
+  visible: {
+    if (settings.bravisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+Rectangle {
+  color: "transparent"
+  height: units.gu(3)
+  width: parent.width
+  visible: {
+    if (settings.limvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+
+  Text {
+    id: limtext
+    height: units.gu(2)
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: units.gu(4.25)
+    text: "Limburg"
+  }
+
+  Image {
+    source: "img/limburg.png"
+    height: units.gu(1.5)
+    width: units.gu(2.5)
+    anchors {
+      left: parent.left
+      leftMargin: units.gu(1)
+      verticalCenter: parent.verticalCenter
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Maasland Radio"
+  logo: "img/maaslandradio.jpg"
+  achtergrond: "img/maaslandradioback.png"
+  bron: "http://maaslandradio.shoutcaststream.com:8006/stream"
+  visible: {
+    if (settings.limvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Venray"
+  logo: "img/omroepvenray.jpg"
+  achtergrond: "img/omroepvenrayback.png"
+  bron: "http://icecast.omroepvenray.nl/lov.mp3"
+  visible: {
+    if (settings.limvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "L1 Radio"
+  logo: "img/l1radio.jpg"
+  achtergrond: "img/l1radioback.png"
+  bron: "http://icecast.omroep.nl/l1-radio-sb-mp3"
+  visible: {
+    if (settings.limvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Reindonk"
+  logo: "img/omroepreindonk.jpg"
+  achtergrond: "img/omroepreindonkback.png"
+  bron: "https://ms5ic.mx-cd.net/157-661257/Radio_Reindonk"
+  visible: {
+    if (settings.limvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "RTV Maastricht Radio"
+  logo: "img/rtvmaastrichtradio.jpg"
+  achtergrond: "img/rtvmaastrichtradioback.png"
+  bron: "http://stream.rtvmaastricht.nl:8081/rtv/radio_audio/icecast.audio"
+  visible: {
+    if (settings.limvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Radio Grensland"
+  logo: "img/radiogrensland.jpg"
+  achtergrond: "img/radiogrenslandback.png"
+  bron: "http://212.83.138.48:8468/stream"
+  visible: {
+    if (settings.limvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "RTV Roermond"
+  logo: "img/rtvroermond.jpg"
+  achtergrond: "img/rtvroermondback.png"
+  bron: "http://icecast.streamone.net/LyYFt64ABl8S"
+  visible: {
+    if (settings.limvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Omroep Venlo"
+  logo: "img/omroepvenlo.jpg"
+  achtergrond: "img/omroepvenloback.png"
+  bron: "https://icecast.streamone.net/2ZYEDcIAN8Yw"
+  visible: {
+    if (settings.limvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+ZenderRegionaal {
+  naam: "Weert FM"
+  logo: "img/weertfm.jpg"
+  achtergrond: "img/weertfmback.png"
+  bron: "http://weertfm.mooo.com:9000/wfm3"
+  visible: {
+    if (settings.limvisible == "false") {
+      false
+    }
+    else {
+      true
+    }
+  }
+}
+
+/*  REGIONAAL */
+
+}
 }
 Rectangle {
   id: bottomMenu
   z: 4
   width: parent.width
   height: units.gu(6)
+  color: theme.palette.normal.background
   anchors {
     bottom: parent.bottom
   }
@@ -4792,7 +2037,7 @@ Rectangle {
     Rectangle {
       z: 3
       anchors.fill: parent
-      color: "white"
+      color: theme.palette.normal.background
       visible: {
         if (playerIcon.name == "media-playback-stop") {
           false
@@ -4810,6 +2055,7 @@ Rectangle {
   }
 
   Rectangle {
+    z: 10
     width: parent.width
     height: units.gu(0.1)
     color: UbuntuColors.lightGrey
@@ -4833,18 +2079,15 @@ Rectangle {
     }
   }
 
-  Icon {
-    id: playerIcon
-    z: 3
-    width: units.gu(3.2)
-    height: width
+  Rectangle {
+    id: playerIconHolder
+    color: theme.palette.normal.background
+    height: parent.height
+    width: height * 1.5
     anchors {
       verticalCenter: parent.verticalCenter
       right: parent.right
-      rightMargin: units.gu(3)
     }
-    color: "#000000"
-    name: "media-playback-start"
 
     MouseArea {
       anchors.fill: parent
@@ -4858,6 +2101,20 @@ Rectangle {
           playerIcon.name = "media-playback-stop"
         }
       }
+    }
+
+    Icon {
+      id: playerIcon
+      z: 3
+      width: units.gu(3.2)
+      height: width
+      anchors {
+        verticalCenter: parent.verticalCenter
+        right: parent.right
+        rightMargin: units.gu(3)
+      }
+      //color: "#000000"
+      name: "media-playback-start"
     }
   }
 }
@@ -4876,62 +2133,79 @@ Scrollbar {
 }
 
 Component {
-            id: noConnectionDialog
-            Dialog {
-                id: dialogue
-                title: "Oeps!"
-                text: "Deze app vereist een actieve internetverbinding! Controleer je netwerkinstellingen en probeer het opnieuw."
-                Button {
-                    text: "Sluiten"
-                    color: "#00adda"
-                    onClicked: Qt.quit()
-                }
+  id: noConnectionDialog
+  Dialog {
+    id: dialogue
+    title: "Oeps!"
+    text: "Deze app vereist een actieve internetverbinding! Controleer je netwerkinstellingen en probeer het opnieuw."
+    Button {
+      text: "Sluiten"
+      color: "#00adda"
+      onClicked: Qt.quit()
+    }
 
-                Button {
-                    text: "Toch Proberen"
-                    color: "#888888"
-                    onClicked: PopupUtils.close(dialogue)
-                }
-            }
+    Button {
+      text: "Toch Proberen"
+      color: "#888888"
+      onClicked: PopupUtils.close(dialogue)
+    }
+  }
 }
+
+/*/Component {
+  id: tutorialRegionaalDialog
+  Dialog {
+    id: dialogue2
+    AnimatedImage {
+      source: "img/gifje.gif"
+      height: width / 0.6
+    }
+    text: "Klik op het vinkje naast jouw provincie en luister naar je favoriete regionale zender!"
+    Button {
+      text: "Ik begrijp het!"
+      color: "#00adda"
+      onClicked: {
+        PopupUtils.close(dialogue2)
+        settings.tutorialRegionaal = "false"
+      }
+    }
+  }
+}/*/
 
 Component {
-            id: tutorialRegionaalDialog
-            Dialog {
-                id: dialogue2
-                AnimatedImage {
-                  source: "img/gifje.gif"
-                  height: width / 0.6
-                }
-                text: "Klik op het vinkje naast jouw provincie en luister naar je favoriete regionale zender!"
-                Button {
-                    text: "Ik begrijp het!"
-                    color: "#00adda"
-                    onClicked: {
-                      PopupUtils.close(dialogue2)
-                      settings.tutorialRegionaal = "false"
-                    }
-                }
-            }
+  id: tutorialMainDialog
+  Dialog {
+    id: dialogue3
+    AnimatedImage {
+      source: "img/gifje2.gif"
+      height: width / 0.6
+    }
+    text: "Welkom bij Radio NL, dé app waarin je alle Nederlandse radio stations op één plek vindt! Boven in het scherm kan je wisselen tussen landelijke en regionale zenders. Veel luisterplezier!"
+    Button {
+      text: "Ik begrijp het!"
+      color: "#00adda"
+      onClicked: {
+        PopupUtils.close(dialogue3)
+        settings.tutorialMain = "false"
+      }
+    }
+  }
 }
 
-Component {
-            id: tutorialMainDialog
-            Dialog {
-                id: dialogue3
-                AnimatedImage {
-                  source: "img/gifje2.gif"
-                  height: width / 0.6
-                }
-                text: "Welkom bij Radio NL, dé app waarin je alle Nederlandse radio stations op één plek vindt! Boven in het scherm kan je wisselen tussen landelijke en regionale zenders. Veel luisterplezier!"
-                Button {
-                    text: "Ik begrijp het!"
-                    color: "#00adda"
-                    onClicked: {
-                      PopupUtils.close(dialogue3)
-                      settings.tutorialMain = "false"
-                    }
-                }
-            }
+SettingsDialog {
+  id: settingsDialog
 }
+
+function openSettingsDialog() {
+  var sd = PopupUtils.open(settingsDialog);
+}
+
+TutorialRegionaalDialog {
+  id: tutorialRegionaalDialog
+}
+
+function openTutorialRegionaalDialog() {
+  var sd = PopupUtils.open(tutorialRegionaalDialog);
+}
+
 }
