@@ -296,7 +296,7 @@ Button {
     flickRegionaal.state = "landelijk"
     scrollRegionaal.visible = false
     settingsAction.visible = false
-    sections.selectedIndex = 0
+    sections.selectedIndex = 1
     PopupUtils.close(dialogue);
     closed();
   }

@@ -76,10 +76,24 @@ MainView {
         Action {
           text: "Landelijk"
           onTriggered: {
-            scrollLandelijk.visible = true
-            flickLandelijk.state = "landelijk"
-            flickRegionaal.state = "landelijk"
+            flickLandelijk.visible = true
+            flickRegionaal.visible = false
+            flickAlternatief.visible = false
             scrollRegionaal.visible = false
+            scrollLandelijk.visible = true
+            scrollAlternatief.visible = false
+            settingsAction.visible = false
+          }
+        },
+        Action {
+          text: "Alternatief"
+          onTriggered: {
+            flickLandelijk.visible = false
+            flickRegionaal.visible = false
+            flickAlternatief.visible = true
+            scrollRegionaal.visible = false
+            scrollLandelijk.visible = false
+            scrollAlternatief.visible = true
             settingsAction.visible = false
           }
         },
@@ -88,17 +102,21 @@ MainView {
           onTriggered: {
             if (settings.tutorialRegionaal == "true"){
               openTutorialRegionaalDialog()
+              flickLandelijk.visible = false
+              flickRegionaal.visible = true
+              flickAlternatief.visible = false
               scrollRegionaal.visible = true
-              flickLandelijk.state = "regionaal"
-              flickRegionaal.state = "regionaal"
               scrollLandelijk.visible = false
+              scrollAlternatief.visible = false
               settingsAction.visible = true
             }
             else{
+              flickLandelijk.visible = false
+              flickRegionaal.visible = true
+              flickAlternatief.visible = false
               scrollRegionaal.visible = true
-              flickLandelijk.state = "regionaal"
-              flickRegionaal.state = "regionaal"
               scrollLandelijk.visible = false
+              scrollAlternatief.visible = false
               settingsAction.visible = true
             }
           }
@@ -156,6 +174,7 @@ MainView {
       contentWidth: zendersLandelijkColumn.width
       contentHeight: zendersLandelijkColumn.height
 
+      /*/
       states: State {
         name: "regionaal"
         AnchorChanges { target: flickLandelijk; anchors.right: parent.left }
@@ -170,6 +189,7 @@ MainView {
         // smoothly reanchor myRect and move into new position
         AnchorAnimation { duration: 225 }
       }
+      /*/
 
       Column {
         id: zendersLandelijkColumn
@@ -278,16 +298,121 @@ MainView {
     }
 
     Flickable {
+      id: flickAlternatief
+      width: parent.width
+      height: parent.height - units.gu(15)
+      anchors {
+        right: parent.right
+        bottom: bottomMenu.top
+      }
+      contentWidth: zendersAlternatiefColumn.width
+      contentHeight: zendersAlternatiefColumn.height
+
+      Column {
+        id: zendersAlternatiefColumn
+        width: root.width
+        //spacing: units.gu(1)
+
+        /* ALTERNATIEF */
+
+        ZenderLandelijk {
+          naam: "BNR Nieuwsradio"
+          logo: "img/bnr.jpg"
+          achtergrond: "img/bnrback.png"
+          bron: "http://icecast-bnr-cdp.triple-it.nl/bnr_mp3_96_04"
+        }
+
+        ZenderLandelijk {
+          naam: "Classic FM"
+          logo: "img/classicfm.jpg"
+          achtergrond: "img/classicfmback.png"
+          bron: "http://20073.live.streamtheworld.com/CLASSICFM.mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "Soul Radio"
+          logo: "img/soulradio.jpg"
+          achtergrond: "img/soulradioback.png"
+          bron: "http://soulradio02.live-streams.nl/live"
+        }
+
+        ZenderLandelijk {
+          naam: "Sublime FM"
+          logo: "img/sublimefm.jpg"
+          achtergrond: "img/sublimefmback.png"
+          bron: "http://stream.sublimefm.nl/SublimeFM_mp3"
+        }
+
+        Rectangle {
+          color: "transparent"
+          height: units.gu(2)
+          width: parent.width
+        }
+
+        ZenderLandelijk {
+          naam: "Arrow Classic Rock"
+          logo: "img/arrowclassicrock.jpg"
+          achtergrond: "img/arrowclassicrockback.png"
+          bron: "http://stream.gal.io/arrow"
+        }
+
+        ZenderLandelijk {
+          naam: "Arrow Caz"
+          logo: "img/arrowcaz.jpg"
+          achtergrond: "img/arrowcazback.png"
+          bron: "http://stream.arrowcaz.nl/caz128kmp3"
+        }
+
+        ZenderLandelijk {
+          naam: "IndieXL"
+          logo: "img/indiexl.jpg"
+          achtergrond: "img/indiexlback.png"
+          bron: "http://server-23.stream-server.nl:8438/stream?type=http&nocache=40388"
+        }
+
+        Rectangle {
+          color: "transparent"
+          height: units.gu(2)
+          width: parent.width
+        }
+
+        ZenderLandelijk {
+          naam: "NPO Radio 2 Soul & Jazz"
+          logo: "img/nporadio2soul&jazz.jpg"
+          achtergrond: "img/nporadio2back.png"
+          bron: "http://icecast.omroep.nl/radio6-bb-mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "NPO 3FM KX"
+          logo: "img/npo3fmkx.jpg"
+          achtergrond: "img/npo3fmkxback.png"
+          bron: "http://icecast.omroep.nl/3fm-serioustalent-mp3"
+        }
+
+        ZenderLandelijk {
+          naam: "NPO SterrenNL"
+          logo: "img/sterrennl.jpg"
+          achtergrond: "img/sterrennlback.png"
+          bron: "http://icecast.omroep.nl/radio2-sterrennl-mp3"
+        }
+
+        /* EINDE ALTERNATIEF */
+
+      }
+    }
+
+    Flickable {
       id: flickRegionaal
       width: parent.width
       height: parent.height - units.gu(15)
       anchors {
-        left: parent.right
+        right: parent.right
         bottom: bottomMenu.top
       }
       contentWidth: zendersRegionaalColumn.width
       contentHeight: zendersRegionaalColumn.height
-
+      /*/
       states: State {
         name: "regionaal"
         AnchorChanges { target: flickRegionaal; anchors.left: parent.left }
@@ -296,11 +421,16 @@ MainView {
         name: "landelijk"
         AnchorChanges { target: flickRegionaal; anchors.left: parent.right }
       }
+      State {
+        name: "alternatief"
+        AnchorChanges { target: flickRegionaal; anchors.left: parent.right }
+      }
 
       transitions: Transition {
         // smoothly reanchor myRect and move into new position
         AnchorAnimation { duration: 250 }
       }
+      /*/
 
       Column {
         id: zendersRegionaalColumn
@@ -2117,6 +2247,12 @@ Rectangle {
       name: "media-playback-start"
     }
   }
+}
+Scrollbar {
+  id: scrollAlternatief
+  visible: true
+  flickableItem: flickAlternatief
+  align: Qt.AlignTrailing
 }
 Scrollbar {
   id: scrollLandelijk
