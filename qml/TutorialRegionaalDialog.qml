@@ -9,13 +9,12 @@ Component {
     id: dialogue
 
     Component.onCompleted: {
-      selector.selectedIndex = settings.selectedIndex
+      selector.selectedIndex = -1
     }
 
     Label {
       width: parent.width
       wrapMode: Text.Wrap
-      color: "black"
       text: "Kies hieronder uw regio uit. U kunt uw keuze later aanpassen in de instellingen."
     }
 
@@ -296,7 +295,7 @@ Button {
     flickRegionaal.state = "landelijk"
     scrollRegionaal.visible = false
     settingsAction.visible = false
-    sections.selectedIndex = 1
+    sections.selectedIndex = 0
     PopupUtils.close(dialogue);
     closed();
   }
