@@ -43,6 +43,7 @@ Component {
             settings.selectedIndex = "0"
             selector.containerHeight = units.gu(5)
             ok.visible = true
+            cancel.visible = false
           }
           break;
         }
@@ -63,6 +64,7 @@ Component {
           settings.selectedIndex = "1"
           selector.containerHeight = units.gu(5)
           ok.visible = true
+          cancel.visible = false
         }
         break;
       }
@@ -83,6 +85,7 @@ Component {
         settings.selectedIndex = "2"
         selector.containerHeight = units.gu(5)
         ok.visible = true
+        cancel.visible = false
       }
       break;
     }
@@ -103,6 +106,7 @@ Component {
       settings.selectedIndex = "3"
       selector.containerHeight = units.gu(5)
       ok.visible = true
+      cancel.visible = false
     }
     break;
   }
@@ -123,6 +127,7 @@ case 4: {
     settings.selectedIndex = "4"
     selector.containerHeight = units.gu(5)
     ok.visible = true
+    cancel.visible = false
   }
   break;
 }
@@ -143,6 +148,7 @@ case 5: {
     settings.selectedIndex = "5"
     selector.containerHeight = units.gu(5)
     ok.visible = true
+    cancel.visible = false
   }
   break;
 }
@@ -163,6 +169,7 @@ case 6: {
     settings.selectedIndex = "6"
     selector.containerHeight = units.gu(5)
     ok.visible = true
+    cancel.visible = false
   }
   break;
 }
@@ -183,6 +190,7 @@ case 7: {
     settings.selectedIndex = "7"
     selector.containerHeight = units.gu(5)
     ok.visible = true
+    cancel.visible = false
   }
   break;
 }
@@ -203,6 +211,7 @@ case 8: {
     settings.selectedIndex = "8"
     selector.containerHeight = units.gu(5)
     ok.visible = true
+    cancel.visible = false
   }
   break;
 }
@@ -223,6 +232,7 @@ case 9: {
     settings.selectedIndex = "9"
     selector.containerHeight = units.gu(5)
     ok.visible = true
+    cancel.visible = false
   }
   break;
 }
@@ -243,6 +253,7 @@ case 10: {
     settings.selectedIndex = "10"
     selector.containerHeight = units.gu(5)
     ok.visible = true
+    cancel.visible = false
   }
   break;
 }
@@ -263,6 +274,7 @@ case 11: {
     settings.selectedIndex = "11"
     selector.containerHeight = units.gu(5)
     ok.visible = true
+    cancel.visible = false
   }
   break;
 }

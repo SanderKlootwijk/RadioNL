@@ -12,6 +12,19 @@ MainView {
   applicationName: 'radionl.sanderklootwijk'
   automaticOrientation: true
 
+
+  Keys.onSpacePressed: {
+    if (player.playbackState == true) {
+      player.stop()
+      playerIcon.name = "media-playback-start"
+    }
+    else {
+      player.play()
+      playerIcon.name = "media-playback-stop"
+    }
+  }
+
+
   width: units.gu(45)
   height: units.gu(75)
 
@@ -50,6 +63,19 @@ MainView {
 
   Page {
     id: mainPage
+    visible: true
+    height: parent.height
+    width: {
+
+        if (parent.width < units.gu(100)){
+            parent.width
+        }
+        else{
+          parent.width - units.gu(40)
+            //parent.width / 4 * 3 - units.gu(0.1)
+        }
+
+    }
 
     header: PageHeader {
       id: header
@@ -168,13 +194,23 @@ MainView {
       property string limvisible: "false"
       property string selectedIndex: ""
       property string theme: "Ambiance"
+      property string versie: "1.2.0"
     }
 
     Component.onCompleted: {
-      Theme.name = "Ubuntu.Components.Themes." + settings.theme
-      player.source = settings.source
-      bottomIMG.source = settings.image
-      playerText.text = settings.text
+      if (settings.versie == "1.2.0") {
+        Theme.name = "Ubuntu.Components.Themes." + settings.theme
+        player.source = settings.source
+        bottomIMG.source = settings.image
+        playerText.text = settings.text
+        PopupUtils.open(nieuwDialog)
+      }
+      else {
+        Theme.name = "Ubuntu.Components.Themes." + settings.theme
+        player.source = settings.source
+        bottomIMG.source = settings.image
+        playerText.text = settings.text
+      }
     }
 
     VisualItemModel {
@@ -196,10 +232,19 @@ MainView {
         Flickable {
           id: flickLandelijk
           width: parent.width
-          height: parent.height - bottomMenu.height
+          height: {
+
+              if (root.width < units.gu(100)){
+                  parent.height - bottomMenu.height
+              }
+              else{
+                  parent.height
+              }
+
+          }
           anchors {
             right: parent.right
-            bottom: bottomMenu.top
+            top: parent.top
           }
           contentWidth: zendersLandelijkColumn.width
           contentHeight: zendersLandelijkColumn.height
@@ -287,7 +332,7 @@ MainView {
               naam: "Radio Veronica"
               logo: "img/radioveronica.jpg"
               achtergrond: "img/radioveronicaback.jpg"
-              bron: "http://19993.live.streamtheworld.com/VERONICA.mp3"
+              bron: "https://20853.live.streamtheworld.com/VERONICAAAC.aac"
             }
 
             ZenderLandelijk {
@@ -326,10 +371,19 @@ MainView {
         Flickable {
           id: flickAlternatief
           width: parent.width
-          height: parent.height - bottomMenu.height
+          height: {
+
+              if (root.width < units.gu(100)){
+                  parent.height - bottomMenu.height
+              }
+              else{
+                  parent.height
+              }
+
+          }
           anchors {
             right: parent.right
-            bottom: bottomMenu.top
+            top: parent.top
           }
           contentWidth: zendersAlternatiefColumn.width
           contentHeight: zendersAlternatiefColumn.height
@@ -352,7 +406,7 @@ MainView {
               naam: "Classic FM"
               logo: "img/classicfm.jpg"
               achtergrond: "img/classicfmback.jpg"
-              bron: "http://20073.live.streamtheworld.com/CLASSICFM.mp3"
+              bron: "http://19983.live.streamtheworld.com/CLASSICFM.mp3"
             }
 
             ZenderLandelijk {
@@ -445,10 +499,19 @@ MainView {
         Flickable {
           id: flickRegionaal
           width: parent.width
-          height: parent.height - bottomMenu.height
+          height: {
+
+              if (root.width < units.gu(100)){
+                  parent.height - bottomMenu.height
+              }
+              else{
+                  parent.height
+              }
+
+          }
           anchors {
             right: parent.right
-            bottom: bottomMenu.top
+            top: parent.top
           }
           contentWidth: zendersRegionaalColumn.width
           contentHeight: zendersRegionaalColumn.height
@@ -2185,6 +2248,16 @@ MainView {
 
     Rectangle {
       id: bottomMenu
+      visible: {
+
+          if (root.width < units.gu(100)){
+              true
+          }
+          else{
+              false
+          }
+
+      }
       z: 4
       width: parent.width
       height: units.gu(6)
@@ -2307,6 +2380,180 @@ Rectangle {
 }
 }
 }
+
+Rectangle {
+  id: playerPage
+  visible: {
+
+      if (parent.width < units.gu(100)){
+          false
+      }
+      else{
+          true
+      }
+
+  }
+  color: theme.palette.normal.background
+  height: parent.height
+  width: units.gu(39.9)//parent.width / 4
+
+  Rectangle {
+    z: 30
+    width: units.gu(0.1)
+    height: parent.height - playerPageHeader.height + units.gu(0.1)
+    color: theme.palette.normal.base
+    anchors.right: parent.left
+    anchors.bottom: parent.bottom
+  }
+
+  MouseArea {
+    // Zorgt ervoor dat in de tablet modus de pagina achter de playpage niet wordt 'aangeraakt'
+    anchors.fill: parent
+  }
+
+  anchors {
+    right: parent.right
+    bottom: root.bottom
+  }
+
+  PageHeader {
+    id: playerPageHeader
+    z: 20
+    title: i18n.tr("Nu aan het afspelen")
+  }
+
+  Rectangle {
+    color: "#111111"
+    z: 10
+    opacity: 0.8
+    height: centerIMG.height / 7
+    width: centerIMG.width
+    anchors {
+      left: parent.left
+      bottom: centerIMG.bottom
+    }
+    Text {
+      text: {
+        if (settings.image == "") {
+          "Selecteer een zender..."
+        }
+        else {
+          playerText.text
+        }
+      }
+      color: "white"
+      font.pointSize: parent.height / 3
+      anchors {
+        verticalCenter: parent.verticalCenter
+        left: parent.left
+        leftMargin: units.gu(2)
+      }
+    }
+  }
+
+  Image {
+    z: 5
+    id: centerIMG
+    source: bottomIMG.source
+    height: width
+    width: parent.width
+    anchors {
+      left: parent.left
+      top: playerPageHeader.bottom
+    }
+  }
+
+  Rectangle {
+    color: theme.palette.normal.background
+    z: 9
+    height: centerIMG.height
+    width: centerIMG.width
+    visible: {
+      if (settings.image == "") {
+        true
+      }
+      else {
+        false
+      }
+    }
+    anchors {
+      horizontalCenter: centerIMG.horizontalCenter
+      verticalCenter: centerIMG.verticalCenter
+    }
+  }
+
+  Image {
+    z: 7
+    source: centerIMG.source
+    height: width
+    width: centerIMG.width / 1.8
+    anchors {
+      horizontalCenter: centerIMG.horizontalCenter
+      verticalCenter: centerIMG.verticalCenter
+    }
+  }
+
+  FastBlur {
+      z: 5
+      anchors.fill: centerIMG
+      source: centerIMG
+      radius: 32
+  }
+
+  Rectangle {
+    z: 10
+    color: theme.palette.normal.background
+    height: parent.height - centerIMG.height - playerPageHeader.height
+    width: parent.width
+    anchors {
+      horizontalCenter: parent.horizontalCenter
+      bottom: parent.bottom
+    }
+    Icon {
+      z: 3
+      width: units.gu(5)
+      height: width
+      anchors {
+        verticalCenter: parent.verticalCenter
+        horizontalCenter: parent.horizontalCenter
+      }
+      name: playerIcon.name
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: {
+          if (player.playbackState == true) {
+            player.stop()
+            playerIcon.name = "media-playback-start"
+          }
+          else {
+            player.play()
+            playerIcon.name = "media-playback-stop"
+          }
+        }
+      }
+    }
+  }
+}
+
+Component {
+  id: nieuwDialog
+  Dialog {
+    id: nieuwdialogue
+    title: "Versie 1.3.0"
+    text: "Wat is er nieuw:<br>  <br>- Tablet-modus toegevoegd<br>- Wanneer de spatiebalk op een (extern) toetsenbord ingedrukt wordt, stopt en start de player"
+
+    Button {
+      text: "Sluiten"
+      color: "#00adda"
+      onClicked: {
+        settings.versie = "1.3.0"
+        PopupUtils.close(nieuwdialogue)
+      }
+    }
+  }
+}
+
 Component {
   id: noConnectionDialog
   Dialog {
