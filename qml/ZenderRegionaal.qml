@@ -70,7 +70,6 @@ Rectangle {
       bottom: parent.bottom
     }
     color: "grey"
-    clip: true
 
     Image {
       id: background
@@ -79,7 +78,7 @@ Rectangle {
       fillMode: Image.PreserveAspectCrop
       smooth: true
       z: parent.z + 1
-      opacity: 0.5
+      opacity: 0.8
     }
   }
 }

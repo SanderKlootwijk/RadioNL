@@ -67,13 +67,13 @@ MainView {
     height: parent.height
     width: {
 
-        if (parent.width < units.gu(100)){
-            parent.width
-        }
-        else{
-          parent.width - units.gu(40)
-            //parent.width / 4 * 3 - units.gu(0.1)
-        }
+      if (parent.width < units.gu(100)){
+        parent.width
+      }
+      else{
+        parent.width - units.gu(40)
+        //parent.width / 4 * 3 - units.gu(0.1)
+      }
 
     }
 
@@ -83,7 +83,9 @@ MainView {
       opacity: 1
 
       ActionBar {
+        id: actionBar
         anchors.right: parent.right
+        height: playerPageHeader.height
         numberOfSlots: 1
         actions: [
         Action {
@@ -116,10 +118,16 @@ MainView {
             if (settings.theme == "Ambiance"){
               Theme.name = "Ubuntu.Components.Themes.SuruDark"
               settings.theme = "SuruDark"
+              // bottomEdge moet geopend en gesloten worden voordat het nieuwe thema is toegepast. Anders toont zich een lege pagina:
+              bottomEdge.commit()
+              bottomEdge.collapse()
             }
             else {
               Theme.name = "Ubuntu.Components.Themes.Ambiance"
               settings.theme = "Ambiance"
+              // bottomEdge moet geopend en gesloten worden voordat het nieuwe thema is toegepast. Anders toont zich een lege pagina:
+              bottomEdge.commit()
+              bottomEdge.collapse()
             }
           }
         },
@@ -129,6 +137,14 @@ MainView {
           iconName: "help"
           onTriggered: {
             PopupUtils.open(tutorialMainDialog)
+          }
+        },
+        Action {
+          id: infoAction
+          text: i18n.tr("Over")
+          iconName: "info"
+          onTriggered: {
+            PopupUtils.open(aboutDialog)
           }
         }
         ]
@@ -194,11 +210,27 @@ MainView {
       property string limvisible: "false"
       property string selectedIndex: ""
       property string theme: "Ambiance"
-      property string versie: "1.2.0"
+      property string versie: "1.3.0"
+      //Slot 1
+      property string slot1img: ""
+      property string slot1text: ""
+      property string slot1source: ""
+      //Slot 2
+      property string slot2img: ""
+      property string slot2text: ""
+      property string slot2source: ""
+      //Slot 3
+      property string slot3img: ""
+      property string slot3text: ""
+      property string slot3source: ""
+      //Slot 4
+      property string slot4img: ""
+      property string slot4text: ""
+      property string slot4source: ""
     }
 
     Component.onCompleted: {
-      if (settings.versie == "1.2.0") {
+      if (settings.versie == "1.3.0") {
         Theme.name = "Ubuntu.Components.Themes." + settings.theme
         player.source = settings.source
         bottomIMG.source = settings.image
@@ -234,12 +266,12 @@ MainView {
           width: parent.width
           height: {
 
-              if (root.width < units.gu(100)){
-                  parent.height - bottomMenu.height
-              }
-              else{
-                  parent.height
-              }
+            if (root.width < units.gu(100)){
+              parent.height - bottomMenu.height - units.gu(4)
+            }
+            else{
+              parent.height - units.gu(4)
+            }
 
           }
           anchors {
@@ -373,12 +405,12 @@ MainView {
           width: parent.width
           height: {
 
-              if (root.width < units.gu(100)){
-                  parent.height - bottomMenu.height
-              }
-              else{
-                  parent.height
-              }
+            if (root.width < units.gu(100)){
+              parent.height - bottomMenu.height - units.gu(4)
+            }
+            else{
+              parent.height - units.gu(4)
+            }
 
           }
           anchors {
@@ -501,12 +533,12 @@ MainView {
           width: parent.width
           height: {
 
-              if (root.width < units.gu(100)){
-                  parent.height - bottomMenu.height
-              }
-              else{
-                  parent.height
-              }
+            if (root.width < units.gu(100)){
+              parent.height - bottomMenu.height - units.gu(4)
+            }
+            else{
+              parent.height - units.gu(4)
+            }
 
           }
           anchors {
@@ -2250,12 +2282,12 @@ MainView {
       id: bottomMenu
       visible: {
 
-          if (root.width < units.gu(100)){
-              true
-          }
-          else{
-              false
-          }
+        if (root.width < units.gu(100)){
+          true
+        }
+        else{
+          false
+        }
 
       }
       z: 4
@@ -2264,6 +2296,7 @@ MainView {
       color: theme.palette.normal.background
       anchors {
         bottom: parent.bottom
+        bottomMargin: units.gu(4)
       }
 
       Image {
@@ -2379,18 +2412,277 @@ Rectangle {
   }
 }
 }
+
+BottomEdge {
+  id: bottomEdge
+  height: {
+    if (root.width < units.gu(50)){
+      parent.width / 4 + units.gu(7)
+    }
+    else{
+      units.gu(18)
+    }
+  }
+  hint.iconName: "go-up"
+  contentComponent: Page {
+    PageHeader {
+      id: bottomHeader
+      title: i18n.tr("Favorieten")
+    }
+    width: root.width
+    height: root.height
+
+    Row {
+      anchors {
+        top: bottomHeader.bottom
+        topMargin: units.gu(1)
+        horizontalCenter: parent.horizontalCenter
+      }
+      width: parent.width - units.gu(2)
+      spacing: units.gu(1)
+      //Slot 1
+      UbuntuShape {
+        id: slot1
+        width: {
+          if (root.width < units.gu(50)){
+            parent.width / 4 - units.gu(0.8)
+          }
+          else{
+            units.gu(10)
+          }
+        }
+        height: width
+        source: Image {
+          id: slot1img
+          source: settings.slot1img
+        }
+
+        MouseArea {
+          id: mouseArea;
+          anchors.fill: parent
+          onClicked: {
+            if (settings.slot1source == "") {
+            }
+            else {
+              player.stop()
+              player.source = settings.slot1source
+              player.play()
+              playerIcon.name = "media-playback-stop"
+              playerText.text = settings.slot1text
+              bottomIMG.source = settings.slot1img
+              settings.source = player.source
+              settings.text = playerText.text
+              settings.image = bottomIMG.source
+              bottomEdge.collapse()
+            }
+          }
+          onPressAndHold: {
+            slot1img.source = bottomIMG.source
+            settings.slot1img = bottomIMG.source
+            settings.slot1text = playerText.text
+            settings.slot1source = player.source
+          }
+        }
+
+        states: State {
+          name: "pressed"; when: mouseArea.pressed
+          PropertyChanges { target: slot1; scale: 1.03 }
+        }
+
+        transitions: Transition {
+          NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
+        }
+      }
+
+      //Slot 2
+      UbuntuShape {
+        id: slot2
+        width: {
+          if (root.width < units.gu(50)){
+            parent.width / 4 - units.gu(0.8)
+          }
+          else{
+            units.gu(10)
+          }
+        }
+        height: width
+        source: Image {
+          id: slot2img
+          source: settings.slot2img
+        }
+
+        MouseArea {
+          id: mouseArea2;
+          anchors.fill: parent
+          onClicked: {
+            if (settings.slot2source == "") {
+            }
+            else {
+              player.stop()
+              player.source = settings.slot2source
+              player.play()
+              playerIcon.name = "media-playback-stop"
+              playerText.text = settings.slot2text
+              bottomIMG.source = settings.slot2img
+              settings.source = player.source
+              settings.text = playerText.text
+              settings.image = bottomIMG.source
+              bottomEdge.collapse()
+            }
+          }
+          onPressAndHold: {
+            slot2img.source = bottomIMG.source
+            settings.slot2img = bottomIMG.source
+            settings.slot2text = playerText.text
+            settings.slot2source = player.source
+          }
+        }
+
+        states: State {
+          name: "pressed"; when: mouseArea2.pressed
+          PropertyChanges { target: slot2; scale: 1.03 }
+        }
+
+        transitions: Transition {
+          NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
+        }
+      }
+
+      //Slot 3
+      UbuntuShape {
+        id: slot3
+        width: {
+          if (root.width < units.gu(50)){
+            parent.width / 4 - units.gu(0.8)
+          }
+          else{
+            units.gu(10)
+          }
+        }
+        height: width
+        source: Image {
+          id: slot3img
+          source: settings.slot3img
+        }
+
+        MouseArea {
+          id: mouseArea3;
+          anchors.fill: parent
+          onClicked: {
+            if (settings.slot3source == "") {
+            }
+            else {
+              player.stop()
+              player.source = settings.slot3source
+              player.play()
+              playerIcon.name = "media-playback-stop"
+              playerText.text = settings.slot3text
+              bottomIMG.source = settings.slot3img
+              settings.source = player.source
+              settings.text = playerText.text
+              settings.image = bottomIMG.source
+              bottomEdge.collapse()
+            }
+          }
+          onPressAndHold: {
+            slot3img.source = bottomIMG.source
+            settings.slot3img = bottomIMG.source
+            settings.slot3text = playerText.text
+            settings.slot3source = player.source
+          }
+        }
+
+        states: State {
+          name: "pressed"; when: mouseArea3.pressed
+          PropertyChanges { target: slot3; scale: 1.03 }
+        }
+
+        transitions: Transition {
+          NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
+        }
+      }
+
+      //Slot 4
+      UbuntuShape {
+        id: slot4
+        width: {
+          if (root.width < units.gu(50)){
+            parent.width / 4 - units.gu(0.8)
+          }
+          else{
+            units.gu(10)
+          }
+        }
+        height: width
+        source: Image {
+          id: slot4img
+          source: settings.slot4img
+        }
+
+        MouseArea {
+          id: mouseArea4;
+          anchors.fill: parent
+          onClicked: {
+            if (settings.slot4source == "") {
+            }
+            else {
+              player.stop()
+              player.source = settings.slot4source
+              player.play()
+              playerIcon.name = "media-playback-stop"
+              playerText.text = settings.slot4text
+              bottomIMG.source = settings.slot4img
+              settings.source = player.source
+              settings.text = playerText.text
+              settings.image = bottomIMG.source
+              bottomEdge.collapse()
+            }
+          }
+          onPressAndHold: {
+            slot4img.source = bottomIMG.source
+            settings.slot4img = bottomIMG.source
+            settings.slot4text = playerText.text
+            settings.slot4source = player.source
+          }
+        }
+
+        states: State {
+          name: "pressed"; when: mouseArea4.pressed
+          PropertyChanges { target: slot4; scale: 1.03 }
+        }
+
+        transitions: Transition {
+          NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
+        }
+      }
+    }
+  }
+  Rectangle {
+    width: parent.width
+    height: units.gu(4)
+    anchors.bottom: parent.bottom
+
+    color: theme.palette.normal.background
+
+    Rectangle {
+      width: parent.width
+      height: units.gu(0.1)
+      color: theme.palette.normal.base
+    }
+  }
+}
 }
 
 Rectangle {
   id: playerPage
   visible: {
 
-      if (parent.width < units.gu(100)){
-          false
-      }
-      else{
-          true
-      }
+    if (parent.width < units.gu(100)){
+      false
+    }
+    else{
+      true
+    }
 
   }
   color: theme.palette.normal.background
@@ -2494,10 +2786,10 @@ Rectangle {
   }
 
   FastBlur {
-      z: 5
-      anchors.fill: centerIMG
-      source: centerIMG
-      radius: 32
+    z: 5
+    anchors.fill: centerIMG
+    source: centerIMG
+    radius: 32
   }
 
   Rectangle {
@@ -2540,14 +2832,14 @@ Component {
   id: nieuwDialog
   Dialog {
     id: nieuwdialogue
-    title: "Versie 1.3.0"
-    text: "Wat is er nieuw:<br>  <br>- Tablet-modus toegevoegd<br>- Wanneer de spatiebalk op een (extern) toetsenbord ingedrukt wordt, stopt en start de player"
+    title: "Versie 1.4.0"
+    text: "Wat is er nieuw:<br>  <br>- Favorieten toegevoegd<br>  <br>Veeg vanaf de onderkant van het scherm omhoog, om de favorieten te tonen.<br>Houd een (leeg) slot lang ingedrukt en het huidig spelende radiostation wordt aan de favorieten toegevoegd.<br>Tik op een bestaande favoriet om het radiostation af te spelen."
 
     Button {
       text: "Sluiten"
       color: "#00adda"
       onClicked: {
-        settings.versie = "1.3.0"
+        settings.versie = "1.4.0"
         PopupUtils.close(nieuwdialogue)
       }
     }
@@ -2578,12 +2870,33 @@ Component {
   id: tutorialMainDialog
   Dialog {
     id: dialogue3
-    text: "Welkom bij Radio NL, dé app waarin je alle Nederlandse radio stations op één plek vindt! Boven in het scherm kan je wisselen tussen landelijke, alternatieve en regionale zenders. Veel luisterplezier!"
+    text: "<b>Van categorie wisselen</b><br>Bovenin het scherm kan je wisselen tussen landelijke, alternatieve en regionale zenders.<br> <br><b>Favorieten toevoegen</b><br>Veeg vanaf de onderkant van het scherm omhoog, om de favorieten te tonen.<br> <br>Houd een (leeg) slot lang ingedrukt en het huidig spelende radiostation wordt aan de favorieten toegevoegd.<br> <br>Tik op een bestaande favoriet om het radiostation af te spelen."
     Button {
       text: "Ik begrijp het!"
       color: "#00adda"
       onClicked: {
         PopupUtils.close(dialogue3)
+      }
+    }
+  }
+}
+
+Component {
+  id: aboutDialog
+  Dialog {
+    id: dialogue4
+    title: "Over Radio NL"
+    Text {
+      text: '<b>Versie:</b> ' + settings.versie + '<br><b>Broncode:</b> <a href="https://github.com/SanderKlootwijk/RadioNL">GitHub</a><br><b>Licentie:</b> <a href="https://tldrlegal.com/license/mit-license">MIT Licentie</a><br><br> <br>© 2017-2018 Sander Klootwijk'
+      color: theme.palette.normal.baseText
+      horizontalAlignment: Text.AlignHCenter
+      onLinkActivated: Qt.openUrlExternally(link)
+    }
+    Button {
+      text: "Sluiten"
+      color: "#00adda"
+      onClicked: {
+        PopupUtils.close(dialogue4)
       }
     }
   }
