@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: radionl.sanderklootwijk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-07 14:45+0000\n"
+"POT-Creation-Date: 2019-01-30 12:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,10 +45,10 @@ msgstr ""
 msgid "Regionaal"
 msgstr ""
 
-#: ../qml/Main.qml:2430
+#: ../qml/Main.qml:2443
 msgid "Favorieten"
 msgstr ""
 
-#: ../qml/Main.qml:2714
+#: ../qml/Main.qml:2727
 msgid "Nu aan het afspelen"
 msgstr ""

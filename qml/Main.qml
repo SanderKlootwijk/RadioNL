@@ -210,7 +210,7 @@ MainView {
       property string limvisible: "false"
       property string selectedIndex: ""
       property string theme: "Ambiance"
-      property string versie: "1.3.0"
+      property string versie: "1.4.0"
       //Slot 1
       property string slot1img: ""
       property string slot1text: ""
@@ -230,18 +230,18 @@ MainView {
     }
 
     Component.onCompleted: {
-      if (settings.versie == "1.3.0") {
+      if (settings.versie == "1.4.2") {
         Theme.name = "Ubuntu.Components.Themes." + settings.theme
         player.source = settings.source
         bottomIMG.source = settings.image
         playerText.text = settings.text
-        PopupUtils.open(nieuwDialog)
       }
       else {
         Theme.name = "Ubuntu.Components.Themes." + settings.theme
         player.source = settings.source
         bottomIMG.source = settings.image
         playerText.text = settings.text
+        PopupUtils.open(nieuwDialog)
       }
     }
 
@@ -462,6 +462,26 @@ MainView {
             }
 
             ZenderLandelijk {
+              naam: "KINK"
+              logo: "img/kink.jpg"
+              achtergrond: "img/kinkback.jpg"
+              bron: "https://20073.live.streamtheworld.com/KINKAAC.aac"
+            }
+
+            ZenderLandelijk {
+              naam: "IndieXL"
+              logo: "img/indiexl.jpg"
+              achtergrond: "img/indiexlback.jpg"
+              bron: "http://server-23.stream-server.nl:8438/stream?type=http&nocache=40388"
+            }
+
+            Rectangle {
+              color: "transparent"
+              height: units.gu(2)
+              width: parent.width
+            }
+
+            ZenderLandelijk {
               naam: "Arrow Classic Rock"
               logo: "img/arrowclassicrock.jpg"
               achtergrond: "img/arrowclassicrockback.jpg"
@@ -473,13 +493,6 @@ MainView {
               logo: "img/arrowcaz.jpg"
               achtergrond: "img/arrowcazback.jpg"
               bron: "http://stream.arrowcaz.nl/caz128kmp3"
-            }
-
-            ZenderLandelijk {
-              naam: "IndieXL"
-              logo: "img/indiexl.jpg"
-              achtergrond: "img/indiexlback.jpg"
-              bron: "http://server-23.stream-server.nl:8438/stream?type=http&nocache=40388"
             }
 
             Rectangle {
@@ -2416,7 +2429,7 @@ Rectangle {
 BottomEdge {
   id: bottomEdge
   height: {
-    if (root.width < units.gu(50)){
+    if (root.width < units.gu(65)){
       parent.width / 4 + units.gu(7)
     }
     else{
@@ -2444,7 +2457,7 @@ BottomEdge {
       UbuntuShape {
         id: slot1
         width: {
-          if (root.width < units.gu(50)){
+          if (root.width < units.gu(65)){
             parent.width / 4 - units.gu(0.8)
           }
           else{
@@ -2498,7 +2511,7 @@ BottomEdge {
       UbuntuShape {
         id: slot2
         width: {
-          if (root.width < units.gu(50)){
+          if (root.width < units.gu(65)){
             parent.width / 4 - units.gu(0.8)
           }
           else{
@@ -2552,7 +2565,7 @@ BottomEdge {
       UbuntuShape {
         id: slot3
         width: {
-          if (root.width < units.gu(50)){
+          if (root.width < units.gu(65)){
             parent.width / 4 - units.gu(0.8)
           }
           else{
@@ -2606,7 +2619,7 @@ BottomEdge {
       UbuntuShape {
         id: slot4
         width: {
-          if (root.width < units.gu(50)){
+          if (root.width < units.gu(65)){
             parent.width / 4 - units.gu(0.8)
           }
           else{
@@ -2832,14 +2845,14 @@ Component {
   id: nieuwDialog
   Dialog {
     id: nieuwdialogue
-    title: "Versie 1.4.0"
-    text: "Wat is er nieuw:<br>  <br>- Favorieten toegevoegd<br>  <br>Veeg vanaf de onderkant van het scherm omhoog, om de favorieten te tonen.<br>Houd een (leeg) slot lang ingedrukt en het huidig spelende radiostation wordt aan de favorieten toegevoegd.<br>Tik op een bestaande favoriet om het radiostation af te spelen."
+    title: "Versie 1.4.2"
+    text: "Wat is er nieuw:<br>  <br>- Nieuw logo<br>- KINK toegevoegd (alternatieve landelijke zender)"
 
     Button {
       text: "Sluiten"
       color: "#00adda"
       onClicked: {
-        settings.versie = "1.4.0"
+        settings.versie = "1.4.2"
         PopupUtils.close(nieuwdialogue)
       }
     }
@@ -2887,7 +2900,7 @@ Component {
     id: dialogue4
     title: "Over Radio NL"
     Text {
-      text: '<b>Versie:</b> ' + settings.versie + '<br><b>Broncode:</b> <a href="https://github.com/SanderKlootwijk/RadioNL">GitHub</a><br><b>Licentie:</b> <a href="https://tldrlegal.com/license/mit-license">MIT Licentie</a><br><br> <br>© 2017-2018 Sander Klootwijk'
+      text: '<b>Versie:</b> ' + settings.versie + '<br><b>Broncode:</b> <a href="https://github.com/SanderKlootwijk/RadioNL">GitHub</a><br><b>Licentie:</b> <a href="https://tldrlegal.com/license/mit-license">MIT Licentie</a><br><br> <br>© 2018-2019 Sander Klootwijk'
       color: theme.palette.normal.baseText
       horizontalAlignment: Text.AlignHCenter
       onLinkActivated: Qt.openUrlExternally(link)
