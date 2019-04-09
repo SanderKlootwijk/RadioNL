@@ -12,7 +12,6 @@ MainView {
   applicationName: 'radionl.sanderklootwijk'
   automaticOrientation: true
 
-
   Keys.onSpacePressed: {
     if (player.playbackState == true) {
       player.stop()
@@ -23,7 +22,6 @@ MainView {
       playerIcon.name = "media-playback-stop"
     }
   }
-
 
   width: units.gu(45)
   height: units.gu(75)
@@ -230,11 +228,10 @@ MainView {
     }
 
     Component.onCompleted: {
-      if (settings.versie == "1.4.2") {
+      if (settings.versie == "1.4.3") {
         Theme.name = "Ubuntu.Components.Themes." + settings.theme
         player.source = settings.source
         bottomIMG.source = settings.image
-        playerText.text = settings.text
       }
       else {
         Theme.name = "Ubuntu.Components.Themes." + settings.theme
@@ -500,6 +497,30 @@ MainView {
               height: units.gu(2)
               width: parent.width
             }
+
+            //Talpa
+
+            ZenderLandelijk {
+              naam: "Joe"
+              logo: "img/joe.jpg"
+              achtergrond: "img/joeback.jpg"
+              bron: "https://icecast-qmusicnl-cdp.triple-it.nl/Joe_nl_1_96.mp3"
+            }
+
+            ZenderLandelijk {
+              naam: "XM"
+              logo: "img/xm.jpg"
+              achtergrond: "img/xmback.jpg"
+              bron: "http://21293.live.streamtheworld.com/TLPSTR17.mp3"
+            }
+
+            Rectangle {
+              color: "transparent"
+              height: units.gu(2)
+              width: parent.width
+            }
+
+            //NPO
 
             ZenderLandelijk {
               naam: "NPO Radio 2 Soul & Jazz"
@@ -2845,14 +2866,14 @@ Component {
   id: nieuwDialog
   Dialog {
     id: nieuwdialogue
-    title: "Versie 1.4.2"
-    text: "Wat is er nieuw:<br>  <br>- Nieuw logo<br>- KINK toegevoegd (alternatieve landelijke zender)"
+    title: "Versie 1.4.3"
+    text: "Wat is er nieuw:<br>  <br>- Nieuw splashscreen<br>- Joe toegevoegd (nieuw in Nederland)<br>- XM toegevoegd (opleidingszender Talpa)"
 
     Button {
       text: "Sluiten"
       color: "#00adda"
       onClicked: {
-        settings.versie = "1.4.2"
+        settings.versie = "1.4.3"
         PopupUtils.close(nieuwdialogue)
       }
     }

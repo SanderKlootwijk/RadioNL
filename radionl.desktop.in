@@ -5,5 +5,6 @@ Icon=assets/radionl.svg
 Terminal=false
 Type=Application
 X-Ubuntu-Touch=true
-X-Ubuntu-Splash-Color=#111111
+X-Ubuntu-Splash-Image=assets/splash.svg
+X-Ubuntu-Splash-Color=#858585
 X-Ubuntu-Supported-Orientations=portrait
