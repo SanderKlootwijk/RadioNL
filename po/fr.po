@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the radionl.sanderklootwijk package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: radionl.sanderklootwijk\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-08 12:24+0000\n"
+"PO-Revision-Date: 2019-12-29 22:00+0000\n"
+"Last-Translator: Anne017 <anneonyme017@openmailbox.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../qml/Main.qml:80 radionl.desktop.in.h:1
+msgid "Radio NL"
+msgstr "Radio NL"
+
+#: ../qml/Main.qml:91
+msgid "Instellingen"
+msgstr "Paramètres"
+
+#: ../qml/Main.qml:134
+msgid "Help"
+msgstr "Aide"
+
+#: ../qml/Main.qml:142
+msgid "Over"
+msgstr "À propos"
+
+#: ../qml/Main.qml:160
+msgid "Landelijk"
+msgstr "Nationales"
+
+#: ../qml/Main.qml:166
+msgid "Alternatief"
+msgstr "Alternatives"
+
+#: ../qml/Main.qml:172
+msgid "Regionaal"
+msgstr "Régionales"
+
+#: ../qml/Main.qml:2464
+msgid "Favorieten"
+msgstr "Favorites"
+
+#: ../qml/Main.qml:2748
+msgid "Nu aan het afspelen"
+msgstr "À l'écoute"
