@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.9
 import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.1
 import Ubuntu.Components 1.3
@@ -15,11 +15,9 @@ MainView {
   Keys.onSpacePressed: {
     if (player.playbackState == true) {
       player.stop()
-      playerIcon.name = "media-playback-start"
     }
     else {
       player.play()
-      playerIcon.name = "media-playback-stop"
     }
   }
 
@@ -43,7 +41,7 @@ MainView {
         PopupUtils.open(noConnectionDialog)
         console.log('Oops! No internet connection.')
       }
-      else{
+      else {
         console.log('Yes! Working internet connection.')
       }
     }
@@ -64,20 +62,17 @@ MainView {
     visible: true
     height: parent.height
     width: {
-
-      if (parent.width < units.gu(100)){
+      if (parent.width < units.gu(100)) {
         parent.width
       }
-      else{
+      else {
         parent.width - units.gu(40)
-        //parent.width / 4 * 3 - units.gu(0.1)
       }
-
     }
 
     header: PageHeader {
       id: header
-      title: i18n.tr("Radio NL")
+      title: "Radio NL"
       opacity: 1
 
       ActionBar {
@@ -88,7 +83,7 @@ MainView {
         actions: [
         Action {
           id: settingsAction
-          text: i18n.tr("Instellingen")
+          text: "Instellingen"
           iconName: "settings"
           onTriggered: openSettingsDialog()
         },
@@ -131,7 +126,7 @@ MainView {
         },
         Action {
           id: helpAction
-          text: i18n.tr("Help")
+          text: "Help"
           iconName: "help"
           onTriggered: {
             PopupUtils.open(tutorialMainDialog)
@@ -139,7 +134,7 @@ MainView {
         },
         Action {
           id: infoAction
-          text: i18n.tr("Over")
+          text: "Over"
           iconName: "info"
           onTriggered: {
             PopupUtils.open(aboutDialog)
@@ -157,19 +152,19 @@ MainView {
 
         actions: [
         Action {
-          text: i18n.tr("Landelijk")
+          text: "Landelijk"
           onTriggered: {
             settingsAction.visible = false
           }
         },
         Action {
-          text: i18n.tr("Alternatief")
+          text: "Alternatief"
           onTriggered: {
             settingsAction.visible = false
           }
         },
         Action {
-          text: i18n.tr("Regionaal")
+          text: "Regionaal"
           onTriggered: {
             if (settings.tutorialRegionaal == "true"){
               openTutorialRegionaalDialog()
@@ -208,7 +203,6 @@ MainView {
       property string limvisible: "false"
       property string selectedIndex: ""
       property string theme: "Ambiance"
-      property string versie: "1.4.0"
       //Slot 1
       property string slot1img: ""
       property string slot1text: ""
@@ -228,18 +222,10 @@ MainView {
     }
 
     Component.onCompleted: {
-      if (settings.versie == "1.4.3") {
-        Theme.name = "Ubuntu.Components.Themes." + settings.theme
-        player.source = settings.source
-        bottomIMG.source = settings.image
-      }
-      else {
-        Theme.name = "Ubuntu.Components.Themes." + settings.theme
-        player.source = settings.source
-        bottomIMG.source = settings.image
-        playerText.text = settings.text
-        PopupUtils.open(nieuwDialog)
-      }
+      Theme.name = "Ubuntu.Components.Themes." + settings.theme
+      player.source = settings.source
+      playerText.text = settings.text
+      bottomIMG.source = settings.image
     }
 
     VisualItemModel {
@@ -262,120 +248,122 @@ MainView {
           id: flickLandelijk
           width: parent.width
           height: {
-
-            if (root.width < units.gu(100)){
+            if (root.width < units.gu(100)) {
               parent.height - bottomMenu.height - units.gu(4)
             }
-            else{
+            else {
               parent.height - units.gu(4)
             }
-
           }
+
           anchors {
             right: parent.right
             top: parent.top
           }
+
           contentWidth: zendersLandelijkColumn.width
-          contentHeight: zendersLandelijkColumn.height
+          contentHeight: zendersLandelijkColumn.height - units.gu(0.1)
 
           Column {
             id: zendersLandelijkColumn
             width: mainPage.width
 
+            ZenderDivider {
+              text: "Nederlandse Publieke Omroep"
+            }
+
             /* NPO ZENDERS */
 
-            ZenderLandelijk {
+            Zender {
               naam: "NPO Radio 1"
+              subText: "Het nieuws van alle kanten"
               logo: "img/nporadio1.jpg"
-              achtergrond: "img/nporadio1back.jpg"
               bron: "http://icecast.omroep.nl/radio1-bb-mp3"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "NPO Radio 2"
+              subText: "Er is maar één NPO Radio 2"
               logo: "img/nporadio2.jpg"
-              achtergrond: "img/nporadio2back.jpg"
               bron: "http://icecast.omroep.nl/radio2-bb-mp3"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "NPO 3FM"
+              subText: "Laat je horen"
               logo: "img/npo3fm.jpg"
-              achtergrond: "img/npo3fmback.jpg"
               bron: "http://icecast.omroep.nl/3fm-bb-mp3"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "NPO Radio 4"
+              subText: "Klassiek komt bij je binnen"
               logo: "img/nporadio4.jpg"
-              achtergrond: "img/nporadio4back.jpg"
               bron: "http://icecast.omroep.nl/radio4-bb-mp3"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "NPO Radio 5"
+              subText: "Je voelt je thuis bij NPO Radio 5"
               logo: "img/nporadio5.jpg"
-              achtergrond: "img/nporadio5back.jpg"
               bron: "http://icecast.omroep.nl/radio5-bb-mp3"
             }
 
             /* EINDE NPO ZENDERS */
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(2)
-              width: parent.width
+            ZenderDivider {
+              text: "Commerciële zenders"
             }
 
             /* COMMERCIEEL */
 
-            ZenderLandelijk {
+            Zender {
               naam: "Q-music"
+              subText: "Q sounds better with you"
               logo: "img/qmusic.jpg"
-              achtergrond: "img/qmusicback.jpg"
               bron: "http://icecast-qmusic.cdp.triple-it.nl/Qmusic_nl_live_96.mp3"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "Radio 538"
+              subText: "Één station, alle hits"
               logo: "img/radio538.jpg"
-              achtergrond: "img/radio538back.jpg"
-              bron: "http://18973.live.streamtheworld.com/RADIO538.mp3"
+              bron: "https://22593.live.streamtheworld.com/RADIO538.mp3?dist=tunein"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "Sky Radio"
+              subText: "The feel good station"
               logo: "img/skyradio.jpg"
-              achtergrond: "img/skyradioback.jpg"
-              bron: "http://playerservices.streamtheworld.com/api/livestream-redirect/SKYRADIO.mp3"
+              bron: "http://22613.live.streamtheworld.com/SKYRADIO.mp3?dist=tunein"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "Radio 10"
+              subText: "De grootste hits aller tijden!"
               logo: "img/radio10.jpg"
-              achtergrond: "img/radio10back.jpg"
-              bron: "http://20853.live.streamtheworld.com/RADIO10.mp3"
+              bron: "http://19993.live.streamtheworld.com/RADIO10.mp3?dist=tunein"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "Radio Veronica"
+              subText: "WE. LOVE. MUSIC"
               logo: "img/radioveronica.jpg"
-              achtergrond: "img/radioveronicaback.jpg"
-              bron: "https://20853.live.streamtheworld.com/VERONICAAAC.aac"
+              bron: "https://20873.live.streamtheworld.com/VERONICA.mp3?dist=tunein"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "100% NL"
+              subText: "De beste muziek van Nederland"
               logo: "img/100pnl.jpg"
-              achtergrond: "img/100pnlback.jpg"
-              bron: "http://stream.100p.nl/100pctnl.mp3"
+              bron: "https://20853.live.streamtheworld.com/100PNL_MP3_SC?dist=tunein"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "SLAM!"
+              subText: "Play Music, Play Life"
               logo: "img/slam.jpg"
-              achtergrond: "img/slamback.jpg"
-              bron: "https://stream.slam.nl/slam_mp3"
+              bron: "https://stream.slam.nl/slam_mp3?dist=tunein"
             }
 
             /* EINDE COMMERCIEEL */
@@ -401,146 +389,216 @@ MainView {
           id: flickAlternatief
           width: parent.width
           height: {
-
-            if (root.width < units.gu(100)){
+            if (root.width < units.gu(100)) {
               parent.height - bottomMenu.height - units.gu(4)
             }
-            else{
+            else {
               parent.height - units.gu(4)
             }
-
           }
+
           anchors {
             right: parent.right
             top: parent.top
           }
+
           contentWidth: zendersAlternatiefColumn.width
-          contentHeight: zendersAlternatiefColumn.height
+          contentHeight: zendersAlternatiefColumn.height - units.gu(0.1)
 
           Column {
             id: zendersAlternatiefColumn
             width: mainPage.width
-            //spacing: units.gu(1)
+
+            ZenderDivider {
+              text: "Commerciële zenders"
+            }
 
             /* ALTERNATIEF */
 
-            ZenderLandelijk {
+            Zender {
               naam: "BNR Nieuwsradio"
+              subText: "#IkhoorbijBNR"
               logo: "img/bnr.jpg"
-              achtergrond: "img/bnrback.jpg"
               bron: "http://icecast-bnr-cdp.triple-it.nl/bnr_mp3_96_04"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "Classic FM"
+              subText: "Klassiek voor iedereen"
               logo: "img/classicfm.jpg"
-              achtergrond: "img/classicfmback.jpg"
-              bron: "http://19983.live.streamtheworld.com/CLASSICFM.mp3"
+              bron: "http://19983.live.streamtheworld.com/CLASSICFM.mp3?dist=tunein"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "Soul Radio"
+              subText: "Soul muziek"
               logo: "img/soulradio.jpg"
-              achtergrond: "img/soulradioback.jpg"
-              bron: "http://soulradio02.live-streams.nl/live"
+              bron: "http://21233.live.streamtheworld.com/SOULRADIO.mp3"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "Sublime FM"
+              subText: "Join the Groove"
               logo: "img/sublimefm.jpg"
-              achtergrond: "img/sublimefmback.jpg"
               bron: "http://stream.sublimefm.nl/SublimeFM_mp3"
             }
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(2)
-              width: parent.width
-            }
+            ZenderDivider {}
 
-            ZenderLandelijk {
+            Zender {
               naam: "KINK"
+              subText: "No Alternative"
               logo: "img/kink.jpg"
-              achtergrond: "img/kinkback.jpg"
               bron: "https://20073.live.streamtheworld.com/KINKAAC.aac"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "IndieXL"
+              subText: "Durf te ontdekken, luister IndieXL!"
               logo: "img/indiexl.jpg"
-              achtergrond: "img/indiexlback.jpg"
               bron: "http://server-23.stream-server.nl:8438/stream?type=http&nocache=40388"
             }
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(2)
-              width: parent.width
-            }
+            ZenderDivider {}
 
-            ZenderLandelijk {
+            Zender {
               naam: "Arrow Classic Rock"
+              subText: "Classic en modern rock"
               logo: "img/arrowclassicrock.jpg"
-              achtergrond: "img/arrowclassicrockback.jpg"
               bron: "http://stream.gal.io/arrow"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "Arrow Caz"
+              subText: "Your Hits, More Music"
               logo: "img/arrowcaz.jpg"
-              achtergrond: "img/arrowcazback.jpg"
               bron: "http://stream.arrowcaz.nl/caz128kmp3"
             }
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(2)
-              width: parent.width
+            ZenderDivider {}
+
+            Zender {
+              naam: "ZTACK"
+              subText: "Shuffle Your Day"
+              logo: "img/ztack.jpg"
+              bron: "https://audio.ztack.nl/radio/8000/ztack"
             }
 
-            //Talpa
-
-            ZenderLandelijk {
+            Zender {
               naam: "Joe"
+              subText: "All the way"
               logo: "img/joe.jpg"
-              achtergrond: "img/joeback.jpg"
               bron: "https://icecast-qmusicnl-cdp.triple-it.nl/Joe_nl_1_96.mp3"
-            }
-
-            ZenderLandelijk {
-              naam: "XM"
-              logo: "img/xm.jpg"
-              achtergrond: "img/xmback.jpg"
-              bron: "http://21293.live.streamtheworld.com/TLPSTR17.mp3"
-            }
-
-            Rectangle {
-              color: "transparent"
-              height: units.gu(2)
-              width: parent.width
             }
 
             //NPO
 
-            ZenderLandelijk {
+            ZenderDivider {
+              text: "Nederlandse Publieke Omroep"
+            }
+
+            Zender {
               naam: "NPO Radio 2 Soul & Jazz"
+              subText: "Soul & Jazz muziek"
               logo: "img/nporadio2soul&jazz.jpg"
-              achtergrond: "img/nporadio2back.jpg"
               bron: "http://icecast.omroep.nl/radio6-bb-mp3"
             }
 
-            ZenderLandelijk {
+            Zender {
               naam: "NPO 3FM KX"
+              subText: "For the love of music"
               logo: "img/npo3fmkx.jpg"
-              achtergrond: "img/npo3fmkxback.jpg"
               bron: "http://icecast.omroep.nl/3fm-serioustalent-mp3"
             }
 
-            ZenderLandelijk {
-              naam: "NPO SterrenNL"
+            Zender {
+              naam: "NPO Sterren NL"
+              subText: "De nummer 1 in Nederlandstalige muziek"
               logo: "img/sterrennl.jpg"
-              achtergrond: "img/sterrennlback.jpg"
               bron: "http://icecast.omroep.nl/radio2-sterrennl-mp3"
+            }
+
+            // FunX zenders
+
+            ZenderDivider {
+              text: "FunX Zenders"
+            }
+
+            Zender {
+              naam: "FunX NL"
+              subText: "The Sound of the City"
+              logo: "img/funx.jpg"
+              bron: "https://icecast.omroep.nl/funx-bb-mp3"
+            }
+
+            Zender {
+              naam: "FunX Amsterdam"
+              subText: "Amsterdam"
+              logo: "img/funx.jpg"
+              bron: "https://icecast.omroep.nl/funx-amsterdam-bb-mp3"
+            }
+
+            Zender {
+              naam: "FunX Rotterdam"
+              subText: "Rotterdam"
+              logo: "img/funx.jpg"
+              bron: "https://icecast.omroep.nl/funx-rotterdam-bb-mp3"
+            }
+
+            Zender {
+              naam: "FunX Den Haag"
+              subText: "Den Haag"
+              logo: "img/funx.jpg"
+              bron: "http://icecast.omroep.nl/funx-denhaag-bb-mp3"
+            }
+
+            Zender {
+              naam: "FunX Utrecht"
+              subText: "Utrecht"
+              logo: "img/funx.jpg"
+              bron: "https://icecast.omroep.nl/funx-utrecht-bb-mp3"
+            }
+
+            Zender {
+              naam: "FunX Arab"
+              subText: "Arabische muziek (Raï)"
+              logo: "img/funx.jpg"
+              bron: "https://icecast.omroep.nl/funx-arab-bb-mp3"
+            }
+
+            Zender {
+              naam: "FunX Dance"
+              subText: "Dance muziek"
+              logo: "img/funx.jpg"
+              bron: "https://icecast.omroep.nl/funx-dance-bb-mp3"
+            }
+
+            Zender {
+              naam: "FunX Hip Hop"
+              subText: "Hip Hop"
+              logo: "img/funx.jpg"
+              bron: "https://icecast.omroep.nl/funx-hiphop-bb-mp3"
+            }
+
+            Zender {
+              naam: "FunX Latin"
+              subText: "Latin muziek"
+              logo: "img/funx.jpg"
+              bron: "https://icecast.omroep.nl/funx-latin-bb-mp3"
+            }
+
+            Zender {
+              naam: "FunX Reggae"
+              subText: "Reggae"
+              logo: "img/funx.jpg"
+              bron: "https://icecast.omroep.nl/funx-reggae-bb-mp3"
+            }
+
+            Zender {
+              naam: "FunX Slow Jamz"
+              subText: "Slow Jamz"
+              logo: "img/funx.jpg"
+              bron: "https://icecast.omroep.nl/funx-slowjamz-bb-mp3"
             }
 
             /* EINDE ALTERNATIEF */
@@ -566,21 +624,21 @@ MainView {
           id: flickRegionaal
           width: parent.width
           height: {
-
-            if (root.width < units.gu(100)){
+            if (root.width < units.gu(100)) {
               parent.height - bottomMenu.height - units.gu(4)
             }
-            else{
+            else {
               parent.height - units.gu(4)
             }
-
           }
+
           anchors {
             right: parent.right
             top: parent.top
           }
+
           contentWidth: zendersRegionaalColumn.width
-          contentHeight: zendersRegionaalColumn.height
+          contentHeight: zendersRegionaalColumn.height - units.gu(0.1)
 
           Column {
             id: zendersRegionaalColumn
@@ -588,10 +646,8 @@ MainView {
 
             /* REGIO */
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Friesland"
               visible: {
                 if (settings.frivisible == "false") {
                   false
@@ -600,34 +656,13 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                id: fritext
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Friesland"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/friesland.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Omrop Fryslân"
+              subText: "Ofstimd op dy!"
               logo: "img/omropfryslan.jpg"
-              achtergrond: "img/omropfryslanback.jpg"
-              bron: "http://icecast.pmedia70.kpnstreaming.nl/omropfryslanlive-OmropFryslanRadio.mp3"
+              bron: "https://d3pvma9xb2775h.cloudfront.net/icecast/omropfryslan/radio.mp3"
               visible: {
                 if (settings.frivisible == "false") {
                   false
@@ -638,10 +673,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Waterstad FM"
+              subText: "Radio uit het Hart van Friesland"
               logo: "img/waterstadfm.jpg"
-              achtergrond: "img/waterstadfmback.jpg"
               bron: "http://stream.waterstadfm.nl/waterstadfm"
               visible: {
                 if (settings.frivisible == "false") {
@@ -653,11 +688,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Radio Centraal"
+              subText: "Lokale omroep Weststellingwerf"
               logo: "img/radiocentraal.jpg"
-              achtergrond: "img/radiocentraalback.jpg"
-              bron: "http://centraal.mm-stream.nl:8017/stream"
+              bron: "https://mcp-2.mm-stream.nl:8017/stream"
               visible: {
                 if (settings.frivisible == "false") {
                   false
@@ -668,10 +703,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "RTV Noordoost Friesland"
+              subText: "Nieuws uit Noordoost Friesland"
               logo: "img/rtvnof.jpg"
-              achtergrond: "img/rtvnofback.jpg"
               bron: "http://media02.streampartner.nl:8056/live"
               visible: {
                 if (settings.frivisible == "false") {
@@ -683,10 +718,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Radio Spannenburg"
+              subText: "It hert fan De Fryske Marren"
               logo: "img/radiospannenburg.jpg"
-              achtergrond: "img/radiospannenburgback.jpg"
               bron: "http://37.59.195.28:8132/;"
               visible: {
                 if (settings.frivisible == "false") {
@@ -698,11 +733,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
-              naam: "Leo FM"
+            Zender {
+              naam: "Leo Middelsé"
+              subText: "Omroep voor Leeuwarden en omstreken"
               logo: "img/leofm.jpg"
-              achtergrond: "img/leofmback.jpg"
-              bron: "http://rs5.stream24.org:8390/;*.mp3"
+              bron: "https://radio1.stream24.net:8390/live.mp3"
               visible: {
                 if (settings.frivisible == "false") {
                   false
@@ -713,10 +748,8 @@ MainView {
               }
             }
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Groningen"
               visible: {
                 if (settings.grovisible == "false") {
                   false
@@ -725,34 +758,13 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                id: grotext
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Groningen"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/groningen.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Simone FM"
+              subText: "Échte radio"
               logo: "img/simonefm.jpg"
-              achtergrond: "img/simonefmback.jpg"
-              bron: "http://stream.stream.delivery/simonefm"
+              bron: "https://stream.simone.nl/simone"
               visible: {
                 if (settings.grovisible == "false") {
                   false
@@ -763,26 +775,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
-              naam: "Radio Compagnie"
-              logo: "img/radiocompagnie.jpg"
-              achtergrond: "img/radiocompagnieback.jpg"
-              bron: "http://178.19.116.3:8000/stream"
-              visible: {
-                if (settings.grovisible == "false") {
-                  false
-                }
-                else {
-                  true
-                }
-              }
-            }
-
-            ZenderRegionaal {
+            Zender {
               naam: "Radio Westerwolde"
+              subText: "Het nieuwsportaal van de regio!"
               logo: "img/radiowesterwolde.jpg"
-              achtergrond: "img/radiowesterwoldeback.jpg"
-              bron: "http://server3.ic-stream.nl:6154/;"
+              bron: "http://icecast.radiowesterwolde.nl:8000/G1_RWW"
               visible: {
                 if (settings.grovisible == "false") {
                   false
@@ -793,11 +790,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "RTV Noord"
+              subText: "Het nieuws uit Groningen"
               logo: "img/rtvnoord.jpg"
-              achtergrond: "img/rtvnoordback.jpg"
-              bron: "http://icecast.omroep.nl/rtvnoord-bb-mp3"
+              bron: "https://media.rtvnoord.nl/icecast/rtvnoord/radio?.mp3"
               visible: {
                 if (settings.grovisible == "false") {
                   false
@@ -808,11 +805,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "OOG Radio"
+              subText: "Nieuws uit Groningen"
               logo: "img/oogradio.jpg"
-              achtergrond: "img/oogradioback.jpg"
-              bron: "http://icecast.streamone.net/yQYMPcsCPtcw"
+              bron: "https://olon.az.icecast.ebsd.ericsson.net/oog_radio"
               visible: {
                 if (settings.grovisible == "false") {
                   false
@@ -823,25 +820,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
-              naam: "Haren FM"
-              logo: "img/harenfm.jpg"
-              achtergrond: "img/harenfmback.jpg"
-              bron: "http://icecast.streamonecloud.net/zzf29538s4p8"
-              visible: {
-                if (settings.grovisible == "false") {
-                  false
-                }
-                else {
-                  true
-                }
-              }
-            }
-
-            ZenderRegionaal {
+            Zender {
               naam: "Joy Radio"
+              subText: "Hits only!"
               logo: "img/joyradio.jpg"
-              achtergrond: "img/joyradioback.jpg"
               bron: "http://stream.joyradio.nl/joyradio"
               visible: {
                 if (settings.grovisible == "false") {
@@ -853,10 +835,8 @@ MainView {
               }
             }
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Drenthe"
               visible: {
                 if (settings.drenvisible == "false") {
                   false
@@ -865,34 +845,13 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                id: drentext
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Drenthe"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/drenthe.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "RTV Drenthe"
+              subText: "Altijd in de buurt"
               logo: "img/rtvdrenthe.jpg"
-              achtergrond: "img/rtvdrentheback.jpg"
-              bron: "http://icecast.omroep.nl/rtvnoord-bb-mp3"
+              bron: "https://cdn.rtvdrenthe.nl/icecast/rtvdrenthe/rtvradio"
               visible: {
                 if (settings.drenvisible == "false") {
                   false
@@ -903,11 +862,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "ZO!34"
+              subText: "De stem van Zuidoost-Drenthe"
               logo: "img/zo!34.jpg"
-              achtergrond: "img/zo!34back.jpg"
-              bron: "http://stream01.streamhier.nl:8024/stream"
+              bron: "https://mcp-2.mm-stream.nl:7000/stream"
               visible: {
                 if (settings.drenvisible == "false") {
                   false
@@ -918,10 +877,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            // Streekradio is overgegaan in DNO radio, zie wijzijndno.nl
+            /*/Zender {
               naam: "Streekradio"
+              subText: ""
               logo: "img/streekradio.jpg"
-              achtergrond: "img/streekradioback.jpg"
               bron: "http://livestream.streekradio.com/live"
               visible: {
                 if (settings.drenvisible == "false") {
@@ -931,12 +891,10 @@ MainView {
                   true
                 }
               }
-            }
+            }/*/
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Overijssel"
               visible: {
                 if (settings.overvisible == "false") {
                   false
@@ -945,33 +903,12 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                id: overtext
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Overijssel"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/overijssel.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Radio Rosita"
+              subText: "Nonstop de beste mix"
               logo: "img/radiorosita.jpg"
-              achtergrond: "img/radiorositaback.jpg"
               bron: "http://audiostreamen.nl:8004/;"
               visible: {
                 if (settings.overvisible == "false") {
@@ -983,11 +920,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "RTV Oost"
+              subText: "Thuis in Overijssel"
               logo: "img/rtvoost.jpg"
-              achtergrond: "img/rtvoostback.jpg"
-              bron: "http://ice.cr2.streamzilla.xlcdn.com:8000/sz=rtv_oost=RadioOost_mp3"
+              bron: "http://streams.rtvoost.nl/audio/oost/mp3"
               visible: {
                 if (settings.overvisible == "false") {
                   false
@@ -998,11 +935,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "RTV SLOS"
+              subText: "Lokale omroep Steenwijkerland"
               logo: "img/rtvslos.jpg"
-              achtergrond: "img/rtvslosback.jpg"
-              bron: "http://icecast.streamone.net/cjZFLu-AKwQW"
+              bron: "https://olon.az.icecast.ebsd.ericsson.net/mix105_steenwijkerland"
               visible: {
                 if (settings.overvisible == "false") {
                   false
@@ -1013,10 +950,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Twente FM"
+              subText: "Het radiostation voor Noordoost Twente"
               logo: "img/twentefm.jpg"
-              achtergrond: "img/twentefmback.jpg"
               bron: "http://stream.twentefm.nl:8004/high"
               visible: {
                 if (settings.overvisible == "false") {
@@ -1028,10 +965,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Radio Hengelo"
+              subText: "De lokale omroep van en voor Hengelo"
               logo: "img/radiohengelo.jpg"
-              achtergrond: "img/radiohengeloback.jpg"
               bron: "http://stream1.icehosting.nl:8128/;stream.mp3"
               visible: {
                 if (settings.overvisible == "false") {
@@ -1043,10 +980,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Enschede FM"
+              subText: "24/7 de lekkerste hits op het internet"
               logo: "img/enschedefm.jpg"
-              achtergrond: "img/enschedefmback.jpg"
               bron: "http://stream1.icehosting.nl:8126/;stream.mp3"
               visible: {
                 if (settings.overvisible == "false") {
@@ -1058,10 +995,8 @@ MainView {
               }
             }
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Flevoland"
               visible: {
                 if (settings.flevisible == "false") {
                   false
@@ -1070,34 +1005,13 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                id: fletext
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Flevoland"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/flevoland.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep Flevoland"
+              subText: "Het laatste nieuws voor Flevoland"
               logo: "img/omroepflevoland.jpg"
-              achtergrond: "img/omroepflevolandback.jpg"
-              bron: "http://streams.omroepflevoland.nl:8000/flevoland64k"
+              bron: "https://stream.omroepflevoland.nl/icecast/omroepflevoland/stream1"
               visible: {
                 if (settings.flevisible == "false") {
                   false
@@ -1108,10 +1022,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Radio Lelystad"
+              subText: "Altijd in de lucht!"
               logo: "img/radiolelystad.jpg"
-              achtergrond: "img/radiolelystadback.jpg"
               bron: "http://live.radiolelystad.nl:8000/listen"
               visible: {
                 if (settings.flevisible == "false") {
@@ -1123,26 +1037,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
-              naam: "Echnaton FM"
-              logo: "img/echnatonfm.jpg"
-              achtergrond: "img/echnatonfmback.jpg"
-              bron: "http://icecast.streamone.nl/pXsb3sihz9"
-              visible: {
-                if (settings.flevisible == "false") {
-                  false
-                }
-                else {
-                  true
-                }
-              }
-            }
-
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep Almere Radio"
+              subText: "Hét nieuwsplatform voor Almere en Omstreken"
               logo: "img/omroepalmereradio.jpg"
-              achtergrond: "img/omroepalmereradioback.jpg"
-              bron: "http://icecast.streamone.nl/Pi6mjq9XKC"
+              bron: "https://players.rcast.net/stream/65615.mp3"
               visible: {
                 if (settings.flevisible == "false") {
                   false
@@ -1153,10 +1052,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "URK FM"
+              subText: "De lokale omroep voor de gemeente Urk"
               logo: "img/urkfm.jpg"
-              achtergrond: "img/urkfmback.jpg"
               bron: "http://live.urkfm.nl:8000/urkfm.mp3"
               visible: {
                 if (settings.flevisible == "false") {
@@ -1168,10 +1067,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
-              naam: "Omroep Zeewolde"
+            Zender {
+              naam: "Lokale Omroep Zeewolde"
+              subText: "Uw nieuwsbron uit Zeewolde"
               logo: "img/omroepzeewolde.jpg"
-              achtergrond: "img/omroepzeewoldeback.jpg"
               bron: "http://stream.lokaleomroepzeewolde.nl:8000/normal"
               visible: {
                 if (settings.flevisible == "false") {
@@ -1183,10 +1082,8 @@ MainView {
               }
             }
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Gelderland"
               visible: {
                 if (settings.gevisible == "false") {
                   false
@@ -1195,32 +1092,12 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Gelderland"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/gelderland.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep Gelderland"
+              subText: "Altijd in de buurt!"
               logo: "img/omroepgelderland.jpg"
-              achtergrond: "img/omroepgelderlandback.jpg"
               bron: "http://stream.omroepgelderland.nl/radiogelderland"
               visible: {
                 if (settings.gevisible == "false") {
@@ -1232,10 +1109,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Keizerstad Hits"
+              subText: "Jouw nummer 1 in Gelderland"
               logo: "img/keizerstad.jpg"
-              achtergrond: "img/keizerstadback.jpg"
               bron: "http://server-06.stream-server.nl:8800/;"
               visible: {
                 if (settings.gevisible == "false") {
@@ -1247,11 +1124,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Radio 024"
+              subText: "De beste classics & hits!"
               logo: "img/radio024.jpg"
-              achtergrond: "img/radio024back.jpg"
-              bron: "http://high.024.fm:8338/live"
+              bron: "http://stream.radio024.nl/radio024.mp3"
               visible: {
                 if (settings.gevisible == "false") {
                   false
@@ -1262,11 +1139,12 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            //Stream werkt niet goed
+            /*Zender {
               naam: "RN7"
+              subText: "De streekomroep voor Nijmegen"
               logo: "img/rn7.jpg"
-              achtergrond: "img/rn7back.jpg"
-              bron: "https://icecast.streamone.net/i4NtlopQlQUk"
+              bron: "https://stream.stream.delivery/rn7"
               visible: {
                 if (settings.gevisible == "false") {
                   false
@@ -1275,12 +1153,13 @@ MainView {
                   true
                 }
               }
-            }
+            }*/
 
-            ZenderRegionaal {
+            // Overgegaan in UniekFM
+            /*Zender {  
               naam: "Achterhoek FM"
+              subText: "Lokale omroep voor de gemeente Lochem"
               logo: "img/achterhoekfm.jpg"
-              achtergrond: "img/achterhoekfmback.jpg"
               bron: "https://ms3ic.mx-cd.net/169-699187/AchterhoekFM"
               visible: {
                 if (settings.gevisible == "false") {
@@ -1290,42 +1169,12 @@ MainView {
                   true
                 }
               }
-            }
+            }*/
 
-            ZenderRegionaal {
-              naam: "Omroep Nijkerk"
-              logo: "img/omroepnijkerk.jpg"
-              achtergrond: "img/omroepnijkerkback.jpg"
-              bron: "http://studio.omroepn.nl:443/nfm.mp3;"
-              visible: {
-                if (settings.gevisible == "false") {
-                  false
-                }
-                else {
-                  true
-                }
-              }
-            }
-
-            ZenderRegionaal {
-              naam: "Zorgomroep Rivierenland"
-              logo: "img/zorgomroeprivierenland.jpg"
-              achtergrond: "img/zorgomroeprivierenlandback.jpg"
-              bron: "http://zot.shoutcaststream.com:8048/;"
-              visible: {
-                if (settings.gevisible == "false") {
-                  false
-                }
-                else {
-                  true
-                }
-              }
-            }
-
-            ZenderRegionaal {
+            Zender {
               naam: "Favoriet FM"
+              subText: "Jouw Favoriet!"
               logo: "img/favorietfm.jpg"
-              achtergrond: "img/favorietfmback.jpg"
               bron: "http://stream.rtv-favoriet.nl:8000/ffm-320-mp3?ver=452769"
               visible: {
                 if (settings.gevisible == "false") {
@@ -1337,11 +1186,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Klasse FM"
+              subText: "Gewoon gezellig!"
               logo: "img/klassefm.jpg"
-              achtergrond: "img/klassefmback.jpg"
-              bron: "http://stream.klasse.fm:8070/;"
+              bron: "https://mediaserv38.live-streams.nl:18023/stream"
               visible: {
                 if (settings.gevisible == "false") {
                   false
@@ -1352,10 +1201,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            // Offline??
+            /*/Zender {
               naam: "4daagse radio"
+              subText: ""
               logo: "img/4daagseradio.jpg"
-              achtergrond: "img/4daagseradioback.jpg"
               bron: "http://icecast.streamone.nl/k3MNdo0Azq?hash=1519746132620.mp3"
               visible: {
                 if (settings.gevisible == "false") {
@@ -1365,12 +1215,10 @@ MainView {
                   true
                 }
               }
-            }
+            }/*/
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Utrecht"
               visible: {
                 if (settings.utvisible == "false") {
                   false
@@ -1379,34 +1227,13 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                id: uttext
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Utrecht"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/utrecht.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Radio M Utrecht"
+              subText: "Nieuws- en sportzender van de provincie Utrecht"
               logo: "img/mutrecht.jpg"
-              achtergrond: "img/mutrechtback.jpg"
-              bron: "http://icecast.omroep.nl/rtvutrecht-radio-m-bb-mp3"
+              bron: "https://media.rtvutrecht.nl/radiomutrecht-bb-mp3"
               visible: {
                 if (settings.utvisible == "false") {
                   false
@@ -1417,10 +1244,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "EVA | Amersfoort & Leusden"
+              subText: "De lokale omroep voor Amersfoort en Leusden"
               logo: "img/eva.jpg"
-              achtergrond: "img/evaback.jpg"
               bron: "http://stream.mediagroep-eva.nl:8001/radio"
               visible: {
                 if (settings.utvisible == "false") {
@@ -1432,11 +1259,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Midland FM"
+              subText: "Voor elkaar"
               logo: "img/midlandfm.jpg"
-              achtergrond: "img/midlandfmback.jpg"
-              bron: "http://176.31.224.21:8204/;"
+              bron: "https://caster04.streampakket.com/proxy/8216/stream;"
               visible: {
                 if (settings.utvisible == "false") {
                   false
@@ -1447,11 +1274,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Bingo FM"
+              subText: "Nederlandstalige muziek!"
               logo: "img/bingofm.jpg"
-              achtergrond: "img/bingofmback.jpg"
-              bron: "http://icecast.omroep.nl/rtvutrecht-bingo-fm-bb-mp3"
+              bron: "https://media.rtvutrecht.nl/bingofm-bb-mp3"
               visible: {
                 if (settings.utvisible == "false") {
                   false
@@ -1462,11 +1289,12 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            // Geen goede streaming URL meer beschikbaar
+            /*Zender {
               naam: "RTV Baarn"
+              subText: "Lokale omroep uit Baarn"
               logo: "img/rtvbaarn.jpg"
-              achtergrond: "img/rtvbaarnback.jpg"
-              bron: "http://icecast.streamone.net/IJAFJ-oRIZUy"
+              bron: ""
               visible: {
                 if (settings.utvisible == "false") {
                   false
@@ -1475,12 +1303,12 @@ MainView {
                   true
                 }
               }
-            }
+            }*/
 
-            ZenderRegionaal {
+            Zender {
               naam: "ValleiRadio.nl"
+              subText: "Radio voor iedereen!"
               logo: "img/valleiradio.jpg"
-              achtergrond: "img/valleiradioback.jpg"
               bron: "http://server-25.stream-server.nl:8366/;"
               visible: {
                 if (settings.utvisible == "false") {
@@ -1492,10 +1320,8 @@ MainView {
               }
             }
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Noord-Holland"
               visible: {
                 if (settings.nohovisible == "false") {
                   false
@@ -1504,34 +1330,13 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                id: nohotext
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Noord-Holland"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/noord-holland.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "NH Radio"
+              subText: "Informeert, inspireert en verbindt"
               logo: "img/nhradio.jpg"
-              achtergrond: "img/nhradioback.jpg"
-              bron: "http://rtvnh-ics1.streamgate.nl/rtvnh"
+              bron: "http://ice.cr1.streamzilla.xlcdn.com:8000/sz%3Dnhnieuws%3DNHRadio_mp3"
               visible: {
                 if (settings.nohovisible == "false") {
                   false
@@ -1542,10 +1347,12 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            // 6FM is overgegaan in NH Gooi radio, aanpassen
+
+            /*/Zender {
               naam: "6FM"
+              subText: ""
               logo: "img/zesfm.jpg"
-              achtergrond: "img/zesfmback.jpg"
               bron: "http://6fm.nl:8000/mp3live"
               visible: {
                 if (settings.nohovisible == "false") {
@@ -1555,12 +1362,12 @@ MainView {
                   true
                 }
               }
-            }
+            }/*/
 
-            ZenderRegionaal {
+            Zender {
               naam: "FunX Amsterdam"
+              subText: "The Sound of the City"
               logo: "img/funxamsterdam.jpeg"
-              achtergrond: "img/funxamsterdamback.jpg"
               bron: "http://icecast.omroep.nl/funx-amsterdam-bb-mp3"
               visible: {
                 if (settings.nohovisible == "false") {
@@ -1572,10 +1379,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "MeerRadio"
+              subText: "Lokale omroep an Haarlemmermeer"
               logo: "img/meerradio.jpg"
-              achtergrond: "img/meerradioback.jpg"
               bron: "http://www.meerradio.nl:8000/;stream.mp3"
               visible: {
                 if (settings.nohovisible == "false") {
@@ -1587,10 +1394,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Haarlem 105"
+              subText: "Van stad tot strand!"
               logo: "img/haarlem105.jpg"
-              achtergrond: "img/haarlem105back.jpg"
               bron: "http://studio.haarlem105.nl:8000/haarlem105.mp3"
               visible: {
                 if (settings.nohovisible == "false") {
@@ -1602,10 +1409,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "RTV Amstelveen"
+              subText: "Lokale Omroep Amstelveen"
               logo: "img/rtvamstelveen.jpg"
-              achtergrond: "img/rtvamstelveenback.jpg"
               bron: "http://217.21.199.146:8084/stream?icy=http"
               visible: {
                 if (settings.nohovisible == "false") {
@@ -1617,10 +1424,8 @@ MainView {
               }
             }
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Zuid-Holland"
               visible: {
                 if (settings.zuhovisible == "false") {
                   false
@@ -1629,33 +1434,12 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                id: zuhotext
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Zuid-Holland"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/zuid-holland.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Havenstad Radio"
+              subText: "Rotterdams lekkerste popzender"
               logo: "img/havenstadradio.jpg"
-              achtergrond: "img/havenstadradioback.jpg"
               bron: "http://mediaserv33.live-streams.nl:8056/stream"
               visible: {
                 if (settings.zuhovisible == "false") {
@@ -1667,10 +1451,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "RTV Rijnmond"
+              subText: "Wij zijn erbij!"
               logo: "img/rtvrijnmond.jpg"
-              achtergrond: "img/rtvrijnmondback.jpg"
               bron: "http://d2e9xgjjdd9cr5.cloudfront.net/icecast/rijnmond/radio-mp3"
               visible: {
                 if (settings.zuhovisible == "false") {
@@ -1682,10 +1466,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep West"
+              subText: "Het laatste nieuws, weer en verkeer"
               logo: "img/omroepwest.jpg"
-              achtergrond: "img/omroepwestback.jpg"
               bron: "http://d3jhv0ayn0z3fg.cloudfront.net/icecast/omroepwest/radio"
               visible: {
                 if (settings.zuhovisible == "false") {
@@ -1697,10 +1481,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "ZFM"
+              subText: "Dag en nacht hits en nieuws vanuit het hart van Zuid-Holland"
               logo: "img/zfm.jpg"
-              achtergrond: "img/zfmback.jpg"
               bron: "http://www.kippingmultimediaal.nl:8000/ZFMmobiel"
               visible: {
                 if (settings.zuhovisible == "false") {
@@ -1712,10 +1496,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "FunX Den Haag"
+              subText: "The Sound of the City"
               logo: "img/funxdenhaag.jpg"
-              achtergrond: "img/funxdenhaagback.jpg"
               bron: "http://icecast.omroep.nl/funx-denhaag-bb-mp3"
               visible: {
                 if (settings.zuhovisible == "false") {
@@ -1727,10 +1511,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Den Haag FM"
+              subText: "100% Haags!"
               logo: "img/denhaagfm.jpg"
-              achtergrond: "img/denhaagfmback.jpg"
               bron: "http://82.94.205.122/proxy/haagseomroep?mp=/denhaagfm"
               visible: {
                 if (settings.zuhovisible == "false") {
@@ -1742,10 +1526,8 @@ MainView {
               }
             }
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Zeeland"
               visible: {
                 if (settings.zeevisible == "false") {
                   false
@@ -1754,33 +1536,12 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                id: zeetext
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Zeeland"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/zeeland.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep Zeeland"
+              subText: "Regionale omroep voor de provincie Zeeland"
               logo: "img/omroepzeeland.jpg"
-              achtergrond: "img/omroepzeelandback.jpg"
               bron: "http://livestream.zeelandnet.nl:8000/omroepzeeland_radio"
               visible: {
                 if (settings.zeevisible == "false") {
@@ -1792,10 +1553,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep Tholen"
-              logo: "img/omroeptholen.png"
-              achtergrond: "img/omroeptholenback.jpg"
+              subText: "Regionale omroep voor regio Tholen"
+              logo: "img/omroeptholen.jpg"
               bron: "http://stream.dotpoint.nl:8065/stream?type=http&nocache=125381"
               visible: {
                 if (settings.zeevisible == "false") {
@@ -1807,11 +1568,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Radio Schouwen-Duiveland"
+              subText: "Moet je horen!"
               logo: "img/radioschouwenduiveland.jpg"
-              achtergrond: "img/radioschouwenduivelandback.jpg"
-              bron: "http://radio.streamonecloud.net/dM21nd6oMi"
+              bron: "http://212.115.192.105:45121/radioschoudui"
               visible: {
                 if (settings.zeevisible == "false") {
                   false
@@ -1822,10 +1583,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Scheldemond FM"
+              subText: "Omroep voor West Zeeuws Vlaanderen"
               logo: "img/scheldemondfm.jpg"
-              achtergrond: "img/scheldemondfmback.jpg"
               bron: "http://stream.scheldemondfm.nl:8200/;"
               visible: {
                 if (settings.zeevisible == "false") {
@@ -1837,10 +1598,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Terneuzen FM"
+              subText: "Dé regionale zender van Terneuzen"
               logo: "img/terneuzenfm.jpg"
-              achtergrond: "img/terneuzenfmback.jpg"
               bron: "http://terneuzenfm.shoutcaststream.com:8076/;stream/1"
               visible: {
                 if (settings.zeevisible == "false") {
@@ -1852,25 +1613,8 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
-              naam: "Radio Reimerswaal"
-              logo: "img/radioreimerswaal.jpg"
-              achtergrond: "img/radioreimerswaalback.jpg"
-              bron: "http://s44.myradiostream.com:6410/;listen.mp3"
-              visible: {
-                if (settings.zeevisible == "false") {
-                  false
-                }
-                else {
-                  true
-                }
-              }
-            }
-
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Noord-Brabant"
               visible: {
                 if (settings.bravisible == "false") {
                   false
@@ -1879,33 +1623,12 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                id: bratext
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Noord-Brabant"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/noord-brabant.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Glow FM"
+              subText: "Hits Till It Hurts"
               logo: "img/glowfm.jpg"
-              achtergrond: "img/glowfmback.jpg"
               bron: "http://stream.glowfm.nl:8000/glowfm.mp3"
               visible: {
                 if (settings.bravisible == "false") {
@@ -1917,11 +1640,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Kempen FM"
+              subText: "Hét 'Feelgood' Radiostation van de Kempen!"
               logo: "img/kempenfm.jpg"
-              achtergrond: "img/kempenfmback.jpg"
-              bron: "http://91.213.69.167:40030/;"
+              bron: "https://cc6.beheerstream.com/8730/stream"
               visible: {
                 if (settings.bravisible == "false") {
                   false
@@ -1932,25 +1655,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
-              naam: "Maasland FM"
-              logo: "img/maaslandfm.jpg"
-              achtergrond: "img/maaslandfmback.jpg"
-              bron: "http://icecast.streamone.nl/f5Snk8SjbA"
-              visible: {
-                if (settings.bravisible == "false") {
-                  false
-                }
-                else {
-                  true
-                }
-              }
-            }
-
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep Brabant"
+              subText: "Regionale omroep voor de provincie Noord-Brabant"
               logo: "img/omroepbrabant.jpg"
-              achtergrond: "img/omroepbrabantback.jpg"
               bron: "http://d3slqp9xhts6qb.cloudfront.net/icecast/omroepbrabant/mp3"
               visible: {
                 if (settings.bravisible == "false") {
@@ -1962,10 +1670,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            //Stream offline
+            /*Zender {
               naam: "Omroep Centraal"
+              subText: "Lokale omroep Gemert-Bakel"
               logo: "img/omroepcentraal.jpg"
-              achtergrond: "img/omroepcentraalback.jpg"
               bron: "http://84.81.102.147:8000/;"
               visible: {
                 if (settings.bravisible == "false") {
@@ -1975,12 +1684,12 @@ MainView {
                   true
                 }
               }
-            }
+            }*/
 
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep Veldhoven"
+              subText: "Het laatste nieuws voor én door Veldhoven"
               logo: "img/omroepveldhoven.jpg"
-              achtergrond: "img/omroepveldhovenback.jpg"
               bron: "http://77.166.186.207:8000/Veldhoven"
               visible: {
                 if (settings.bravisible == "false") {
@@ -1992,25 +1701,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
-              naam: "Radio 8FM"
-              logo: "img/radio8fm.jpg"
-              achtergrond: "img/radio8fmback.jpg"
-              bron: "http://server-83.stream-server.nl/stream"
-              visible: {
-                if (settings.bravisible == "false") {
-                  false
-                }
-                else {
-                  true
-                }
-              }
-            }
-
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep Helmond"
+              subText: "Altijd dichtbij"
               logo: "img/omroephelmond.jpg"
-              achtergrond: "img/omroephelmondback.jpg"
               bron: "http://stream.omroephelmond.nl:8024/;"
               visible: {
                 if (settings.bravisible == "false") {
@@ -2022,11 +1716,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Radio Horizon"
+              subText: "Streekomroep voor Cranendonck en Heeze-Leende"
               logo: "img/radiohorizon.jpg"
-              achtergrond: "img/radiohorizonback.jpg"
-              bron: "http://rtvhorizon.nl:8001/;"
+              bron: "https://www.rtvhorizon.nl/radiostream/mp3"
               visible: {
                 if (settings.bravisible == "false") {
                   false
@@ -2037,10 +1731,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Radio Kontakt"
+              subText: "Lokale radio voor de gemeente Laarbeek"
               logo: "img/radiokontakt.jpg"
-              achtergrond: "img/radiokontaktback.jpg"
               bron: "http://lokaal.kontaktfm.nl:8005/;"
               visible: {
                 if (settings.bravisible == "false") {
@@ -2052,10 +1746,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Langstraat FM"
+              subText: "Radio: Waalwijk, Loon op Zand"
               logo: "img/langstraatfm.jpg"
-              achtergrond: "img/langstraatfmback.jpg"
               bron: "https://mediaserv30.live-streams.nl:18001/stream"
               visible: {
                 if (settings.bravisible == "false") {
@@ -2067,10 +1761,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Studio040"
+              subText: "Lokale radio voor Eindhoven"
               logo: "img/studio040.jpg"
-              achtergrond: "img/studio040back.jpg"
               bron: "http://stream.studio040.nl:8000/studio040.mp3"
               visible: {
                 if (settings.bravisible == "false") {
@@ -2082,10 +1776,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep Best"
+              subText: "Lokale omroep van de gemeente Best"
               logo: "img/omroepbest.jpg"
-              achtergrond: "img/omroepbestback.jpg"
               bron: "http://109.235.33.237:8000/omroep.mp3"
               visible: {
                 if (settings.bravisible == "false") {
@@ -2097,11 +1791,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Efteling Kids Radio"
+              subText: "Radio voor kinderen"
               logo: "img/eftelingkidsradio.jpg"
-              achtergrond: "img/eftelingkidsradioback.jpg"
-              bron: "https://20133.live.streamtheworld.com/TLPSTR07.mp3"
+              bron: "http://ice.cr2.streamzilla.xlcdn.com:8000/sz=efteling=hdstream"
               visible: {
                 if (settings.bravisible == "false") {
                   false
@@ -2112,10 +1806,8 @@ MainView {
               }
             }
 
-            Rectangle {
-              color: "transparent"
-              height: units.gu(3)
-              width: parent.width
+            ZenderDivider {
+              text: "Limburg"
               visible: {
                 if (settings.limvisible == "false") {
                   false
@@ -2124,33 +1816,12 @@ MainView {
                   true
                 }
               }
-
-              Text {
-                id: limtext
-                height: units.gu(2)
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: units.gu(4.25)
-                text: "Limburg"
-                color: theme.palette.normal.baseText
-              }
-
-              Image {
-                source: "img/limburg.png"
-                height: units.gu(1.5)
-                width: units.gu(2.5)
-                anchors {
-                  left: parent.left
-                  leftMargin: units.gu(1)
-                  verticalCenter: parent.verticalCenter
-                }
-              }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Maasland Radio"
+              subText: "Jouw Regio Radio"
               logo: "img/maaslandradio.jpg"
-              achtergrond: "img/maaslandradioback.jpg"
               bron: "http://maaslandradio.shoutcaststream.com:8006/stream"
               visible: {
                 if (settings.limvisible == "false") {
@@ -2162,10 +1833,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep Venray"
+              subText: "Ook voor jou!"
               logo: "img/omroepvenray.jpg"
-              achtergrond: "img/omroepvenrayback.jpg"
               bron: "http://icecast.omroepvenray.nl/lov.mp3"
               visible: {
                 if (settings.limvisible == "false") {
@@ -2177,11 +1848,11 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "L1 Radio"
+              subText: "Liefde voor Limburg"
               logo: "img/l1radio.jpg"
-              achtergrond: "img/l1radioback.jpg"
-              bron: "http://icecast.omroep.nl/l1-radio-sb-mp3"
+              bron: "http://d34pj260kw1xmk.cloudfront.net/icecast/l1/radio-bb-mp3"
               visible: {
                 if (settings.limvisible == "false") {
                   false
@@ -2192,10 +1863,12 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            // Veranderd in omroep horst aan de maas??
+            /*/
+            Zender {
               naam: "Omroep Reindonk"
+              subText: ""
               logo: "img/omroepreindonk.jpg"
-              achtergrond: "img/omroepreindonkback.jpg"
               bron: "https://ms5ic.mx-cd.net/157-661257/Radio_Reindonk"
               visible: {
                 if (settings.limvisible == "false") {
@@ -2206,11 +1879,12 @@ MainView {
                 }
               }
             }
+            /*/
 
-            ZenderRegionaal {
+            Zender {
               naam: "RTV Maastricht Radio"
+              subText: "Lokale radio voor Maastricht"
               logo: "img/rtvmaastrichtradio.jpg"
-              achtergrond: "img/rtvmaastrichtradioback.jpg"
               bron: "http://stream.rtvmaastricht.nl:8081/rtv/radio_audio/icecast.audio"
               visible: {
                 if (settings.limvisible == "false") {
@@ -2222,10 +1896,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Radio Grensland"
+              subText: "Hits van toen en nu en iedere dag het lokale nieuws"
               logo: "img/radiogrensland.jpg"
-              achtergrond: "img/radiogrenslandback.jpg"
               bron: "http://212.83.138.48:8468/stream"
               visible: {
                 if (settings.limvisible == "false") {
@@ -2237,10 +1911,13 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            // Overgegaan in ML5
+
+            /*/
+            Zender {
               naam: "RTV Roermond"
+              subText: "Nieuws en sport uit Limburg"
               logo: "img/rtvroermond.jpg"
-              achtergrond: "img/rtvroermondback.jpg"
               bron: "http://icecast.streamone.net/LyYFt64ABl8S"
               visible: {
                 if (settings.limvisible == "false") {
@@ -2250,13 +1927,13 @@ MainView {
                   true
                 }
               }
-            }
+            }/*/
 
-            ZenderRegionaal {
+            Zender {
               naam: "Omroep Venlo"
+              subText: "Lokale omroep van de gemeente Venlo"
               logo: "img/omroepvenlo.jpg"
-              achtergrond: "img/omroepvenloback.jpg"
-              bron: "https://icecast.streamone.net/2ZYEDcIAN8Yw"
+              bron: "https://olon.az.icecast.ebsd.ericsson.net/omroep_venlo"
               visible: {
                 if (settings.limvisible == "false") {
                   false
@@ -2267,10 +1944,10 @@ MainView {
               }
             }
 
-            ZenderRegionaal {
+            Zender {
               naam: "Weert FM"
+              subText: "Lokale omroep voor Weert en Nederweert"
               logo: "img/weertfm.jpg"
-              achtergrond: "img/weertfmback.jpg"
               bron: "http://weertfm.mooo.com:9000/wfm3"
               visible: {
                 if (settings.limvisible == "false") {
@@ -2312,643 +1989,724 @@ MainView {
 
     }
 
+    // bottomMenu; this menu contains te current playing radio station and player. It hides when the screen is bigger then units.gu(100), e.g. tablets or computers
     Rectangle {
-      id: bottomMenu
-      visible: {
-
-        if (root.width < units.gu(100)){
-          true
-        }
-        else{
-          false
-        }
-
-      }
       z: 4
+      id: bottomMenu
+
       width: parent.width
-      height: units.gu(6)
+      height: units.gu(9)
+
       color: theme.palette.normal.background
+
       anchors {
         bottom: parent.bottom
         bottomMargin: units.gu(4)
       }
 
-      Image {
-        id: bottomIMG
-        z: 5
-        source: ""
-        height: parent.height - units.gu(0.1)
-        width: parent.height - units.gu(0.1)
-        anchors {
-          left: parent.left
-          bottom: parent.bottom
-        }
-      }
-      /*/ TIJDELIJK UITGESCHAKELD. Opnieuw ontwerpen met behulp van bufferstate audio.
-      AnimatedImage {
-      height: units.gu(4)
-      width: height
       visible: {
-      if (player.playbackState == true) {
-      false
-    }
-    else {
-    true
-  }
-}
-anchors.right: playerIcon.left
-anchors.rightMargin: units.gu(3)
-anchors.verticalCenter: parent.verticalCenter
-source: "img/loading.gif"
-
-Rectangle {
-z: 3
-anchors.fill: parent
-color: theme.palette.normal.background
-visible: {
-if (playerIcon.name == "media-playback-stop") {
-false
-}
-else {
-true
-}
-}
-}
-}
-/*/
-Audio {
-  id: player
-  source: " "
-}
-
-Rectangle {
-  z: 10
-  width: parent.width
-  height: units.gu(0.1)
-  color: theme.palette.normal.base
-}
-
-Text {
-  id: playerText
-  visible: {
-    if (player.playbackState == true) {
-      true
-    }
-    else {
-      false
-    }
-  }
-  text: " "
-  color: theme.palette.normal.baseText
-  anchors {
-    verticalCenter: parent.verticalCenter
-    left: bottomIMG.right
-    leftMargin: units.gu(3)
-  }
-}
-
-Rectangle {
-  id: playerIconHolder
-  color: theme.palette.normal.background
-  height: parent.height
-  width: height * 1.5
-  anchors {
-    verticalCenter: parent.verticalCenter
-    right: parent.right
-  }
-
-  MouseArea {
-    anchors.fill: parent
-    onClicked: {
-      if (player.playbackState == true) {
-        player.stop()
-        playerIcon.name = "media-playback-start"
-      }
-      else {
-        player.play()
-        playerIcon.name = "media-playback-stop"
-      }
-    }
-  }
-
-  Icon {
-    id: playerIcon
-    z: 3
-    width: units.gu(3.2)
-    height: width
-    anchors {
-      verticalCenter: parent.verticalCenter
-      right: parent.right
-      rightMargin: units.gu(3)
-    }
-    //color: "#000000"
-    name: "media-playback-start"
-  }
-}
-}
-
-BottomEdge {
-  id: bottomEdge
-  height: {
-    if (root.width < units.gu(65)){
-      parent.width / 4 + units.gu(7)
-    }
-    else{
-      units.gu(18)
-    }
-  }
-  hint.iconName: "go-up"
-  contentComponent: Page {
-    PageHeader {
-      id: bottomHeader
-      title: i18n.tr("Favorieten")
-    }
-    width: root.width
-    height: root.height
-
-    Row {
-      anchors {
-        top: bottomHeader.bottom
-        topMargin: units.gu(1)
-        horizontalCenter: parent.horizontalCenter
-      }
-      width: parent.width - units.gu(2)
-      spacing: units.gu(1)
-      //Slot 1
-      UbuntuShape {
-        id: slot1
-        width: {
-          if (root.width < units.gu(65)){
-            parent.width / 4 - units.gu(0.8)
-          }
-          else{
-            units.gu(10)
-          }
-        }
-        height: width
-        source: Image {
-          id: slot1img
-          source: settings.slot1img
-        }
-
-        MouseArea {
-          id: mouseArea;
-          anchors.fill: parent
-          onClicked: {
-            if (settings.slot1source == "") {
-            }
-            else {
-              player.stop()
-              player.source = settings.slot1source
-              player.play()
-              playerIcon.name = "media-playback-stop"
-              playerText.text = settings.slot1text
-              bottomIMG.source = settings.slot1img
-              settings.source = player.source
-              settings.text = playerText.text
-              settings.image = bottomIMG.source
-              bottomEdge.collapse()
-            }
-          }
-          onPressAndHold: {
-            slot1img.source = bottomIMG.source
-            settings.slot1img = bottomIMG.source
-            settings.slot1text = playerText.text
-            settings.slot1source = player.source
-          }
-        }
-
-        states: State {
-          name: "pressed"; when: mouseArea.pressed
-          PropertyChanges { target: slot1; scale: 1.03 }
-        }
-
-        transitions: Transition {
-          NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
-        }
-      }
-
-      //Slot 2
-      UbuntuShape {
-        id: slot2
-        width: {
-          if (root.width < units.gu(65)){
-            parent.width / 4 - units.gu(0.8)
-          }
-          else{
-            units.gu(10)
-          }
-        }
-        height: width
-        source: Image {
-          id: slot2img
-          source: settings.slot2img
-        }
-
-        MouseArea {
-          id: mouseArea2;
-          anchors.fill: parent
-          onClicked: {
-            if (settings.slot2source == "") {
-            }
-            else {
-              player.stop()
-              player.source = settings.slot2source
-              player.play()
-              playerIcon.name = "media-playback-stop"
-              playerText.text = settings.slot2text
-              bottomIMG.source = settings.slot2img
-              settings.source = player.source
-              settings.text = playerText.text
-              settings.image = bottomIMG.source
-              bottomEdge.collapse()
-            }
-          }
-          onPressAndHold: {
-            slot2img.source = bottomIMG.source
-            settings.slot2img = bottomIMG.source
-            settings.slot2text = playerText.text
-            settings.slot2source = player.source
-          }
-        }
-
-        states: State {
-          name: "pressed"; when: mouseArea2.pressed
-          PropertyChanges { target: slot2; scale: 1.03 }
-        }
-
-        transitions: Transition {
-          NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
-        }
-      }
-
-      //Slot 3
-      UbuntuShape {
-        id: slot3
-        width: {
-          if (root.width < units.gu(65)){
-            parent.width / 4 - units.gu(0.8)
-          }
-          else{
-            units.gu(10)
-          }
-        }
-        height: width
-        source: Image {
-          id: slot3img
-          source: settings.slot3img
-        }
-
-        MouseArea {
-          id: mouseArea3;
-          anchors.fill: parent
-          onClicked: {
-            if (settings.slot3source == "") {
-            }
-            else {
-              player.stop()
-              player.source = settings.slot3source
-              player.play()
-              playerIcon.name = "media-playback-stop"
-              playerText.text = settings.slot3text
-              bottomIMG.source = settings.slot3img
-              settings.source = player.source
-              settings.text = playerText.text
-              settings.image = bottomIMG.source
-              bottomEdge.collapse()
-            }
-          }
-          onPressAndHold: {
-            slot3img.source = bottomIMG.source
-            settings.slot3img = bottomIMG.source
-            settings.slot3text = playerText.text
-            settings.slot3source = player.source
-          }
-        }
-
-        states: State {
-          name: "pressed"; when: mouseArea3.pressed
-          PropertyChanges { target: slot3; scale: 1.03 }
-        }
-
-        transitions: Transition {
-          NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
-        }
-      }
-
-      //Slot 4
-      UbuntuShape {
-        id: slot4
-        width: {
-          if (root.width < units.gu(65)){
-            parent.width / 4 - units.gu(0.8)
-          }
-          else{
-            units.gu(10)
-          }
-        }
-        height: width
-        source: Image {
-          id: slot4img
-          source: settings.slot4img
-        }
-
-        MouseArea {
-          id: mouseArea4;
-          anchors.fill: parent
-          onClicked: {
-            if (settings.slot4source == "") {
-            }
-            else {
-              player.stop()
-              player.source = settings.slot4source
-              player.play()
-              playerIcon.name = "media-playback-stop"
-              playerText.text = settings.slot4text
-              bottomIMG.source = settings.slot4img
-              settings.source = player.source
-              settings.text = playerText.text
-              settings.image = bottomIMG.source
-              bottomEdge.collapse()
-            }
-          }
-          onPressAndHold: {
-            slot4img.source = bottomIMG.source
-            settings.slot4img = bottomIMG.source
-            settings.slot4text = playerText.text
-            settings.slot4source = player.source
-          }
-        }
-
-        states: State {
-          name: "pressed"; when: mouseArea4.pressed
-          PropertyChanges { target: slot4; scale: 1.03 }
-        }
-
-        transitions: Transition {
-          NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
-        }
-      }
-    }
-  }
-  Rectangle {
-    width: parent.width
-    height: units.gu(4)
-    anchors.bottom: parent.bottom
-
-    color: theme.palette.normal.background
-
-    Rectangle {
-      width: parent.width
-      height: units.gu(0.1)
-      color: theme.palette.normal.base
-    }
-  }
-}
-}
-
-Rectangle {
-  id: playerPage
-  visible: {
-
-    if (parent.width < units.gu(100)){
-      false
-    }
-    else{
-      true
-    }
-
-  }
-  color: theme.palette.normal.background
-  height: parent.height
-  width: units.gu(39.9)//parent.width / 4
-
-  Rectangle {
-    z: 30
-    width: units.gu(0.1)
-    height: parent.height - playerPageHeader.height + units.gu(0.1)
-    color: theme.palette.normal.base
-    anchors.right: parent.left
-    anchors.bottom: parent.bottom
-  }
-
-  MouseArea {
-    // Zorgt ervoor dat in de tablet modus de pagina achter de playpage niet wordt 'aangeraakt'
-    anchors.fill: parent
-  }
-
-  anchors {
-    right: parent.right
-    bottom: root.bottom
-  }
-
-  PageHeader {
-    id: playerPageHeader
-    z: 20
-    title: i18n.tr("Nu aan het afspelen")
-  }
-
-  Rectangle {
-    color: "#111111"
-    z: 10
-    opacity: 0.8
-    height: centerIMG.height / 7
-    width: centerIMG.width
-    anchors {
-      left: parent.left
-      bottom: centerIMG.bottom
-    }
-    Text {
-      text: {
-        if (settings.image == "") {
-          "Selecteer een zender..."
+        if (root.width < units.gu(100)) {
+          true
         }
         else {
-          playerText.text
+          false
         }
       }
-      color: "white"
-      font.pointSize: parent.height / 3
-      anchors {
-        verticalCenter: parent.verticalCenter
-        left: parent.left
-        leftMargin: units.gu(2)
+
+      // Grey line on top of bottomMenu
+
+      Rectangle {
+        z: 10
+        width: parent.width
+        height: units.gu(0.1)
+        color: theme.palette.normal.base
       }
-    }
-  }
 
-  Image {
-    z: 5
-    id: centerIMG
-    source: bottomIMG.source
-    height: width
-    width: parent.width
-    anchors {
-      left: parent.left
-      top: playerPageHeader.bottom
-    }
-  }
+      // Contents of the menu are below
 
-  Rectangle {
-    color: theme.palette.normal.background
-    z: 9
-    height: centerIMG.height
-    width: centerIMG.width
-    visible: {
-      if (settings.image == "") {
-        true
+      UbuntuShape {
+        id: bottomIMGShape
+        height: units.gu(7)
+        width: height
+
+        anchors {
+          left: parent.left
+          leftMargin: units.gu(1)
+          verticalCenter: parent.verticalCenter
+        }
+
+        // Put radio station logo in UbuntuShape
+        source: Image {
+          id: bottomIMG
+
+          // Source is blank, it gets set by the 'zender' component
+          source: ""
+        }
+
+        aspect: UbuntuShape.Inset
       }
-      else {
-        false
+
+      Audio {
+        id: player
+
+        // Source is blank, it gets set by the 'zender' component
+        source: " "
       }
-    }
-    anchors {
-      horizontalCenter: centerIMG.horizontalCenter
-      verticalCenter: centerIMG.verticalCenter
-    }
-  }
 
-  Image {
-    z: 7
-    source: centerIMG.source
-    height: width
-    width: centerIMG.width / 1.8
-    anchors {
-      horizontalCenter: centerIMG.horizontalCenter
-      verticalCenter: centerIMG.verticalCenter
-    }
-  }
+      // Put labels in a 'box'
 
-  FastBlur {
-    z: 5
-    anchors.fill: centerIMG
-    source: centerIMG
-    radius: 32
-  }
+      Item {
+        width: parent.width - units.gu(9)
+        height: units.gu(4.5)
 
-  Rectangle {
-    z: 10
-    color: theme.palette.normal.background
-    height: parent.height - centerIMG.height - playerPageHeader.height
-    width: parent.width
-    anchors {
-      horizontalCenter: parent.horizontalCenter
-      bottom: parent.bottom
-    }
-    Icon {
-      z: 3
-      width: units.gu(5)
-      height: width
-      anchors {
-        verticalCenter: parent.verticalCenter
-        horizontalCenter: parent.horizontalCenter
-      }
-      name: playerIcon.name
+        anchors {
+          left: bottomIMGShape.right
+          leftMargin: units.gu(1)
+          verticalCenter: parent.verticalCenter
+        }
 
-      MouseArea {
-        anchors.fill: parent
-        onClicked: {
+        visible: {
           if (player.playbackState == true) {
-            player.stop()
-            playerIcon.name = "media-playback-start"
+            true
           }
           else {
-            player.play()
-            playerIcon.name = "media-playback-stop"
+            false
+          }
+        }
+
+        Label {
+          anchors {
+            left: parent.left
+            top: parent.top
+          }
+
+          text: "Nu aan het spelen"
+
+          font.bold: true
+        }
+
+        Label {
+          id: playerText
+
+          anchors {
+            left: parent.left
+            bottom: parent.bottom
+          }
+
+          // playerText is blank, it gets set by the 'zender' component
+          text: " "
+        }
+      }
+
+      // Put the playerIcon in a Rectangle to make the MouseArea bigger
+      Rectangle {
+        id: playerIconHolder
+
+        height: parent.height
+        width: height * 1.5
+
+        color: theme.palette.normal.background
+
+        anchors {
+          verticalCenter: parent.verticalCenter
+          right: parent.right
+        }
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            if (player.playbackState == true) {
+              player.stop()
+            }
+            else {
+              player.play()
+            }
+          }
+        }
+
+        // Player icon
+        Icon {
+          z: 3
+          id: playerIcon
+
+          width: units.gu(3)
+          height: width
+
+          anchors {
+            verticalCenter: parent.verticalCenter
+            right: parent.right
+            rightMargin: units.gu(3)
+          }
+
+          name: {
+            if (player.playbackState == true) {
+              "media-playback-stop"
+            }
+            else {
+              "media-playback-start"
+            }
+          }
+        }
+
+        // Buffer rectangle. If the audio player is loading, the ActivityIndicator will show
+        Rectangle {
+          z: 4
+          id: buffer
+          visible: {
+            if (player.playbackState == true) {
+              if (player.bufferProgress < 0.20) {
+                true
+              }
+              else {
+                false
+              }
+            }
+            else {
+              false
+            }
+          }
+
+          anchors.fill: parent
+          color: theme.palette.normal.background
+
+          ActivityIndicator {
+            width: units.gu(3.2)
+            height: width
+
+            running: true
+            anchors.centerIn: parent
+          }
+        }
+      }
+    }
+
+    // Needed to open the bottomEdge in desktop mode. Temporary solution.
+    MouseArea {
+      z: 10
+
+      width: bottomEdge.width
+      height: units.gu(4)
+
+      anchors {
+        bottom: parent.bottom
+        left: parent.left
+      }
+
+      onClicked: {
+        bottomEdge.commit()
+      }
+    }
+
+    // The bottomEdge cointains the favorite radio station set by the user.
+    BottomEdge {
+
+      id: bottomEdge
+
+      hint.iconName: "go-up"
+
+      height: {
+        if (root.width < units.gu(65)) {
+          parent.width / 4 + units.gu(7)
+        }
+        else {
+          units.gu(18)
+        }
+      }
+
+      contentComponent: Page {
+        PageHeader {
+          id: bottomHeader
+          title: "Favorieten"
+        }
+        width: root.width
+        height: root.height
+
+        Row {
+          anchors {
+            top: bottomHeader.bottom
+            topMargin: units.gu(1)
+            horizontalCenter: parent.horizontalCenter
+          }
+          width: parent.width - units.gu(2)
+          spacing: units.gu(1)
+          //Slot 1
+          UbuntuShape {
+            id: slot1
+            width: {
+              if (root.width < units.gu(65)){
+                parent.width / 4 - units.gu(0.8)
+              }
+              else{
+                units.gu(10)
+              }
+            }
+            height: width
+            source: Image {
+              id: slot1img
+              source: settings.slot1img
+            }
+
+            MouseArea {
+              id: mouseArea;
+              anchors.fill: parent
+              onClicked: {
+                if (settings.slot1source == "") {
+                }
+                else {
+                  player.stop()
+                  player.source = settings.slot1source
+                  player.play()
+                  playerText.text = settings.slot1text
+                  bottomIMG.source = settings.slot1img
+                  settings.source = player.source
+                  settings.text = playerText.text
+                  settings.image = bottomIMG.source
+                  bottomEdge.collapse()
+                }
+              }
+              onPressAndHold: {
+                slot1img.source = bottomIMG.source
+                settings.slot1img = bottomIMG.source
+                settings.slot1text = playerText.text
+                settings.slot1source = player.source
+              }
+            }
+
+            states: State {
+              name: "pressed"; when: mouseArea.pressed
+              PropertyChanges { target: slot1; scale: 1.03 }
+            }
+
+            transitions: Transition {
+              NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
+            }
+          }
+
+          //Slot 2
+          UbuntuShape {
+            id: slot2
+            width: {
+              if (root.width < units.gu(65)){
+                parent.width / 4 - units.gu(0.8)
+              }
+              else{
+                units.gu(10)
+              }
+            }
+            height: width
+            source: Image {
+              id: slot2img
+              source: settings.slot2img
+            }
+
+            MouseArea {
+              id: mouseArea2;
+              anchors.fill: parent
+              onClicked: {
+                if (settings.slot2source == "") {
+                }
+                else {
+                  player.stop()
+                  player.source = settings.slot2source
+                  player.play()
+                  playerText.text = settings.slot2text
+                  bottomIMG.source = settings.slot2img
+                  settings.source = player.source
+                  settings.text = playerText.text
+                  settings.image = bottomIMG.source
+                  bottomEdge.collapse()
+                }
+              }
+              onPressAndHold: {
+                slot2img.source = bottomIMG.source
+                settings.slot2img = bottomIMG.source
+                settings.slot2text = playerText.text
+                settings.slot2source = player.source
+              }
+            }
+
+            states: State {
+              name: "pressed"; when: mouseArea2.pressed
+              PropertyChanges { target: slot2; scale: 1.03 }
+            }
+
+            transitions: Transition {
+              NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
+            }
+          }
+
+          //Slot 3
+          UbuntuShape {
+            id: slot3
+            width: {
+              if (root.width < units.gu(65)){
+                parent.width / 4 - units.gu(0.8)
+              }
+              else{
+                units.gu(10)
+              }
+            }
+            height: width
+            source: Image {
+              id: slot3img
+              source: settings.slot3img
+            }
+
+            MouseArea {
+              id: mouseArea3;
+              anchors.fill: parent
+              onClicked: {
+                if (settings.slot3source == "") {
+                }
+                else {
+                  player.stop()
+                  player.source = settings.slot3source
+                  player.play()
+                  playerText.text = settings.slot3text
+                  bottomIMG.source = settings.slot3img
+                  settings.source = player.source
+                  settings.text = playerText.text
+                  settings.image = bottomIMG.source
+                  bottomEdge.collapse()
+                }
+              }
+              onPressAndHold: {
+                slot3img.source = bottomIMG.source
+                settings.slot3img = bottomIMG.source
+                settings.slot3text = playerText.text
+                settings.slot3source = player.source
+              }
+            }
+
+            states: State {
+              name: "pressed"; when: mouseArea3.pressed
+              PropertyChanges { target: slot3; scale: 1.03 }
+            }
+
+            transitions: Transition {
+              NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
+            }
+          }
+
+          //Slot 4
+          UbuntuShape {
+            id: slot4
+            width: {
+              if (root.width < units.gu(65)){
+                parent.width / 4 - units.gu(0.8)
+              }
+              else{
+                units.gu(10)
+              }
+            }
+            height: width
+            source: Image {
+              id: slot4img
+              source: settings.slot4img
+            }
+
+            MouseArea {
+              id: mouseArea4;
+              anchors.fill: parent
+              onClicked: {
+                if (settings.slot4source == "") {
+                }
+                else {
+                  player.stop()
+                  player.source = settings.slot4source
+                  player.play()
+                  playerText.text = settings.slot4text
+                  bottomIMG.source = settings.slot4img
+                  settings.source = player.source
+                  settings.text = playerText.text
+                  settings.image = bottomIMG.source
+                  bottomEdge.collapse()
+                }
+              }
+              onPressAndHold: {
+                slot4img.source = bottomIMG.source
+                settings.slot4img = bottomIMG.source
+                settings.slot4text = playerText.text
+                settings.slot4source = player.source
+              }
+            }
+
+            states: State {
+              name: "pressed"; when: mouseArea4.pressed
+              PropertyChanges { target: slot4; scale: 1.03 }
+            }
+
+            transitions: Transition {
+              NumberAnimation { properties: "scale"; duration: 50; easing.type: Easing.InOutQuad }
+            }
+          }
+        }
+      }
+      Rectangle {
+        width: parent.width
+        height: units.gu(4)
+        anchors.bottom: parent.bottom
+
+        color: theme.palette.normal.background
+
+        Rectangle {
+          width: parent.width
+          height: units.gu(0.1)
+          color: theme.palette.normal.base
+        }
+      }
+    }
+  }
+
+  // PlayerPage. It shows up when the screen is bigger then units.gu(100), e.g. tablets or computers
+  Rectangle {
+    id: playerPage
+
+    height: parent.height
+    width: units.gu(39.9)//parent.width / 4
+
+    color: theme.palette.normal.background
+
+    anchors {
+      right: parent.right
+      bottom: root.bottom
+    }
+
+    visible: {
+      if (parent.width < units.gu(100)) {
+        false
+      }
+      else {
+        true
+      }
+    }
+
+    // Content below
+
+    Rectangle {
+      z: 30
+      width: units.gu(0.1)
+      height: parent.height - playerPageHeader.height + units.gu(0.1)
+      color: theme.palette.normal.base
+      anchors.right: parent.left
+      anchors.bottom: parent.bottom
+    }
+
+    MouseArea {
+      // Ensures that in tablet mode the page behind the playpage is not 'touched'
+      anchors.fill: parent
+    }
+
+    PageHeader {
+      z: 20
+      id: playerPageHeader
+      title: "Nu aan het afspelen"
+    }
+
+    Rectangle {
+      z: 10
+      height: centerIMG.height / 7
+      width: centerIMG.width
+
+      anchors {
+        left: parent.left
+        bottom: centerIMG.bottom
+      }
+
+      color: "#111111"
+      opacity: 0.8
+
+      Text {
+        color: "white"
+
+        anchors {
+          verticalCenter: parent.verticalCenter
+          left: parent.left
+          leftMargin: units.gu(2)
+        }
+
+        text: {
+          if (settings.image == "") {
+            "Selecteer een zender..."
+          }
+          else {
+            playerText.text
+          }
+        }
+
+        font.pointSize: parent.height / 3
+      }
+    }
+
+    Image {
+      z: 5
+      id: centerIMG
+      height: width
+      width: parent.width
+
+      anchors {
+        left: parent.left
+        top: playerPageHeader.bottom
+      }
+
+      // Fetch the larger image for the playerPage
+      source: bottomIMG.source + "_large.jpg"
+
+    }
+
+    Rectangle {
+      z: 9
+      height: centerIMG.height
+      width: centerIMG.width
+
+      color: theme.palette.normal.background
+
+      anchors {
+        horizontalCenter: centerIMG.horizontalCenter
+        verticalCenter: centerIMG.verticalCenter
+      }
+
+      visible: {
+        if (settings.image == "") {
+          true
+        }
+        else {
+          false
+        }
+      }
+    }
+
+    Image {
+      z: 7
+      height: width
+      width: centerIMG.width / 1.8
+
+      anchors {
+        horizontalCenter: centerIMG.horizontalCenter
+        verticalCenter: centerIMG.verticalCenter
+      }
+
+      source: centerIMG.source
+
+    }
+
+    FastBlur {
+      z: 5
+      anchors.fill: centerIMG
+
+      source: centerIMG
+      radius: 32
+    }
+
+    // This rectangle cointains te player button from the playerPage
+    Rectangle {
+      z: 10
+      height: parent.height - centerIMG.height - playerPageHeader.height
+      width: parent.width
+
+      color: theme.palette.normal.background
+
+      anchors {
+        horizontalCenter: parent.horizontalCenter
+        bottom: parent.bottom
+      }
+
+      Icon {
+        z: 3
+        width: units.gu(5)
+        height: width
+
+        anchors {
+          verticalCenter: parent.verticalCenter
+          horizontalCenter: parent.horizontalCenter
+        }
+
+        name: playerIcon.name
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: {
+            if (player.playbackState == true) {
+              player.stop()
+            }
+            else {
+              player.play()
+            }
           }
         }
       }
     }
   }
-}
 
-Component {
-  id: nieuwDialog
-  Dialog {
-    id: nieuwdialogue
-    title: "Versie 1.4.3"
-    text: "Wat is er nieuw:<br>  <br>- Nieuw splashscreen<br>- Joe toegevoegd (nieuw in Nederland)<br>- XM toegevoegd (opleidingszender Talpa)"
+  Component {
+    id: noConnectionDialog
+    Dialog {
+      id: dialogue
+      title: "Oeps!"
+      text: "Deze app vereist een actieve internetverbinding! Controleer je netwerkinstellingen en probeer het opnieuw."
+      Button {
+        text: "Sluiten"
+        color: theme.palette.normal.activity
+        onClicked: Qt.quit()
+      }
 
-    Button {
-      text: "Sluiten"
-      color: "#00adda"
-      onClicked: {
-        settings.versie = "1.4.3"
-        PopupUtils.close(nieuwdialogue)
+      Button {
+        text: "Toch Proberen"
+        color: "#888888"
+        onClicked: PopupUtils.close(dialogue)
       }
     }
   }
-}
 
-Component {
-  id: noConnectionDialog
-  Dialog {
-    id: dialogue
-    title: "Oeps!"
-    text: "Deze app vereist een actieve internetverbinding! Controleer je netwerkinstellingen en probeer het opnieuw."
-    Button {
-      text: "Sluiten"
-      color: "#00adda"
-      onClicked: Qt.quit()
-    }
-
-    Button {
-      text: "Toch Proberen"
-      color: "#888888"
-      onClicked: PopupUtils.close(dialogue)
-    }
-  }
-}
-
-Component {
-  id: tutorialMainDialog
-  Dialog {
-    id: dialogue3
-    text: "<b>Van categorie wisselen</b><br>Bovenin het scherm kan je wisselen tussen landelijke, alternatieve en regionale zenders.<br> <br><b>Favorieten toevoegen</b><br>Veeg vanaf de onderkant van het scherm omhoog, om de favorieten te tonen.<br> <br>Houd een (leeg) slot lang ingedrukt en het huidig spelende radiostation wordt aan de favorieten toegevoegd.<br> <br>Tik op een bestaande favoriet om het radiostation af te spelen."
-    Button {
-      text: "Ik begrijp het!"
-      color: "#00adda"
-      onClicked: {
-        PopupUtils.close(dialogue3)
+  Component {
+    id: tutorialMainDialog
+    Dialog {
+      id: dialogue3
+      text: "<b>Van categorie wisselen</b><br>Bovenin het scherm kun je wisselen tussen landelijke, alternatieve en regionale zenders.<br> <br><b>Favorieten toevoegen</b><br>Veeg vanaf de onderkant van het scherm omhoog om de favorieten te tonen.<br> <br>Houd een (leeg) slot lang ingedrukt en het huidig spelende radiostation wordt aan de favorieten toegevoegd.<br> <br>Tik op een bestaande favoriet om het radiostation af te spelen."
+      Button {
+        text: "Sluiten"
+        color: theme.palette.normal.activity
+        onClicked: {
+          PopupUtils.close(dialogue3)
+        }
       }
     }
   }
-}
 
-Component {
-  id: aboutDialog
-  Dialog {
-    id: dialogue4
-    title: "Over Radio NL"
-    Text {
-      text: '<b>Versie:</b> ' + settings.versie + '<br><b>Broncode:</b> <a href="https://github.com/SanderKlootwijk/RadioNL">GitHub</a><br><b>Licentie:</b> <a href="https://tldrlegal.com/license/mit-license">MIT Licentie</a><br><br> <br>© 2018-2019 Sander Klootwijk'
-      color: theme.palette.normal.baseText
-      horizontalAlignment: Text.AlignHCenter
-      onLinkActivated: Qt.openUrlExternally(link)
-    }
-    Button {
-      text: "Sluiten"
-      color: "#00adda"
-      onClicked: {
-        PopupUtils.close(dialogue4)
+  Component {
+    id: aboutDialog
+    Dialog {
+      id: dialogue4
+      title: "Over Radio NL"
+      Text {
+        text: '<b>Versie: 2.1</b> <br><b>Broncode:</b> <a href="https://github.com/SanderKlootwijk/RadioNL">GitHub</a><br><b>Licentie:</b> <a href="https://tldrlegal.com/license/mit-license">MIT Licentie</a><br><br> <br>© 2018-2020 Sander Klootwijk'
+        color: theme.palette.normal.baseText
+        horizontalAlignment: Text.AlignHCenter
+        onLinkActivated: Qt.openUrlExternally(link)
+      }
+      Button {
+        text: "Sluiten"
+        color: theme.palette.normal.activity
+        onClicked: {
+          PopupUtils.close(dialogue4)
+        }
       }
     }
   }
-}
 
-SettingsDialog {
-  id: settingsDialog
-}
+  SettingsDialog {
+    id: settingsDialog
+  }
 
-function openSettingsDialog() {
-  var sd = PopupUtils.open(settingsDialog);
-}
+  function openSettingsDialog() {
+    var sd = PopupUtils.open(settingsDialog);
+  }
 
-TutorialRegionaalDialog {
-  id: tutorialRegionaalDialog
-}
+  TutorialRegionaalDialog {
+    id: tutorialRegionaalDialog
+  }
 
-function openTutorialRegionaalDialog() {
-  var sd = PopupUtils.open(tutorialRegionaalDialog);
-}
+  function openTutorialRegionaalDialog() {
+    var sd = PopupUtils.open(tutorialRegionaalDialog);
+  }
 }

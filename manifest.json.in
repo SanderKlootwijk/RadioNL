@@ -1,6 +1,6 @@
 {
     "name": "radionl.sanderklootwijk",
-    "description": "Alle Nederlandse radio stations in één app!",
+    "description": "Alle Nederlandse radiozenders in één app!",
     "architecture": "@CLICK_ARCH@",
     "title": "Radio NL",
     "hooks": {
@@ -9,7 +9,7 @@
             "desktop":  "radionl.desktop"
         }
     },
-    "version": "1.4.3",
-    "maintainer": "Sander Klootwijk <sander.k1007@kpnmail.nl>",
+    "version": "2.1.0",
+    "maintainer": "Sander Klootwijk <sander.klootwijk@tutanota.com>",
     "framework" : "ubuntu-sdk-16.04"
 }

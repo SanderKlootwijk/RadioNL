@@ -1,13 +1,14 @@
-import QtQuick 2.4
+import QtQuick 2.9
 import Ubuntu.Components 1.3
 import Ubuntu.Components.Popups 1.3
 
 Component {
   id: aboutDialog
+
   Dialog {
     signal closed();
     id: dialogue
-    title: qsTr("Instellingen")
+    title: "Instellingen"
 
     Component.onCompleted: {
       selector.selectedIndex = settings.selectedIndex
@@ -275,6 +276,7 @@ Button {
   width: parent.width
   id: ok
   text: "Sluiten"
+  color: theme.palette.normal.activity
 
   onClicked: {
     PopupUtils.close(dialogue);

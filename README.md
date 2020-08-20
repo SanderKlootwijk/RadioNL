@@ -8,6 +8,3 @@ Mis je een (regionale) zender, of heb je een bug ontdekt? Maak dan een 'issue' a
 Alle logo's en namen in deze toepassing zijn handelsmerken van hun respectievelijke eigenaars.
 
 Download deze app voor Ubuntu Touch in de OpenStore: https://open-store.io/app/radionl.sanderklootwijk
-
-RadioNL compileren voor Ubuntu Touch 16.04:
-clickable -k 16.04

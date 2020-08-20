@@ -1,5 +1,5 @@
-project(radionl C CXX)
 cmake_minimum_required(VERSION 3.0.0)
+project(radionl C CXX)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -26,17 +26,23 @@ set(DATA_DIR /)
 set(DESKTOP_FILE_NAME ${PROJECT_NAME}.desktop)
 
 # This command figures out the target architecture for use in the manifest file
-execute_process(
-    COMMAND dpkg-architecture -qDEB_HOST_ARCH
-    OUTPUT_VARIABLE CLICK_ARCH
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+# Either via the environment variable ARCH (set by Clickable) or dpkg
+if(DEFINED ENV{ARCH})
+    set(CLICK_ARCH "$ENV{ARCH}")
+else()
+    execute_process(
+        COMMAND dpkg-architecture -qDEB_HOST_ARCH
+        OUTPUT_VARIABLE CLICK_ARCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+endif()
 
 configure_file(manifest.json.in ${CMAKE_CURRENT_BINARY_DIR}/manifest.json)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/manifest.json DESTINATION ${CMAKE_INSTALL_PREFIX})
 install(FILES ${PROJECT_NAME}.apparmor DESTINATION ${DATA_DIR})
-install(DIRECTORY qml DESTINATION ${DATA_DIR})
 install(DIRECTORY assets DESTINATION ${DATA_DIR})
+
+install(DIRECTORY qml DESTINATION ${DATA_DIR})
 
 # Translations
 file(GLOB_RECURSE I18N_SRC_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/po qml/*.qml qml/*.js)
@@ -60,3 +66,17 @@ add_custom_target(${DESKTOP_FILE_NAME} ALL
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE_NAME} DESTINATION ${DATA_DIR})
 
 add_subdirectory(po)
+
+# Make source files visible in qtcreator
+file(GLOB_RECURSE PROJECT_SRC_FILES
+    RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    qml/*.qml
+    qml/*.js
+    src/*
+    *.json
+    *.json.in
+    *.apparmor
+    *.desktop.in
+)
+
+add_custom_target(${PROJECT_NAME}_FILES ALL SOURCES ${PROJECT_SRC_FILES})
