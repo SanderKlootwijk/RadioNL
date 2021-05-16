@@ -2682,7 +2682,7 @@ MainView {
       id: dialogue4
       title: "Over Radio NL"
       Text {
-        text: '<b>Versie: 2.1</b> <br><b>Broncode:</b> <a href="https://github.com/SanderKlootwijk/RadioNL">GitHub</a><br><b>Licentie:</b> <a href="https://tldrlegal.com/license/mit-license">MIT Licentie</a><br><br> <br>© 2018-2020 Sander Klootwijk'
+        text: '<br><b>Broncode:</b> <a href="https://github.com/SanderKlootwijk/RadioNL">GitHub</a><br><b>Licentie:</b> <a href="https://tldrlegal.com/license/mit-license">MIT Licentie</a><br><br> <br>© 2018-2020 Sander Klootwijk'
         color: theme.palette.normal.baseText
         horizontalAlignment: Text.AlignHCenter
         onLinkActivated: Qt.openUrlExternally(link)
