@@ -27,7 +27,7 @@ MainView {
   Image {
     id: testImg
     anchors.right: parent.left
-    source: "https://www.npo3fm.nl/templates/npo3fm/images/logo-npo3fm.png"
+    source: "https://www.npo3fm.nl/svg/npo_3fm_logo.svg"
     onStatusChanged: if (testImg.status == Image.Ready) console.log('TestImg is loaded!')
   }
 
@@ -419,14 +419,14 @@ MainView {
               naam: "BNR Nieuwsradio"
               subText: "#IkhoorbijBNR"
               logo: "img/bnr.jpg"
-              bron: "http://icecast-bnr-cdp.triple-it.nl/bnr_mp3_96_04"
+              bron: "http://21283.live.streamtheworld.com/BNR_NIEUWSRADIO.mp3?DIST=TuneIn&TGT=TuneIn"
             }
 
             Zender {
-              naam: "Classic FM"
+              naam: "classicnl"
               subText: "Klassiek voor iedereen"
-              logo: "img/classicfm.jpg"
-              bron: "http://19983.live.streamtheworld.com/CLASSICFM.mp3?dist=tunein"
+              logo: "img/classicnl.jpg"
+              bron: "http://22723.live.streamtheworld.com/CLASSICFM.mp3?DIST=TuneIn&TGT=TuneIn"
             }
 
             Zender {
@@ -449,7 +449,7 @@ MainView {
               naam: "KINK"
               subText: "No Alternative"
               logo: "img/kink.jpg"
-              bron: "https://20073.live.streamtheworld.com/KINKAAC.aac"
+              bron: "https://21293.live.streamtheworld.com/KINK.mp3"
             }
 
             Zender {
@@ -718,11 +718,12 @@ MainView {
               }
             }
 
-            Zender {
+            // Stream niet betrouwbaar
+            /*Zender {
               naam: "Radio Spannenburg"
               subText: "It hert fan De Fryske Marren"
               logo: "img/radiospannenburg.jpg"
-              bron: "http://37.59.195.28:8132/;"
+              bron: "https://stream.radiospannenburg.nl/radiospannenburg"
               visible: {
                 if (settings.frivisible == "false") {
                   false
@@ -731,13 +732,13 @@ MainView {
                   true
                 }
               }
-            }
+            }*/
 
             Zender {
               naam: "Leo Middelsé"
               subText: "Omroep voor Leeuwarden en omstreken"
               logo: "img/leofm.jpg"
-              bron: "https://radio1.stream24.net:8390/live.mp3"
+              bron: "https://ms5ic.mx-cd.net/238-2265270/LEO_Middelse_Radio"
               visible: {
                 if (settings.frivisible == "false") {
                   false
@@ -1124,7 +1125,8 @@ MainView {
               }
             }
 
-            Zender {
+            // Zender opgeheven? Stream is uit de lucht.
+            /*Zender {
               naam: "Radio 024"
               subText: "De beste classics & hits!"
               logo: "img/radio024.jpg"
@@ -1137,10 +1139,9 @@ MainView {
                   true
                 }
               }
-            }
+            }*/
 
-            //Stream werkt niet goed
-            /*Zender {
+            Zender {
               naam: "RN7"
               subText: "De streekomroep voor Nijmegen"
               logo: "img/rn7.jpg"
@@ -1153,7 +1154,7 @@ MainView {
                   true
                 }
               }
-            }*/
+            }
 
             // Overgegaan in UniekFM
             /*Zender {  
@@ -1394,11 +1395,12 @@ MainView {
               }
             }
 
-            Zender {
-              naam: "Haarlem 105"
+            //Stream niet betrouwbaar
+            /*Zender {
+              naam: "Haarlem105"
               subText: "Van stad tot strand!"
               logo: "img/haarlem105.jpg"
-              bron: "http://studio.haarlem105.nl:8000/haarlem105.mp3"
+              bron: "http://stream.tbmp.nl:8010/haarlem105.web"
               visible: {
                 if (settings.nohovisible == "false") {
                   false
@@ -1407,13 +1409,14 @@ MainView {
                   true
                 }
               }
-            }
+            }*/
 
-            Zender {
+            //Stream niet betrouwbaar
+            /*Zender {
               naam: "RTV Amstelveen"
               subText: "Lokale Omroep Amstelveen"
               logo: "img/rtvamstelveen.jpg"
-              bron: "http://217.21.199.146:8084/stream?icy=http"
+              bron: "http://radio.rtva.nl/station"
               visible: {
                 if (settings.nohovisible == "false") {
                   false
@@ -1422,7 +1425,7 @@ MainView {
                   true
                 }
               }
-            }
+            }*/
 
             ZenderDivider {
               text: "Zuid-Holland"
@@ -1644,7 +1647,7 @@ MainView {
               naam: "Kempen FM"
               subText: "Hét 'Feelgood' Radiostation van de Kempen!"
               logo: "img/kempenfm.jpg"
-              bron: "https://cc6.beheerstream.com/8730/stream"
+              bron: "https://mediacp.audiostreamen.nl/musicbiz"
               visible: {
                 if (settings.bravisible == "false") {
                   false
@@ -1659,7 +1662,7 @@ MainView {
               naam: "Omroep Brabant"
               subText: "Regionale omroep voor de provincie Noord-Brabant"
               logo: "img/omroepbrabant.jpg"
-              bron: "http://d3slqp9xhts6qb.cloudfront.net/icecast/omroepbrabant/mp3"
+              bron: "http://av.omroepbrabant.nl/icecast/omroepbrabant/mp3"
               visible: {
                 if (settings.bravisible == "false") {
                   false
@@ -1898,9 +1901,9 @@ MainView {
 
             Zender {
               naam: "Radio Grensland"
-              subText: "Hits van toen en nu en iedere dag het lokale nieuws"
+              subText: "Een grenzeloos idee!"
               logo: "img/radiogrensland.jpg"
-              bron: "http://212.83.138.48:8468/stream"
+              bron: "https://antares.dribbcast.com/proxy/grensland?mp=/stream"
               visible: {
                 if (settings.limvisible == "false") {
                   false
