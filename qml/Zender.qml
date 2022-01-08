@@ -6,7 +6,7 @@ ListItem {
 
   height: units.gu(9)
 
-  property alias logo: logo.source
+  property string logo
   property alias naam: naam.text
   property alias subText: subText.text
   property alias bron: bron.text
@@ -25,7 +25,7 @@ ListItem {
 
     // Put radio station logo in UbuntuShape
     source: Image {
-      id: logo
+      source: logo
     }
 
     aspect: UbuntuShape.Inset
@@ -101,30 +101,22 @@ ListItem {
     MouseArea {
       anchors.fill: parent
       onClicked: {
-        if (player.playbackState == true) {
-          if (playerText.text == naam.text) {
+        if (playerText.text == naam.text) {
+          if (player.playbackState == true) {
             player.stop()
           }
           else {
-            player.stop()
-            player.source = bron.text
-            settings.source = bron.text
             player.play()
-            playerText.text = naam.text
-            settings.text = naam.text
-            bottomIMG.source = logo.source
-            settings.image = logo.source
           }
         }
         else {
-          player.stop()
           player.source = bron.text
           settings.source = bron.text
           player.play()
           playerText.text = naam.text
           settings.text = naam.text
-          bottomIMG.source = logo.source
-          settings.image = logo.source
+          bottomIMG.source = logo
+          settings.image = logo
         }
       }
     }

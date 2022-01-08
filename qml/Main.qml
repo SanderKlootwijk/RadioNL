@@ -185,9 +185,9 @@ MainView {
 
     Settings {
       id: settings
-      property string source: ""
-      property string image: ""
-      property string text: ""
+      property string source: "http://icecast.omroep.nl/radio1-bb-mp3"
+      property string image: "img/nporadio1.jpg"
+      property string text: "NPO Radio 1"
       property string tutorialRegionaal: "true"
       property string gevisible: "false"
       property string utvisible: "false"
@@ -342,7 +342,7 @@ MainView {
               naam: "Radio 10"
               subText: "De grootste hits aller tijden!"
               logo: "img/radio10.jpg"
-              bron: "http://19993.live.streamtheworld.com/RADIO10.mp3?dist=tunein"
+              bron: "http://stream.radio10.nl/radio10"
             }
 
             Zender {
@@ -356,7 +356,7 @@ MainView {
               naam: "100% NL"
               subText: "De beste muziek van Nederland"
               logo: "img/100pnl.jpg"
-              bron: "https://20853.live.streamtheworld.com/100PNL_MP3_SC?dist=tunein"
+              bron: "https://stream.100p.nl/100pctnl.mp3"
             }
 
             Zender {
@@ -419,7 +419,7 @@ MainView {
               naam: "BNR Nieuwsradio"
               subText: "#IkhoorbijBNR"
               logo: "img/bnr.jpg"
-              bron: "http://21283.live.streamtheworld.com/BNR_NIEUWSRADIO.mp3?DIST=TuneIn&TGT=TuneIn"
+              bron: "https://stream.bnr.nl/bnr_mp3_128_20"
             }
 
             Zender {
@@ -433,7 +433,7 @@ MainView {
               naam: "Soul Radio"
               subText: "Soul muziek"
               logo: "img/soulradio.jpg"
-              bron: "http://21233.live.streamtheworld.com/SOULRADIO.mp3"
+              bron: "https://playerservices.streamtheworld.com/api/livestream-redirect/SOULRADIO.mp3"
             }
 
             Zender {
@@ -449,7 +449,7 @@ MainView {
               naam: "KINK"
               subText: "No Alternative"
               logo: "img/kink.jpg"
-              bron: "https://21293.live.streamtheworld.com/KINK.mp3"
+              bron: "https://playerservices.streamtheworld.com/api/livestream-redirect/KINK.mp3"
             }
 
             Zender {
@@ -1042,7 +1042,7 @@ MainView {
               naam: "Omroep Almere Radio"
               subText: "Hét nieuwsplatform voor Almere en Omstreken"
               logo: "img/omroepalmereradio.jpg"
-              bron: "https://players.rcast.net/stream/65615.mp3"
+              bron: "https://stream.rcast.net/65615"
               visible: {
                 if (settings.flevisible == "false") {
                   false
@@ -1261,7 +1261,7 @@ MainView {
             }
 
             Zender {
-              naam: "Midland FM"
+              naam: "Radio Midland"
               subText: "Voor elkaar"
               logo: "img/midlandfm.jpg"
               bron: "https://caster04.streampakket.com/proxy/8216/stream;"
@@ -1384,7 +1384,7 @@ MainView {
               naam: "MeerRadio"
               subText: "Lokale omroep an Haarlemmermeer"
               logo: "img/meerradio.jpg"
-              bron: "http://www.meerradio.nl:8000/;stream.mp3"
+              bron: "https://olon.az.icecast.ebsd.ericsson.net/meer_radio"
               visible: {
                 if (settings.nohovisible == "false") {
                   false
@@ -2051,9 +2051,6 @@ MainView {
 
       Audio {
         id: player
-
-        // Source is blank, it gets set by the 'zender' component
-        source: " "
       }
 
       // Put labels in a 'box'
@@ -2155,6 +2152,10 @@ MainView {
         Rectangle {
           z: 4
           id: buffer
+
+          width: units.gu(3)
+          height: width
+
           visible: {
             if (player.playbackState == true) {
               if (player.bufferProgress < 0.20) {
@@ -2169,15 +2170,15 @@ MainView {
             }
           }
 
-          anchors.fill: parent
+          anchors {
+            centerIn: playerIcon
+          }
+
           color: theme.palette.normal.background
 
           ActivityIndicator {
-            width: units.gu(3.2)
-            height: width
-
             running: true
-            anchors.centerIn: parent
+            anchors.fill: parent
           }
         }
       }
@@ -2256,22 +2257,21 @@ MainView {
                 if (settings.slot1source == "") {
                 }
                 else {
-                  player.stop()
                   player.source = settings.slot1source
                   player.play()
                   playerText.text = settings.slot1text
                   bottomIMG.source = settings.slot1img
-                  settings.source = player.source
-                  settings.text = playerText.text
-                  settings.image = bottomIMG.source
+                  settings.source = settings.slot1source
+                  settings.text = settings.slot1text
+                  settings.image = settings.slot1img
                   bottomEdge.collapse()
                 }
               }
               onPressAndHold: {
-                slot1img.source = bottomIMG.source
-                settings.slot1img = bottomIMG.source
-                settings.slot1text = playerText.text
-                settings.slot1source = player.source
+                slot1img.source = settings.image
+                settings.slot1img = settings.image
+                settings.slot1text = settings.text
+                settings.slot1source = settings.source
               }
             }
 
@@ -2309,22 +2309,21 @@ MainView {
                 if (settings.slot2source == "") {
                 }
                 else {
-                  player.stop()
                   player.source = settings.slot2source
                   player.play()
                   playerText.text = settings.slot2text
                   bottomIMG.source = settings.slot2img
-                  settings.source = player.source
-                  settings.text = playerText.text
-                  settings.image = bottomIMG.source
+                  settings.source = settings.slot2source
+                  settings.text = settings.slot2text
+                  settings.image = settings.slot2img
                   bottomEdge.collapse()
                 }
               }
               onPressAndHold: {
-                slot2img.source = bottomIMG.source
-                settings.slot2img = bottomIMG.source
-                settings.slot2text = playerText.text
-                settings.slot2source = player.source
+                slot2img.source = settings.image
+                settings.slot2img = settings.image
+                settings.slot2text = settings.text
+                settings.slot2source = settings.source
               }
             }
 
@@ -2362,22 +2361,21 @@ MainView {
                 if (settings.slot3source == "") {
                 }
                 else {
-                  player.stop()
                   player.source = settings.slot3source
                   player.play()
                   playerText.text = settings.slot3text
                   bottomIMG.source = settings.slot3img
-                  settings.source = player.source
-                  settings.text = playerText.text
-                  settings.image = bottomIMG.source
+                  settings.source = settings.slot3source
+                  settings.text = settings.slot3text
+                  settings.image = settings.slot3img
                   bottomEdge.collapse()
                 }
               }
               onPressAndHold: {
-                slot3img.source = bottomIMG.source
-                settings.slot3img = bottomIMG.source
-                settings.slot3text = playerText.text
-                settings.slot3source = player.source
+                slot3img.source = settings.image
+                settings.slot3img = settings.image
+                settings.slot3text = settings.text
+                settings.slot3source = settings.source
               }
             }
 
@@ -2415,22 +2413,21 @@ MainView {
                 if (settings.slot4source == "") {
                 }
                 else {
-                  player.stop()
                   player.source = settings.slot4source
                   player.play()
                   playerText.text = settings.slot4text
                   bottomIMG.source = settings.slot4img
-                  settings.source = player.source
-                  settings.text = playerText.text
-                  settings.image = bottomIMG.source
+                  settings.source = settings.slot4source
+                  settings.text = settings.slot4text
+                  settings.image = settings.slot4img
                   bottomEdge.collapse()
                 }
               }
               onPressAndHold: {
-                slot4img.source = bottomIMG.source
-                settings.slot4img = bottomIMG.source
-                settings.slot4text = playerText.text
-                settings.slot4source = player.source
+                slot4img.source = settings.image
+                settings.slot4img = settings.image
+                settings.slot4text = settings.text
+                settings.slot4source = settings.source
               }
             }
 
@@ -2682,7 +2679,7 @@ MainView {
       id: dialogue4
       title: "Over Radio NL"
       Text {
-        text: '<br><b>Broncode:</b> <a href="https://github.com/SanderKlootwijk/RadioNL">GitHub</a><br><b>Licentie:</b> <a href="https://tldrlegal.com/license/mit-license">MIT Licentie</a><br><br> <br>© 2018-2020 Sander Klootwijk'
+        text: '<br><b>Broncode:</b> <a href="https://github.com/SanderKlootwijk/RadioNL">GitHub</a><br><b>Licentie:</b> <a href="https://tldrlegal.com/license/mit-license">MIT Licentie</a><br><br> <br>© 2018-2022 Sander Klootwijk'
         color: theme.palette.normal.baseText
         horizontalAlignment: Text.AlignHCenter
         onLinkActivated: Qt.openUrlExternally(link)
