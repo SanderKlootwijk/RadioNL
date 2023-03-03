@@ -1,10 +1,9 @@
 # Radio NL
-Alle Nederlandse radio stations in één app!
 
-Met Radio NL luister je nu ook op Ubuntu Touch naar jouw favoriete Nederlandse radiozenders! Deze app bevat zowel landelijke als regionale zenders.
+Alle Nederlandse radiozenders in één app!
 
-Mis je een (regionale) zender, of heb je een bug ontdekt? Maak dan een 'issue' aan op GitHub of stuur een bericht via Telegram (@SanderKlootwijk). Deze applicatie is zelfstandig ontwikkeld.
+## License
 
-Alle logo's en namen in deze toepassing zijn handelsmerken van hun respectievelijke eigenaars.
+Copyright (C) 2022  Sander Klootwijk
 
-Download deze app voor Ubuntu Touch in de OpenStore: https://open-store.io/app/radionl.sanderklootwijk
+Licensed under the MIT license
