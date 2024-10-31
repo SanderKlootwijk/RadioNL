@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: radionl.sanderklootwijk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 20:10+0000\n"
+"POT-Creation-Date: 2024-10-31 21:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/AboutPage.qml:10 ../qml/Main.qml:198
+#: ../qml/AboutPage.qml:10 ../qml/Main.qml:192
 msgid "About"
 msgstr ""
 
-#: ../qml/AboutPage.qml:63 ../qml/Main.qml:172 radionl.desktop.in.h:1
+#: ../qml/AboutPage.qml:63 ../qml/Main.qml:166 radionl.desktop.in.h:1
 msgid "Radio NL"
 msgstr ""
 
@@ -41,31 +41,27 @@ msgstr ""
 msgid "Favorites"
 msgstr ""
 
-#: ../qml/Main.qml:183
+#: ../qml/Main.qml:177
 msgid "Alternative"
 msgstr ""
 
-#: ../qml/Main.qml:183
+#: ../qml/Main.qml:177
 msgid "National"
 msgstr ""
 
-#: ../qml/Main.qml:183
+#: ../qml/Main.qml:177
 msgid "Regional"
 msgstr ""
 
-#: ../qml/Main.qml:193 ../qml/SettingsPage.qml:11
+#: ../qml/Main.qml:187 ../qml/SettingsPage.qml:11
 msgid "Settings"
 msgstr ""
 
-#: ../qml/Main.qml:274
+#: ../qml/Main.qml:244
 msgid "You appear to be offline"
 msgstr ""
 
-#: ../qml/Main.qml:274
-msgid "You are back online"
-msgstr ""
-
-#: ../qml/ProvinceSettingsPage.qml:14 ../qml/SettingsPage.qml:118
+#: ../qml/ProvinceSettingsPage.qml:14 ../qml/SettingsPage.qml:134
 msgid "Province"
 msgstr ""
 
@@ -75,15 +71,19 @@ msgid ""
 "province on the <i>Regional</i> tab"
 msgstr ""
 
-#: ../qml/SettingsPage.qml:52
-msgid "Dark mode"
+#: ../qml/SettingsPage.qml:57
+msgid "Theme"
 msgstr ""
 
-#: ../qml/SettingsPage.qml:86
+#: ../qml/SettingsPage.qml:78
+msgid "System"
+msgstr ""
+
+#: ../qml/SettingsPage.qml:102
 msgid "Automatic playback on startup"
 msgstr ""
 
-#: ../qml/SettingsPage.qml:134
+#: ../qml/SettingsPage.qml:150
 msgid "No province set"
 msgstr ""
 

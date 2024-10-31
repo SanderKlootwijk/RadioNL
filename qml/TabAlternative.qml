@@ -35,16 +35,16 @@ Item {
 
             Station {
                 name: "BNR Nieuwsradio"
-                subText: "#IkhoorbijBNR"
+                subText: "Blijf Scherp."
                 logo: "img/bnr.jpg"
-                source: "https://23603.live.streamtheworld.com/BNR_NIEUWSRADIO.mp3"
+                source: "https://stream.bnr.nl/bnr_mp3_128_20"
             }
 
             Station {
                 name: "classicnl"
                 subText: "Klassiek voor iedereen"
                 logo: "img/classicnl.jpg"
-                source: "http://22723.live.streamtheworld.com/CLASSICFM.mp3"
+                source: "https://stream.classic.nl/classicnl.mp3"
             }
 
             Station {
@@ -56,7 +56,7 @@ Item {
 
             Station {
                 name: "Sublime FM"
-                subText: "Join the Groove"
+                subText: "Let's get it on!"
                 logo: "img/sublimefm.jpg"
                 source: "http://stream.sublimefm.nl/SublimeFM_mp3"
             }
@@ -65,7 +65,7 @@ Item {
 
             Station {
                 name: "KINK"
-                subText: "No Alternative"
+                subText: "Alternative Rock_Radio"
                 logo: "img/kink.jpg"
                 source: "https://playerservices.streamtheworld.com/api/livestream-redirect/KINK.mp3"
             }
@@ -104,9 +104,9 @@ Item {
 
             Station {
                 name: "Joe"
-                subText: "All the way"
+                subText: "Good times, great music"
                 logo: "img/joe.jpg"
-                source: "https://icecast-qmusicnl-cdp.triple-it.nl/Joe_nl_1_96.mp3"
+                source: "https://stream.joe.nl/joe/mp3"
             }
 
             /* END OF COMMERCIAL STATIONS */
@@ -119,15 +119,15 @@ Item {
 
             Station {
                 name: "NPO Radio 2 Soul & Jazz"
-                subText: "Soul & Jazz muziek"
+                subText: "De hele dag relaxte muziek"
                 logo: "img/nporadio2soul&jazz.jpg"
                 source: "http://icecast.omroep.nl/radio6-bb-mp3"
             }
 
             Station {
-                name: "NPO 3FM KX"
-                subText: "For the love of music"
-                logo: "img/npo3fmkx.jpg"
+                name: "NPO Campus Radio"
+                subText: "Tune in to tomorrow"
+                logo: "img/npocampusradio.jpg"
                 source: "http://icecast.omroep.nl/3fm-serioustalent-mp3"
             }
 
@@ -146,7 +146,7 @@ Item {
 
             Station {
                 name: "FunX NL"
-                subText: "The Sound of the City"
+                subText: "your city your sound"
                 logo: "img/funx.jpg"
                 source: "https://icecast.omroep.nl/funx-bb-mp3"
             }

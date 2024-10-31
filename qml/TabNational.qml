@@ -35,7 +35,7 @@ Item {
 
             Station {
                 name: "NPO Radio 1"
-                subText: "Het nieuws van alle kanten"
+                subText: "Wie luistert, weet meer"
                 logo: "img/nporadio1.jpg"
                 source: "http://icecast.omroep.nl/radio1-bb-mp3"
             }
@@ -49,14 +49,14 @@ Item {
 
             Station {
                 name: "NPO 3FM"
-                subText: "Laat je horen"
+                subText: "We Want More"
                 logo: "img/npo3fm.jpg"
                 source: "http://icecast.omroep.nl/3fm-bb-mp3"
             }
 
             Station {
                 name: "NPO Radio 4"
-                subText: "Klassiek komt bij je binnen"
+                subText: "Zo mooi is klassiek"
                 logo: "img/nporadio4.jpg"
                 source: "http://icecast.omroep.nl/radio4-bb-mp3"
             }
@@ -85,14 +85,14 @@ Item {
 
             Station {
                 name: "Radio 538"
-                subText: "Één station, alle hits"
+                subText: "Jouw hits, jouw 538!"
                 logo: "img/radio538.jpg"
                 source: "https://22593.live.streamtheworld.com/RADIO538.mp3?dist=tunein"
             }
 
             Station {
                 name: "Sky Radio"
-                subText: "The feel good station"
+                subText: "The Feel Good Station"
                 logo: "img/skyradio.jpg"
                 source: "http://22613.live.streamtheworld.com/SKYRADIO.mp3?dist=tunein"
             }
@@ -108,19 +108,19 @@ Item {
                 name: "Radio Veronica"
                 subText: "WE. LOVE. MUSIC"
                 logo: "img/radioveronica.jpg"
-                source: "https://20873.live.streamtheworld.com/VERONICA.mp3?dist=tunein"
+                source: "https://playerservices.streamtheworld.com/api/livestream-redirect/VERONICA.mp3"
             }
 
             Station {
                 name: "100% NL"
-                subText: "De beste muziek van Nederland"
+                subText: "Maakt je dag!"
                 logo: "img/100pnl.jpg"
                 source: "https://stream.100p.nl/100pctnl.mp3"
             }
 
             Station {
                 name: "SLAM!"
-                subText: "Play Music, Play Life"
+                subText: "Boost Your Life"
                 logo: "img/slam.jpg"
                 source: "https://stream.slam.nl/slam_mp3?dist=tunein"
             }

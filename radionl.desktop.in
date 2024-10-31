@@ -1,6 +1,6 @@
 [Desktop Entry]
 _Name=Radio NL
-Exec=qmlscene %U qml/Main.qml
+Exec=qmlscene %U qml/Main.qml --scaling
 Icon=assets/radionl.svg
 Terminal=false
 Type=Application

@@ -36,35 +36,51 @@ Page {
             width: settingsPage.width
 
             ListItem {
-                id: darkModeListItem
+                id: themeTitle
 
-                onClicked: darkModeSwitch.checked ? darkModeSwitch.checked = false : darkModeSwitch.checked = true
+                height: units.gu(6.25)
+
+                divider.colorFrom: theme.palette.normal.background
+                divider.colorTo: theme.palette.normal.background
 
                 Label {
-                    width: parent.width - units.gu(10)
+                    id: themeTitleLabel
+                    width: parent.width - units.gu(4)
 
                     anchors {
-                        verticalCenter: parent.verticalCenter
+                        bottom: parent.bottom
+                        bottomMargin: units.gu(1.25)
                         left: parent.left
                         leftMargin: units.gu(2)
                     }
-
-                    text: i18n.tr("Dark mode")
+                    
+                    text: i18n.tr("Theme") + ":"
 
                     elide: Text.ElideRight
                 }
+            }
 
-                Switch {
-                    id: darkModeSwitch
-                    checked: settings.darkMode
-                    onCheckedChanged: settings.darkMode = checked
-                    
+            ListItem {
+                id: themeListItem
+
+                height: themeOptionSelector.height + units.gu(2)
+
+                OptionSelector {
+                    id: themeOptionSelector
+
+                    width: parent.width - units.gu(4)
+
                     anchors {
-                        verticalCenter: parent.verticalCenter
-                        right: parent.right
-                        rightMargin: units.gu(2)
-                    } 
-                }
+                        horizontalCenter: parent.horizontalCenter
+                        top: parent.top
+                    }
+
+                    model: [i18n.tr("System"), "Ambiance", "Suru Dark"]
+
+                    onSelectedIndexChanged: settings.theme = selectedIndex
+
+                    Component.onCompleted: selectedIndex = settings.theme
+                }   
             }
 
             ListItem {

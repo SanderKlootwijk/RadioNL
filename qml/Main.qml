@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import Lomiri.Components 1.3
 import Lomiri.Components.Popups 1.3
+import Lomiri.Connectivity 1.0
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import QtGraphicalEffects 1.0
@@ -17,17 +18,15 @@ MainView {
     applicationName: 'radionl.sanderklootwijk'
     automaticOrientation: true
 
-    property string version: "3.0.0"
+    property string version: "3.1.0"
 
     Component.onCompleted: {
         // On first run, with an empty source
         if (settings.source == "empty") {
-            connectionTimer.start()
         }
         // Autoplay disabled
         else if (settings.autoPlayOnStart == false) {
             player.source = settings.source
-            connectionTimer.start()
         }
         // Autoplay enabled
         else {
@@ -35,7 +34,6 @@ MainView {
             player.play()
             player.stop()
             reconnectTimer.running = true
-            connectionTimer.start()
         }
     }
 
@@ -47,7 +45,7 @@ MainView {
         id: settings
 
         // Settings
-        property bool darkMode: false
+        property int theme: 0
         property bool autoPlayOnStart: false
         property string provinceName: "FirstRun"
 
@@ -76,50 +74,46 @@ MainView {
         property string slot4text: ""
         property string slot4source: ""
 
-        onDarkModeChanged: {
-            Theme.name = darkMode ? "Lomiri.Components.Themes.SuruDark" : "Lomiri.Components.Themes.Ambiance"
+        // Theme changing
+        function changeTheme() {
+            switch (theme) {
+                case 0:
+                    Theme.name = "";
+                    break;
+                case 1:
+                    Theme.name = "Ubuntu.Components.Themes.Ambiance";
+                    break;
+                case 2:
+                    Theme.name = "Ubuntu.Components.Themes.SuruDark";
+                    break;
+                default:
+                    Theme.name = "";
+                    break;
+            }
             bottomEdge.commit()
             bottomEdge.collapse()
         }
 
-        Component.onCompleted: {
-            Theme.name = darkMode ? "Lomiri.Components.Themes.SuruDark" : "Lomiri.Components.Themes.Ambiance"
-            bottomEdge.commit()
-            bottomEdge.collapse()
-        }
+        Component.onCompleted: changeTheme()
+
+        onThemeChanged: changeTheme()
     }
 
     // Network check
-    Image {
-        id: testImg
-        anchors.right: parent.left
-        source: "https://www.npo3fm.nl/svg/npo_3fm_logo.svg"
-    }
-
-    Timer {
-        id: connectionTimer
-        interval: 1500
-        running: false
-        repeat: false
-        onTriggered: {
-            if (testImg.status == Image.Ready) {
-                console.log('Yes! Working internet connection.')
-                if (connectionPopover.opacity == 1) {
-                    connectionPopoverTimer.start()
-                }
+    Connections {
+        target: Connectivity
+        
+        onStatusChanged: {
+            if (Connectivity.status == NetworkingStatus.Online) {
+                player.play()
+                player.stop()
+                reconnectTimer.running = true
             }
             else {
-                console.log('Oops! No internet connection, trying again.')
-                if (connectionPopover.opacity == 0) {
-                    connectionPopoverFadeIn.start()
-                    player.stop()
-                }
-                testImg.source = ""
-                testImg.source = "https://www.npo3fm.nl/svg/npo_3fm_logo.svg"
-                start()
+                player.stop()
             }
         }
-    }    
+    }
 
     // Audio player
     Audio {
@@ -208,6 +202,8 @@ MainView {
                 z: 1
                 id: connectionPopover
 
+                visible: Connectivity.status !== NetworkingStatus.Online
+
                 width: connectionIcon.width + connectionLabel.width + units.gu(4)
                 height: units.gu(5)
 
@@ -217,36 +213,10 @@ MainView {
                     horizontalCenter: parent.horizontalCenter
                 }
                 
-                opacity: 0
                 radius: 15
                 color: theme.palette.normal.foreground
                 border.width: units.gu(0.1)
                 border.color: theme.palette.normal.base
-
-                NumberAnimation on opacity {
-                    id: connectionPopoverFadeIn
-                    running: false
-                    from: 0
-                    to: 1
-                    duration: LomiriAnimation.SlowDuration
-                }
-
-                NumberAnimation on opacity {
-                    id: connectionPopoverFadeOut
-                    running: false
-                    from: 1
-                    to: 0
-                    duration: LomiriAnimation.SlowDuration
-                }
-
-                Timer {
-                    id: connectionPopoverTimer
-                    interval: 1500
-                    running: false
-                    repeat: false
-                    
-                    onTriggered: connectionPopoverFadeOut.start()
-                }
 
                 Row {
                     id: connectionPopoverRow
@@ -263,7 +233,7 @@ MainView {
                         
                         anchors.verticalCenter: parent.verticalCenter
                         
-                        name: testImg.status == Image.Ready ? "wifi-full" : "wifi-no-connection"
+                        name: "wifi-no-connection"
                     }
 
                     Label {
@@ -271,7 +241,7 @@ MainView {
 
                         anchors.verticalCenter: parent.verticalCenter
 
-                        text: testImg.status == Image.Ready ? i18n.tr("You are back online") : i18n.tr("You appear to be offline")
+                        text: i18n.tr("You appear to be offline")
                     }
                 }
             }
