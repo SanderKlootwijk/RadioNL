@@ -81,10 +81,10 @@ Item {
                 }
 
                 Station {
-                    name: "RTV Noordoost Friesland"
+                    name: "RTV NOF"
                     subText: "Nieuws uit Noordoost Friesland"
                     logo: "img/rtvnof.jpg"
-                    source: "http://media02.streampartner.nl:8056/live"
+                    source: "https://stream.rtvnof.nl/rtvnof1"
                 }
 
                 Station {
@@ -133,7 +133,7 @@ Item {
                     name: "OOG Radio"
                     subText: "Nieuws uit Groningen"
                     logo: "img/oogradio.jpg"
-                    source: "https://olon.az.icecast.ebsd.ericsson.net/oog_radio"
+                    source: "https://nlpo.stream.vip/oogfm/mp3-192/nlpo.stream.vip/"
                 }
 
                 Station {
@@ -203,7 +203,7 @@ Item {
                     name: "RTV SLOS"
                     subText: "Lokale omroep Steenwijkerland"
                     logo: "img/rtvslos.jpg"
-                    source: "https://olon.az.icecast.ebsd.ericsson.net/mix105_steenwijkerland"
+                    source: "https://redbeemedia.streamabc.net/redbm-rtvslos-mp3-192-3641369"
                 }
 
                 Station {
@@ -211,20 +211,6 @@ Item {
                     subText: "Het radiostation voor Noordoost Twente"
                     logo: "img/twentefm.jpg"
                     source: "http://stream.twentefm.nl:8004/high"
-                }
-
-                Station {
-                    name: "Radio Hengelo"
-                    subText: "De lokale omroep van en voor Hengelo"
-                    logo: "img/radiohengelo.jpg"
-                    source: "http://stream1.icehosting.nl:8128/;stream.mp3"
-                }
-
-                Station {
-                    name: "Enschede FM"
-                    subText: "24/7 de lekkerste hits op het internet"
-                    logo: "img/enschedefm.jpg"
-                    source: "http://stream1.icehosting.nl:8126/;stream.mp3"
                 }
             }
 
@@ -252,14 +238,14 @@ Item {
                     name: "Radio Lelystad"
                     subText: "Altijd in de lucht!"
                     logo: "img/radiolelystad.jpg"
-                    source: "http://live.radiolelystad.nl:8000/listen"
+                    source: "https://nlpo.stream.vip/lelystad/mp3-192/nlpo.stream.vip/"
                 }
 
                 Station {
                     name: "Omroep Almere Radio"
                     subText: "Hét nieuwsplatform voor Almere en Omstreken"
                     logo: "img/omroepalmereradio.jpg"
-                    source: "https://stream.rcast.net/65615"
+                    source: "https://stream.omroepalmere.nl/listen/omroepalmere/live.mp3"
                 }
 
                 Station {
@@ -406,7 +392,7 @@ Item {
                     name: "MeerRadio"
                     subText: "Lokale omroep an Haarlemmermeer"
                     logo: "img/meerradio.jpg"
-                    source: "https://olon.az.icecast.ebsd.ericsson.net/meer_radio"
+                    source: "https://nlpo.stream.vip/radiomer/mp3-192/nlpo/"
                 }
             }
 
@@ -462,7 +448,7 @@ Item {
                     name: "Den Haag FM"
                     subText: "100% Haags!"
                     logo: "img/denhaagfm.jpg"
-                    source: "http://82.94.205.122/proxy/haagseomroep?mp=/denhaagfm"
+                    source: "https://server3.radio-streams.net:18012/denhaagfm"
                 }
             }
 
@@ -483,7 +469,7 @@ Item {
                     name: "Omroep Zeeland"
                     subText: "Regionale omroep voor de provincie Zeeland"
                     logo: "img/omroepzeeland.jpg"
-                    source: "http://livestream.zeelandnet.nl:8000/omroepzeeland_radio"
+                    source: "https://d3isaxd2t6q8zm.cloudfront.net/icecast/omroepzeeland/omroepzeeland_radio"
                 }
 
                 Station {
@@ -497,21 +483,7 @@ Item {
                     name: "Radio Schouwen-Duiveland"
                     subText: "Moet je horen!"
                     logo: "img/radioschouwenduiveland.jpg"
-                    source: "http://212.115.192.105:45121/radioschoudui"
-                }
-
-                Station {
-                    name: "Scheldemond FM"
-                    subText: "Omroep voor West Zeeuws Vlaanderen"
-                    logo: "img/scheldemondfm.jpg"
-                    source: "http://stream.scheldemondfm.nl:8200/;"
-                }
-
-                Station {
-                    name: "Terneuzen FM"
-                    subText: "Dé regionale zender van Terneuzen"
-                    logo: "img/terneuzenfm.jpg"
-                    source: "http://terneuzenfm.shoutcaststream.com:8076/;stream/1"
+                    source: "https://s32.myradiostream.com/17098/;"
                 }
             }
 
@@ -532,7 +504,7 @@ Item {
                     name: "Glow FM"
                     subText: "Hits Till It Hurts"
                     logo: "img/glowfm.jpg"
-                    source: "http://stream.glowfm.nl:8000/glowfm.mp3"
+                    source: "https://nlpo.stream.vip/glowfm/mp3-192/nlpo.stream.vip/"
                 }
 
                 Station {
@@ -564,20 +536,6 @@ Item {
                 }
 
                 Station {
-                    name: "Radio Horizon"
-                    subText: "Streekomroep voor Cranendonck en Heeze-Leende"
-                    logo: "img/radiohorizon.jpg"
-                    source: "https://www.rtvhorizon.nl/radiostream/mp3"
-                }
-
-                Station {
-                    name: "Radio Kontakt"
-                    subText: "Lokale radio voor de gemeente Laarbeek"
-                    logo: "img/radiokontakt.jpg"
-                    source: "http://lokaal.kontaktfm.nl:8005/;"
-                }
-
-                Station {
                     name: "Langstraat FM"
                     subText: "Radio: Waalwijk, Loon op Zand"
                     logo: "img/langstraatfm.jpg"
@@ -588,7 +546,7 @@ Item {
                     name: "Studio040"
                     subText: "Lokale radio voor Eindhoven"
                     logo: "img/studio040.jpg"
-                    source: "http://stream.studio040.nl:8000/studio040.mp3"
+                    source: "https://stream.studio040.nl/studio040.mp3"
                 }
 
                 Station {
@@ -602,7 +560,7 @@ Item {
                     name: "Efteling Kids Radio"
                     subText: "Radio voor kinderen"
                     logo: "img/eftelingkidsradio.jpg"
-                    source: "http://ice.cr2.streamzilla.xlcdn.com:8000/sz=efteling=hdstream"
+                    source: "https://media.hostin.live/audio/efteling.mp3"
                 }
             }
 
@@ -651,14 +609,14 @@ Item {
                     name: "Radio Grensland"
                     subText: "Een grenzeloos idee!"
                     logo: "img/radiogrensland.jpg"
-                    source: "https://antares.dribbcast.com/proxy/grensland?mp=/stream"
+                    source: "https://digistreamer.nl:8030/radio.mp3"
                 }
 
                 Station {
                     name: "Omroep Venlo"
                     subText: "Lokale omroep van de gemeente Venlo"
                     logo: "img/omroepvenlo.jpg"
-                    source: "https://olon.az.icecast.ebsd.ericsson.net/omroep_venlo"
+                    source: "https://nlpo.stream.vip/venlo/mp3-192/nlpo"
                 }
 
                 Station {

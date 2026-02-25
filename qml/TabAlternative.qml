@@ -55,10 +55,10 @@ Item {
             }
 
             Station {
-                name: "Sublime FM"
-                subText: "Let's get it on!"
-                logo: "img/sublimefm.jpg"
-                source: "http://stream.sublimefm.nl/SublimeFM_mp3"
+                name: "Sublime"
+                subText: "Your Soulmate"
+                logo: "img/sublime.jpg"
+                source: "https://playerservices.streamtheworld.com/api/livestream-redirect/SUBLIME.mp3"
             }
 
             StationDivider {}
@@ -96,10 +96,10 @@ Item {
             StationDivider {}
 
             Station {
-                name: "ZTACK"
-                subText: "Shuffle Your Day"
-                logo: "img/ztack.jpg"
-                source: "https://audio.ztack.nl/radio/8000/ztack"
+                name: "GoodLIFE Radio"
+                subText: "Dé lifestyle zender van Nederland!"
+                logo: "img/goodliferadio.jpg"
+                source: "https://streaming.hofhosting.nl/proxy/goodlife_main?mp=/stream"
             }
 
             Station {
