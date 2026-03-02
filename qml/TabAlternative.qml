@@ -109,6 +109,13 @@ Item {
                 source: "https://stream.joe.nl/joe/mp3"
             }
 
+            Station {
+                name: "Groot Nieuws Radio"
+                subText: "Christelijke radio"
+                logo: "img/grootnieuwsradio.png"
+                source: "https://playerservices.streamtheworld.com/api/livestream-redirect/GNR.mp3"
+            }
+
             /* END OF COMMERCIAL STATIONS */
 
             /* PUBLIC STATIONS */
