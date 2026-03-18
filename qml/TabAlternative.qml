@@ -112,7 +112,7 @@ Item {
             Station {
                 name: "Groot Nieuws Radio"
                 subText: "Christelijke radio"
-                logo: "img/grootnieuwsradio.png"
+                logo: "img/grootnieuwsradio.jpg"
                 source: "https://playerservices.streamtheworld.com/api/livestream-redirect/GNR.mp3"
             }
 
