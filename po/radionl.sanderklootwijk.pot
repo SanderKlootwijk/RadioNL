@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: radionl.sanderklootwijk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-31 21:21+0000\n"
+"POT-Creation-Date: 2026-03-02 18:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,11 +91,11 @@ msgstr ""
 msgid "Commercial Stations"
 msgstr ""
 
-#: ../qml/TabAlternative.qml:117 ../qml/TabNational.qml:33
+#: ../qml/TabAlternative.qml:124 ../qml/TabNational.qml:33
 msgid "Dutch Public Broadcasting"
 msgstr ""
 
-#: ../qml/TabAlternative.qml:144
+#: ../qml/TabAlternative.qml:151
 msgid "FunX Stations"
 msgstr ""
 
